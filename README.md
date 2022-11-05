@@ -1,2 +1,2 @@
-# 🔂 yoto
-You only train once (YOTO) is a state-of-the-art ensemble method bagging random classification surrogate losses.
+# 🔂 eLOTO
+Ensemble Learning but Only Train Once (eLOTO) is a ensemble method bagging random classification surrogate losses.
