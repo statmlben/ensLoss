@@ -7,6 +7,8 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from scipy.io.arff import loadarff 
+from sklearn.datasets import fetch_openml
 
 ## Reproducibility
 torch.manual_seed(1024)
@@ -106,3 +108,45 @@ def biodeg_data(random_state=0):
     test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
     return train_data, test_data
 
+## nomao dataset
+def biodeg_data(random_state=0):
+    filename='./dataset/biodeg.csv'
+    df = pd.read_csv(filename, sep=";", header=None)
+
+    encode_map = {'RB': 1, 'NRB': 0}
+    df[41].replace(encode_map, inplace=True)
+    df[41] = df[41].astype('float')
+
+    X = df.iloc[:, 0:-1]
+    y = df.iloc[:, -1]
+    X = X.values
+    y = y.values
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
+    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
+    return train_data, test_data
+
+def openml_data(random_state=0, name='sylva_prior'):
+    dataset = fetch_openml(name=name)
+    target_set = list(set(dataset.target))
+    encode_map = {target_set[0]: 0, target_set[1]: 1}
+
+    X = dataset.data
+    y = dataset.target
+    y.replace(encode_map, inplace=True)
+    X = X.values
+    y = y.values
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
+    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
+    return train_data, test_data

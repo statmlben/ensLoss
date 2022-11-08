@@ -15,7 +15,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-from loader import TrainData, TestData, spine_data, sonar_data
+from loader import TrainData, TestData, spine_data, sonar_data, openml_data
 from model import BinaryClassification
 from base import evaluate
 from sklearn.model_selection import KFold
@@ -27,7 +27,7 @@ import pingouin as pg
 from scipy import stats
 import argparse
 
-def main(config, D, H, n_trials=20):
+def main(config, D, H, n_trials=15):
 
     ## Reproducibility
     torch.manual_seed(1024)
@@ -40,7 +40,8 @@ def main(config, D, H, n_trials=20):
     for h in range(n_trials):
 
         # train_data, test_data = spine_data(random_state=h)
-        train_data, test_data = sonar_data(random_state=h)
+        # train_data, test_data = sonar_data(random_state=h)
+        train_data, test_data = openml_data(name='sylva_prior', random_state=h)
         input_shape = train_data.X_data.shape[1]
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
@@ -135,7 +136,7 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     config = { 'batch_size': 64,
-            'trainer': {'epochs': 5000, 'val_per_epochs': 20}, 
+            'trainer': {'epochs': 2000, 'val_per_epochs': 20}, 
             'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
