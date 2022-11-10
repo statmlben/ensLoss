@@ -84,6 +84,7 @@ def main(config, D, H, n_trials=15):
         Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
+    path_.to_csv('his_D({})_H({})_Batch({}).csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
 
     sns.set()
@@ -133,10 +134,14 @@ if __name__=='__main__':
                         help='depth of the neural network')
     parser.add_argument('-H', '--width', default=128, type=int,
                            help='width of the neural network')
+    parser.add_argument('-B', '--batch', default=64, type=int,
+                           help='batch size of the training set')
+    parser.add_argument('-e', '--epoch', default=2000, type=int,
+                           help='number of epochs to train')                       
     args = parser.parse_args()
 
-    config = { 'batch_size': 64,
-            'trainer': {'epochs': 2000, 'val_per_epochs': 20}, 
+    config = { 'batch_size': args.batch,
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 20}, 
             'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 

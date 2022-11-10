@@ -1,4 +1,6 @@
 # **Numerical Experiments**: All you need is long epochs
+- *: p-value is provided by **One-Tailed Paired sample T-Test** based on the alternative: `Acc(eLOTO) >= Acc(Other)`
+
 
 ## Lower Back Pain Symptoms Dataset
 
@@ -28,6 +30,4 @@
 
 
 ## Sonar dataset 
-
-- *: p-value is provided by **One-Tailed Paired sample T-Test** based on the alternative: `Acc(eLOTO) >= Acc(Other)`
 
