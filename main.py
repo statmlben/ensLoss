@@ -134,7 +134,7 @@ if __name__=='__main__':
                         help='depth of the neural network')
     parser.add_argument('-H', '--width', default=128, type=int,
                            help='width of the neural network')
-    parser.add_argument('-B', '--batch', default=64, type=int,
+    parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=2000, type=int,
                            help='number of epochs to train')                       
