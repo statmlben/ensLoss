@@ -24,6 +24,8 @@ df = pd.DataFrame(df)
 import seaborn as sns
 import matplotlib.pyplot as plt
 sns.lineplot(data=df, x="n", y="mean", hue="quantile", style="quantile")
+for quantile_tmp in [.1, .3, .5, .7, .9]:
+    plt.axhline(-np.log(1. - quantile_tmp))
 plt.show()
 
 sns.lineplot(data=df, x="n", y="var", hue="quantile", style="quantile")
