@@ -137,7 +137,7 @@ if __name__=='__main__':
     parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=3000, type=int,
-                           help='number of epochs to train')                       
+                           help='number of epochs to train')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
