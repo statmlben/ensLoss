@@ -132,7 +132,10 @@ def biodeg_data(random_state=0):
     return train_data, test_data
 
 def openml_data(random_state=0, name='sylva_prior'):
-    dataset = fetch_openml(name=name)
+    if name == 'USPS':
+        dataset = fetch_openml(name=name, version=3)
+    else:
+        dataset = fetch_openml(name=name)
     target_set = list(set(dataset.target))
     encode_map = {target_set[0]: 0, target_set[1]: 1}
 

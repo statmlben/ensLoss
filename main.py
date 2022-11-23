@@ -27,7 +27,7 @@ import pingouin as pg
 from scipy import stats
 import argparse
 
-def main(config, D, H, n_trials=15):
+def main(config, D, H, filename='sylva_prior', n_trials=15):
 
     ## Reproducibility
     torch.manual_seed(1024)
@@ -41,7 +41,7 @@ def main(config, D, H, n_trials=15):
 
         # train_data, test_data = spine_data(random_state=h)
         # train_data, test_data = sonar_data(random_state=h)
-        train_data, test_data = openml_data(name='sylva_prior', random_state=h)
+        train_data, test_data = openml_data(name=filename, random_state=h)
         input_shape = train_data.X_data.shape[1]
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
@@ -136,8 +136,10 @@ if __name__=='__main__':
                            help='width of the neural network')
     parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=3000, type=int,
+    parser.add_argument('-e', '--epoch', default=5000, type=int,
                            help='number of epochs to train')
+    parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
+                           help='filename of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
@@ -146,5 +148,9 @@ if __name__=='__main__':
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth
+    filename = args.filename
 
-    main(config=config, D=D, H=H)
+    main(config=config, D=D, H=H, filename=filename)
+
+
+# philippine
