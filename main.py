@@ -26,6 +26,7 @@ import seaborn as sns
 import pingouin as pg
 from scipy import stats
 import argparse
+# import wandb
 
 def main(config, D, H, filename='sylva_prior', n_trials=15):
 
@@ -154,3 +155,5 @@ if __name__=='__main__':
 
 
 # philippine
+# sylva_prior
+# SantanderCustomerSatisfaction
