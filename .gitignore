@@ -6,6 +6,9 @@ __pycache__/
 # paper
 paper/
 
+# wandb
+wandb/
+
 # C extensions
 *.so
 *.csv

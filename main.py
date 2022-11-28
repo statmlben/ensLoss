@@ -26,9 +26,13 @@ import seaborn as sns
 import pingouin as pg
 from scipy import stats
 import argparse
-# import wandb
+import wandb
 
-def main(config, D, H, filename='sylva_prior', n_trials=15):
+def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
+
+    ## wandb log
+    if wandb_log:
+        wandb.init(project="eloto", name=filename+str(D)+'-'+str(H))
 
     ## Reproducibility
     torch.manual_seed(1024)
@@ -49,6 +53,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15):
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
         ## eLOTO ##
+        print('\n-- TRAIN eLOTO --\n')
         model = BinaryClassification(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
@@ -61,6 +66,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15):
         Acc['test_acc'].append(acc_test)
 
         ## BCE loss ##
+        print('\n-- TRAIN BCE --\n')
         model = BinaryClassification(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
@@ -73,6 +79,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15):
         Acc['test_acc'].append(acc_test)
 
         ## Hinge loss ##
+        print('\n-- TRAIN Hinge --\n')
         model = BinaryClassification(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
@@ -85,14 +92,15 @@ def main(config, D, H, filename='sylva_prior', n_trials=15):
         Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
-    path_.to_csv('his_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
+    path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
 
-    sns.set()
+    # sns.set(style="whitegrid", rc={'figure.figsize':(11.7,8.27)})
+    fig, ax = plt.subplots(figsize=(11.7, 8.27))
     ## Variance should be reduced to var / n_trials
     qt = 1 - 2*(1 - scipy.stats.norm.cdf(1.96/np.sqrt(n_trials)))
-    sns.lineplot(data=path_, x='epoch', y='valid_acc', hue='loss', ci=int(100*qt))
-    plt.show()
+    sns.lineplot(ax=ax, data=path_, x='epoch', y='valid_acc', hue='loss', ci=int(100*qt))
+    plt.ylabel("Dataset: %s; Network: (%d, %d) - Test Accuracy" %(filename, H, D))
 
     p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
                     alternative='less').round(5)
@@ -125,6 +133,14 @@ def main(config, D, H, filename='sylva_prior', n_trials=15):
     print('\n-- Result --\n')
     print(out)
     print(p_pair)
+    if wandb_log:
+        wandb.log({"test_acc_curve": wandb.Image(fig), 
+                   "path": path_,
+                   "perf_table": Acc, 
+                   "p_less": p_less,
+                   "p_greater": p_greater,
+                   "network": [H, D]})
+        wandb.finish()
 
 
 
