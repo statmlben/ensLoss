@@ -85,7 +85,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15):
         Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
-    path_.to_csv('his_D({})_H({})_Batch({}).csv'.format(D,H,config['batch_size']), index=False)
+    path_.to_csv('his_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
 
     sns.set()
