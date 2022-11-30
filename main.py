@@ -21,12 +21,15 @@ from base import evaluate
 from sklearn.model_selection import KFold
 import scipy
 from train import Trainer
+import plotly.express as px
+import plotly as ply
 
-import seaborn as sns
 import pingouin as pg
 from scipy import stats
 import argparse
 import wandb
+import plotly.graph_objs as go
+from plot import line
 
 def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
 
@@ -44,8 +47,6 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
 
     for h in range(n_trials):
 
-        # train_data, test_data = spine_data(random_state=h)
-        # train_data, test_data = sonar_data(random_state=h)
         train_data, test_data = openml_data(name=filename, random_state=h)
         input_shape = train_data.X_data.shape[1]
 
@@ -94,14 +95,25 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
     path_ = pd.DataFrame(path_)
     path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
+    
+    # Plot
+    mean_pd = path_.groupby(['epoch', 'loss'], as_index=False).mean()
+    std_pd = path_.groupby(['epoch', 'loss'], as_index=False).std()
+    std_pd[['train_loss', 'train_acc', 'valid_acc']] = std_pd[['train_loss', 'train_acc', 'valid_acc']] / np.sqrt(n_trials)
 
-    # sns.set(style="whitegrid", rc={'figure.figsize':(11.7,8.27)})
-    fig, ax = plt.subplots(figsize=(11.7, 8.27))
-    ## Variance should be reduced to var / n_trials
-    qt = 1 - 2*(1 - scipy.stats.norm.cdf(1.96/np.sqrt(n_trials)))
-    sns.lineplot(ax=ax, data=path_, x='epoch', y='valid_acc', hue='loss', ci=int(100*qt))
-    plt.ylabel("Dataset: %s; Network: (%d, %d) - Test Accuracy" %(filename, H, D))
+    path_stat = pd.merge(mean_pd, std_pd, on=['epoch', 'loss'], suffixes=("_mean", "_std"))
 
+    fig = line(
+        data_frame = path_stat,
+        x = 'epoch',
+        y = 'valid_acc_mean',
+        error_y = 'train_acc_std',
+        error_y_mode = 'band',
+        color = 'loss',
+        title = f'Ave Test Acc in Epochs',
+    )
+
+    # Hypothesis Testing    
     p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
                     alternative='less').round(5)
     p_less = p_less[['A', 'B', 'p-unc', 'alternative']]
@@ -134,15 +146,13 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
     print(out)
     print(p_pair)
     if wandb_log:
-        wandb.log({"test_acc_curve": wandb.Image(fig), 
+        wandb.log({"test_acc_curve": fig,
                    "path": path_,
                    "perf_table": Acc, 
                    "p_less": p_less,
                    "p_greater": p_greater,
                    "network": [H, D]})
         wandb.finish()
-
-
 
 if __name__=='__main__':
     # PARSE THE ARGS
