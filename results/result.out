@@ -470,8 +470,8 @@ dataset: SantanderCustomerSatisfaction
 
 |                      |    BCE |   Hinge |   eLOTO |
 |:---------------------|-------:|--------:|--------:|
-| ('test_acc', 'mean') | 0.8636 |  0.8567 |  0.9041 |
-| ('test_acc', 'std')  | 0.0003 |  0.0005 |  0.0006 |
+| ('test_acc', 'mean') | 0.8636 |  0.8562 |  0.9041 |
+| ('test_acc', 'std')  | 0.0003 |  0.0004 |  0.0005 |
 
 -- Testing --
 
@@ -486,5 +486,56 @@ dataset: SantanderCustomerSatisfaction
 
 -- Result --
 
-| (128, 1) | mean(std) | 0.8636(0.0003) | 0.8567(0.0005) | 0.9041(0.0006) |
+| (128, 1) | mean(std) | 0.8636(0.0003) | 0.8562(0.0004) | 0.9041(0.0005) |
+|          | p_value   | 0.0        | 0.0        | ---            |
+
+
+#### D: 1, H: 256 ####
+
+-- Performance --
+
+|                      |    BCE |   Hinge |   eLOTO |
+|:---------------------|-------:|--------:|--------:|
+| ('test_acc', 'mean') | 0.8707 |  0.8694 |  0.9034 |
+| ('test_acc', 'std')  | 0.0003 |  0.0003 |  0.0004 |
+
+-- Testing --
+
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       0 | less          |
+|  2 | Hinge | eLOTO |       0 | less          |
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       1 | greater       |
+|  2 | Hinge | eLOTO |       1 | greater       |
+
+-- Result --
+
+| (256, 1) | mean(std) | 0.8707(0.0003) | 0.8694(0.0003) | 0.9034(0.0004) |
+|          | p_value   | 0.0        | 0.0        | ---    
+
+#### D: 1, H: 512 ####
+
+-- Performance --
+
+|                      |    BCE |   Hinge |   eLOTO |
+|:---------------------|-------:|--------:|--------:|
+| ('test_acc', 'mean') | 0.8777 |  0.8786 |  0.9034 |
+| ('test_acc', 'std')  | 0.0003 |  0.0003 |  0.0003 |
+
+-- Testing --
+
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       0 | less          |
+|  2 | Hinge | eLOTO |       0 | less          |
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       1 | greater       |
+|  2 | Hinge | eLOTO |       1 | greater       |
+
+-- Result --
+
+| (512, 1) | mean(std) | 0.8777(0.0003) | 0.8786(0.0003) | 0.9034(0.0003) |
 |          | p_value   | 0.0        | 0.0        | ---            |
