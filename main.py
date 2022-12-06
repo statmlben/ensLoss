@@ -97,21 +97,28 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
     Acc = pd.DataFrame(Acc)
     
     # Plot
+    path_ = path_.drop('train_loss', axis=1)
     mean_pd = path_.groupby(['epoch', 'loss'], as_index=False).mean()
+    mean_pd = mean_pd.melt(id_vars=['epoch', 'loss'], var_name='type', value_name='mean')
     std_pd = path_.groupby(['epoch', 'loss'], as_index=False).std()
-    std_pd[['train_loss', 'train_acc', 'valid_acc']] = std_pd[['train_loss', 'train_acc', 'valid_acc']] / np.sqrt(n_trials)
+    std_pd = std_pd.melt(id_vars=['epoch', 'loss'], var_name='type', value_name='std')
 
-    path_stat = pd.merge(mean_pd, std_pd, on=['epoch', 'loss'], suffixes=("_mean", "_std"))
+    std_pd['std'] = std_pd['std'] / np.sqrt(n_trials)
+
+    path_stat = pd.merge(mean_pd, std_pd, on=['epoch', 'loss', 'type'], suffixes=("", ""))
 
     fig = line(
         data_frame = path_stat,
         x = 'epoch',
-        y = 'valid_acc_mean',
-        error_y = 'train_acc_std',
+        y = 'mean',
+        error_y = 'std',
         error_y_mode = 'band',
         color = 'loss',
+        line_dash='type',
+        line_dash_map={'valid_acc': 'solid', 'train_acc': 'dot'},
         title = f'Ave Test Acc in Epochs',
     )
+    # fig.show()
 
     # Hypothesis Testing    
     p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
@@ -151,7 +158,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
                    "perf_table": Acc, 
                    "p_less": p_less,
                    "p_greater": p_greater,
-                   "network": [H, D]})
+                   })
         wandb.finish()
 
 if __name__=='__main__':
@@ -163,15 +170,15 @@ if __name__=='__main__':
                            help='width of the neural network')
     parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=3000, type=int,
+    parser.add_argument('-e', '--epoch', default=1000, type=int,
                            help='number of epochs to train')
     parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
                            help='filename of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 20}, 
-            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
+            'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth

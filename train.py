@@ -47,11 +47,11 @@ class Trainer(object):
                 loss.backward()
                 optimizer.step()
                 
-                epoch_loss_train += loss.item()
+                # epoch_loss_train += loss.item()
                 epoch_acc_train += acc.item()
                 
-                tbar.set_description('TRAIN ({}) SGD({}) | Loss: {:.3f} | Acc: {:.3f}'.format(
-                        e, self.loss, epoch_loss_train/(batch_idx+1), epoch_acc_train/(batch_idx+1)))
+                tbar.set_description('TRAIN ({}) SGD({}) | Acc: {:.3f}'.format(
+                        e, self.loss, epoch_acc_train/(batch_idx+1)))
 
             scheduler.step()
 
@@ -69,11 +69,11 @@ class Trainer(object):
                     y_pred = self.model(X_batch)
                     acc = binary_acc(y_pred, y_batch.unsqueeze(1))
                     
-                    epoch_loss_val += loss.item()
+                    # epoch_loss_valid += loss.item()
                     epoch_acc_val += acc.item()                
                 
-                    tbar.set_description('VALID ({}) SGD({}) | Loss: {:.3f} | Acc: {:.3f}'.format(
-                            e, self.loss, epoch_loss_val/(batch_idx+1), epoch_acc_val/(batch_idx+1)))
+                    tbar.set_description('VALID ({}) SGD({}) | Acc: {:.3f}'.format(
+                            e, self.loss, epoch_acc_val/(batch_idx+1)))
                 print('\n')
                 path_['epoch'].append(e)
                 path_['loss'].append(self.loss)
