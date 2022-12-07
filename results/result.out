@@ -538,3 +538,81 @@ dataset: SantanderCustomerSatisfaction
 
 | (512, 3) | mean(std) | 0.8924(0.0002) | 0.9014(0.0003) | 0.9116(0.0002) |
 |          | p_value   | 0.0        | 0.0        | ---            |
+
+
+#### D: 2, H: 128 ####
+
+-- Performance --
+
+|                      |    BCE |   Hinge |   eLOTO |
+|:---------------------|-------:|--------:|--------:|
+| ('test_acc', 'mean') | 0.882  |  0.8777 |  0.912  |
+| ('test_acc', 'std')  | 0.0002 |  0.0005 |  0.0002 |
+
+-- Testing --
+
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       0 | less          |
+|  2 | Hinge | eLOTO |       0 | less          |
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       1 | greater       |
+|  2 | Hinge | eLOTO |       1 | greater       |
+
+-- Result --
+
+| (128, 2) | mean(std) | 0.882(0.0002) | 0.8777(0.0005) | 0.912(0.0002) |
+|          | p_value   | 0.0        | 0.0        | ---            |
+
+
+#### D: 2, H: 256 ####
+
+-- Performance --
+
+|                      |    BCE |   Hinge |   eLOTO |
+|:---------------------|-------:|--------:|--------:|
+| ('test_acc', 'mean') | 0.8964 |  0.8902 |  0.9125 |
+| ('test_acc', 'std')  | 0.0001 |  0.0005 |  0.0002 |
+
+-- Testing --
+
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       0 | less          |
+|  2 | Hinge | eLOTO |       0 | less          |
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       1 | greater       |
+|  2 | Hinge | eLOTO |       1 | greater       |
+
+-- Result --
+
+| (256, 2) | mean(std) | 0.8964(0.0001) | 0.8902(0.0005) | 0.9125(0.0002) |
+|          | p_value   | 0.0        | 0.0        | ---            |
+
+
+#### D: 2, H: 512 ####
+
+-- Performance --
+
+|                      |    BCE |   Hinge |   eLOTO |
+|:---------------------|-------:|--------:|--------:|
+| ('test_acc', 'mean') | 0.903  |  0.8978 |  0.9123 |
+| ('test_acc', 'std')  | 0.0001 |  0.0005 |  0.0001 |
+
+-- Testing --
+
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       0 | less          |
+|  2 | Hinge | eLOTO |       0 | less          |
+|    | A     | B     |   p-unc | alternative   |
+|---:|:------|:------|--------:|:--------------|
+|  1 | BCE   | eLOTO |       1 | greater       |
+|  2 | Hinge | eLOTO |       1 | greater       |
+
+-- Result --
+
+| (512, 2) | mean(std) | 0.903(0.0001) | 0.8978(0.0005) | 0.9123(0.0001) |
+|          | p_value   | 0.0        | 0.0        | ---            |
