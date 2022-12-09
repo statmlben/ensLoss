@@ -9,9 +9,13 @@ paper/
 # wandb
 wandb/
 
+# dataset
+*.csv
+*.out
+
 # C extensions
 *.so
-*.csv
+
 # Distribution / packaging
 .Python
 build/

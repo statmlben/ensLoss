@@ -170,7 +170,7 @@ if __name__=='__main__':
                            help='width of the neural network')
     parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=1000, type=int,
+    parser.add_argument('-e', '--epoch', default=500, type=int,
                            help='number of epochs to train')
     parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
                            help='filename of the dataset')
@@ -178,7 +178,7 @@ if __name__=='__main__':
 
     config = { 'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
+            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth
