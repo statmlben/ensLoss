@@ -21,13 +21,13 @@ class Trainer(object):
         self.val_loader = val_loader
         self.config = config
 
-    def train(self, path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'valid_acc': []}):
+    def train(self, path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}):
         
         config = self.config
 
         loss_ = getattr(losses, self.loss)()
         optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'])
-        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer)
+        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, 50)
         
         self.model.train()
 
@@ -79,7 +79,7 @@ class Trainer(object):
                 path_['loss'].append(self.loss)
                 path_['train_loss'].append(epoch_loss_train/len(self.train_loader))
                 path_['train_acc'].append(epoch_acc_train/len(self.train_loader))
-                path_['valid_acc'].append(epoch_acc_val/len(self.val_loader))
+                path_['test_acc'].append(epoch_acc_val/len(self.val_loader))
 
         return path_, epoch_acc_val/len(self.val_loader)
 

@@ -43,7 +43,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
     np.random.seed(1024)
 
     Acc = {'trial': [], 'loss': [], 'test_acc': []}
-    path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'valid_acc': []}
+    path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
@@ -115,7 +115,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
         error_y_mode = 'band',
         color = 'loss',
         line_dash='type',
-        line_dash_map={'valid_acc': 'solid', 'train_acc': 'dot'},
+        line_dash_map={'test_acc': 'solid', 'train_acc': 'dot'},
         title = f'Ave Test Acc in Epochs',
     )
     # fig.show()
@@ -177,8 +177,8 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'LinearLR'},
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 5}, 
+            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR'}, #please change the argument if you use other LR
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth
