@@ -155,7 +155,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
     if wandb_log:
         wandb.log({"test_acc_curve": fig,
                    "path": path_,
-                   "perf_table": Acc, 
+                   "perf_table": Acc,
                    "p_less": p_less,
                    "p_greater": p_greater,
                    })
@@ -170,14 +170,14 @@ if __name__=='__main__':
                            help='width of the neural network')
     parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=500, type=int,
+    parser.add_argument('-e', '--epoch', default=1000, type=int,
                            help='number of epochs to train')
     parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
                            help='filename of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 5}, 
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR'}, #please change the argument if you use other LR
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
