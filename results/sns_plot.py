@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import argparse
 import scipy.stats
 
-def path_plot(filename, D, H, train_verbose=True):
+def path_plot(filename, D, H, train_verbose=False):
     sns.set(rc={'figure.figsize':(12, 9)})
     sns.set_theme(style='white')
 
@@ -29,7 +29,8 @@ def path_plot(filename, D, H, train_verbose=True):
         order = [3,4,5]
         plt.legend([handles[idx] for idx in order],[labels[idx] for idx in order], loc='upper right', title='method') 
     else:
-        g = sns.lineplot(data=df, x="epoch", y="test_acc", hue="loss", errorbar=('se', 1./np.sqrt(15)))
+        g = sns.lineplot(data=df, x="epoch", y="test_acc", hue="loss",
+                        linewidth=2, errorbar=('se', 1./np.sqrt(15)))
 
     plt.ylabel('Acc')
     plt.title('{}_{}({})'.format(filename,D,H))
