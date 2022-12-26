@@ -10,6 +10,7 @@ paper/
 wandb/
 
 # dataset
+dataset/
 *.csv
 *.out
 
