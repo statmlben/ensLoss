@@ -1,3 +1,8 @@
+""" eloto:  """
+
+# Authors: Ben Dai <bendai@cuhk.edu.hk>
+# License: MIT License
+
 import torch
 import torch.nn as nn
 import torch.optim as optim

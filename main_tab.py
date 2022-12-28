@@ -1,4 +1,4 @@
-"""eloto in image datasets"""
+""" eloto in tabular datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -18,8 +18,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-from loader import TrainData, TestData, openml_data, img_data
-from model import BinaryClassification, MHIST_CNN
+from loader import TrainData, TestData, openml_data
+from model import BinaryClassification
 from base import evaluate
 from sklearn.model_selection import KFold
 import scipy
@@ -33,9 +33,8 @@ import argparse
 import wandb
 import plotly.graph_objs as go
 from plot import line
-import torchvision.transforms as transforms
 
-def main(config, filename='MHIST', n_trials=1, wandb_log=False):
+def main(config, D, H, filename='sylva_prior', n_trials=15, wandb_log=True):
 
     ## wandb log
     if wandb_log:
@@ -46,42 +45,36 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
     random.seed(1024)
     np.random.seed(1024)
 
-    ## image tranform
-    transform = transforms.Compose(
-                [transforms.ToPILImage(),
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
     Acc = {'trial': [], 'loss': [], 'test_acc': []}
     path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
-        train_data, test_data = img_data(transform=transform, name=filename)
-        input_shape = (3, 224, 224)
+        train_data, test_data = openml_data(name=filename, random_state=h)
+        input_shape = train_data.X_data.shape[1]
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
         ## eLOTO ##
-        # print('\n-- TRAIN eLOTO --\n')
-        # model = MHIST_CNN()
-        # model.to(config['device'])
+        print('\n-- TRAIN eLOTO --\n')
+        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        model.to(config['device'])
 
-        # trainer_ = Trainer(model=model, loss='eLOTO', 
-        #                     config=config, device=config['device'],
-        #                     train_loader=train_loader, val_loader=test_loader)
-        # path_, acc_test = trainer_.train(path_)
-        # Acc['trial'].append(h)
-        # Acc['loss'].append('eLOTO')
-        # Acc['test_acc'].append(acc_test)
+        trainer_ = Trainer(model=model, loss='eLOTO', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader)
+        path_, acc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('eLOTO')
+        Acc['test_acc'].append(acc_test)
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        model = MHIST_CNN()
+        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='BCELoss',
+        trainer_ = Trainer(model=model, loss='BCELoss', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test = trainer_.train(path_)
@@ -91,7 +84,7 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
 
         ## Hinge loss ##
         print('\n-- TRAIN Hinge --\n')
-        model = MHIST_CNN()
+        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='Hinge', 
@@ -174,22 +167,27 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='eLOTO Training')
-    parser.add_argument('-B', '--batch', default=128, type=int,
+    parser.add_argument('-D', '--depth', default=1, type=int,
+                        help='depth of the neural network')
+    parser.add_argument('-H', '--width', default=128, type=int,
+                           help='width of the neural network')
+    parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=1000, type=int,
                            help='number of epochs to train')
-    parser.add_argument('-f', '--filename', default='MHIST', type=str,
+    parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
                            help='filename of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'StepLR'}, #please change the argument if you use other LR
+            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR'}, #please change the argument if you use other LR
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
+    H, D = args.width, args.depth
     filename = args.filename
 
-    main(config=config, filename=filename)
+    main(config=config, D=D, H=H, filename=filename)
 
 ## Tabular dataset
 # philippine

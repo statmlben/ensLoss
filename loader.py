@@ -9,6 +9,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from scipy.io.arff import loadarff 
 from sklearn.datasets import fetch_openml
+import os
+from torchvision.io import read_image
 
 ## Reproducibility
 torch.manual_seed(1024)
@@ -152,3 +154,39 @@ def openml_data(random_state=0, name='sylva_prior'):
     train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
     test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
     return train_data, test_data
+
+## image dataset
+
+class MHIST_loader(Dataset):
+    def __init__(self, annotations_file, img_dir, label_map={'SSA': 0, 'HP': 1}, partition='train', transform=None):
+        self.img_labels = (pd.read_csv(annotations_file) [lambda df: df['Partition'] == partition])
+        self.label_map = label_map
+        self.img_labels['Majority Vote Label'] = self.img_labels['Majority Vote Label'].map(self.label_map)
+        self.img_dir = img_dir
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.img_labels)
+
+    def __getitem__(self, idx):
+        
+        img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
+        image = read_image(img_path)
+        label = self.img_labels.iloc[idx, 1]
+        if self.transform:
+            image = self.transform(image)
+        return image, label
+
+def img_data(transform, name='MHIST'):
+    if name == 'MHIST':
+        train_data = MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', transform=transform)
+        test_data = MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', partition='test', transform=transform)
+    elif name == 'CIFAR2':
+        pass
+    elif name == 'PCam':
+        pass
+    else:
+        raise Exception("Sorry, no dataset provided.") 
+    return train_data, test_data
+
+# MHIST(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/')

@@ -4,6 +4,8 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import torch.nn.functional as F
+
 
 class BinaryClassification(nn.Module):
     def __init__(self, input_shape=12, H=128, D=1):
@@ -31,4 +33,27 @@ class BinaryClassification(nn.Module):
             x = self.batchnorm3(x)
         # x = self.dropout(x)
         x = self.layer_out(x)
+        return x
+
+class MHIST_CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 32, 3)
+        self.conv2 = nn.Conv2d(32, 64, 3)
+        self.conv3 = nn.Conv2d(64, 128, 3)
+        self.pool = nn.MaxPool2d(2, 2)
+
+        self.fc1 = nn.Linear(86528, 1024)
+        self.fc2 = nn.Linear(1024, 512)
+        self.fc3 = nn.Linear(512, 1)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x))) # out_shape= 32x111x111
+        x = self.pool(F.relu(self.conv2(x))) # out_shape= 64x54x54
+        x = self.pool(F.relu(self.conv3(x))) # out_shape= 128x26x26
+
+        x = torch.flatten(x, 1) # out_shape=86528
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
         return x
