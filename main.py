@@ -35,16 +35,11 @@ import plotly.graph_objs as go
 from plot import line
 import torchvision.transforms as transforms
 
-def main(config, filename='MHIST', n_trials=1, wandb_log=False):
+def main(config, filename='MHIST', n_trials=2, wandb_log=False):
 
     ## wandb log
     if wandb_log:
         wandb.init(project="eloto", name=filename+str(D)+'-'+str(H))
-
-    ## Reproducibility
-    torch.manual_seed(1024)
-    random.seed(1024)
-    np.random.seed(1024)
 
     ## image tranform
     transform = transforms.Compose(
@@ -57,6 +52,11 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
 
     for h in range(n_trials):
 
+        ## Reproducibility
+        torch.manual_seed(h)
+        random.seed(h)
+        np.random.seed(h)
+
         train_data, test_data = img_data(transform=transform, name=filename)
         input_shape = (3, 224, 224)
 
@@ -64,17 +64,17 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
         ## eLOTO ##
-        # print('\n-- TRAIN eLOTO --\n')
-        # model = MHIST_CNN()
-        # model.to(config['device'])
+        print('\n-- TRAIN eLOTO --\n')
+        model = MHIST_CNN()
+        model.to(config['device'])
 
-        # trainer_ = Trainer(model=model, loss='eLOTO', 
-        #                     config=config, device=config['device'],
-        #                     train_loader=train_loader, val_loader=test_loader)
-        # path_, acc_test = trainer_.train(path_)
-        # Acc['trial'].append(h)
-        # Acc['loss'].append('eLOTO')
-        # Acc['test_acc'].append(acc_test)
+        trainer_ = Trainer(model=model, loss='eLOTO', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader)
+        path_, acc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('eLOTO')
+        Acc['test_acc'].append(acc_test)
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
@@ -103,7 +103,7 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
         Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
-    path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
+    # path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
     
     # Plot
@@ -145,7 +145,7 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
     res[('test_acc', 'std')] /= np.sqrt(n_trials)
     res = res.T.round(4)
 
-    print('#### D: %d, H: %d ####' %(D, H))
+    # print('#### D: %d, H: %d ####' %(D, H))
 
     print('\n-- Performance --\n')
     print((res.round(4)).to_markdown())
@@ -154,7 +154,7 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
     print(p_less.round(4).to_markdown())
     print(p_greater.round(4).to_markdown())
 
-    out = '| ({}, {}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format(H, D, res['BCE'][0], res['BCE'][1], 
+    out = '| mean(std) | {}({}) | {}({}) | {}({}) |'.format(res['BCE'][0], res['BCE'][1], 
                                                             res['Hinge'][0], res['Hinge'][1],
                                                             res['eLOTO'][0], res['eLOTO'][1])
     p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['p-unc'].values[0], 
@@ -174,17 +174,17 @@ def main(config, filename='MHIST', n_trials=1, wandb_log=False):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='eLOTO Training')
-    parser.add_argument('-B', '--batch', default=128, type=int,
+    parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=1000, type=int,
+    parser.add_argument('-e', '--epoch', default=500, type=int,
                            help='number of epochs to train')
     parser.add_argument('-f', '--filename', default='MHIST', type=str,
                            help='filename of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'StepLR'}, #please change the argument if you use other LR
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10},
+            'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'StepLR'}, #please change the argument if you use other LR
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename

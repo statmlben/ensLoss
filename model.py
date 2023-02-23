@@ -48,6 +48,7 @@ class MHIST_CNN(nn.Module):
         self.fc3 = nn.Linear(512, 1)
 
     def forward(self, x):
+        ## 224x224
         x = self.pool(F.relu(self.conv1(x))) # out_shape= 32x111x111
         x = self.pool(F.relu(self.conv2(x))) # out_shape= 64x54x54
         x = self.pool(F.relu(self.conv3(x))) # out_shape= 128x26x26

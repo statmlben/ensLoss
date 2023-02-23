@@ -42,11 +42,12 @@ class Trainer(object):
             
             tbar = tqdm(self.train_loader, ncols=120)
             for batch_idx, (X_batch, y_batch) in enumerate(tbar):
+                y_batch = y_batch.float()
                 X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
                 
                 optimizer.zero_grad()
                 y_pred = self.model(X_batch)
-                loss = loss_(y_pred, y_batch.unsqueeze(1))
+                loss = loss_(y_pred, y_batch.unsqueeze(1).float())
                 acc = binary_acc(y_pred, y_batch.unsqueeze(1))
                 
                 loss.backward()
