@@ -1,4 +1,4 @@
-""" eloto in tabular datasets"""
+"""eloto in image datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -18,8 +18,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
-from loader import TrainData, TestData, openml_data
-from model import BinaryClassification
+from loader import TrainData, TestData, openml_data, img_data
+from model import BinaryClassification, MHIST_CNN, MHIST_resnet18
 from base import evaluate
 from sklearn.model_selection import KFold
 import scipy
@@ -33,48 +33,58 @@ import argparse
 import wandb
 import plotly.graph_objs as go
 from plot import line
+import torchvision.transforms as transforms
+from torchvision import datasets, models, transforms
 
-def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
+def main(config, filename='MHIST', n_trials=2, wandb_log=False):
 
     ## wandb log
     if wandb_log:
         wandb.init(project="COTO", name=filename+str(D)+'-'+str(H))
 
-    ## Reproducibility
-    torch.manual_seed(1024)
-    random.seed(1024)
-    np.random.seed(1024)
+    ## image tranform
+    transform = transforms.Compose(
+                [transforms.ToPILImage(),
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
     Acc = {'trial': [], 'loss': [], 'test_acc': []}
     path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
-        train_data, test_data = openml_data(name=filename, random_state=h)
-        input_shape = train_data.X_data.shape[1]
+        ## Reproducibility
+        torch.manual_seed(h)
+        random.seed(h)
+        np.random.seed(h)
+
+        train_data, test_data = img_data(transform=transform, name=filename)
+        input_shape = (3, 224, 224)
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
         ## eLOTO ##
-        print('\n-- TRAIN eLOTO --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
-        model.to(config['device'])
+        # print('\n-- TRAIN eLOTO --\n')
+        # model = MHIST_CNN()
+        # model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='eLOTO', 
-                            config=config, device=config['device'],
-                            train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
-        Acc['trial'].append(h)
-        Acc['loss'].append('eLOTO')
-        Acc['test_acc'].append(acc_test)
+        # trainer_ = Trainer(model=model, loss='eLOTO', 
+        #                     config=config, device=config['device'],
+        #                     train_loader=train_loader, val_loader=test_loader)
+        # path_, acc_test = trainer_.train(path_)
+        # Acc['trial'].append(h)
+        # Acc['loss'].append('eLOTO')
+        # Acc['test_acc'].append(acc_test)
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        # model = MHIST_CNN()
+        model = MHIST_resnet18()
+
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='BCELoss', 
+        trainer_ = Trainer(model=model, loss='BCELoss',
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test = trainer_.train(path_)
@@ -83,20 +93,20 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
         Acc['test_acc'].append(acc_test)
 
         ## Hinge loss ##
-        print('\n-- TRAIN Hinge --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
-        model.to(config['device'])
+        # print('\n-- TRAIN Hinge --\n')
+        # model = MHIST_CNN()
+        # model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='Hinge', 
-                            config=config, device=config['device'],
-                            train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
-        Acc['trial'].append(h)
-        Acc['loss'].append('Hinge')
-        Acc['test_acc'].append(acc_test)
+        # trainer_ = Trainer(model=model, loss='Hinge', 
+        #                     config=config, device=config['device'],
+        #                     train_loader=train_loader, val_loader=test_loader)
+        # path_, acc_test = trainer_.train(path_)
+        # Acc['trial'].append(h)
+        # Acc['loss'].append('Hinge')
+        # Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
-    path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
+    # path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
     
     # Plot
@@ -138,7 +148,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
     res[('test_acc', 'std')] /= np.sqrt(n_trials)
     res = res.T.round(4)
 
-    print('#### D: %d, H: %d ####' %(D, H))
+    # print('#### D: %d, H: %d ####' %(D, H))
 
     print('\n-- Performance --\n')
     print((res.round(4)).to_markdown())
@@ -147,7 +157,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
     print(p_less.round(4).to_markdown())
     print(p_greater.round(4).to_markdown())
 
-    out = '| ({}, {}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format(H, D, res['BCE'][0], res['BCE'][1], 
+    out = '| mean(std) | {}({}) | {}({}) | {}({}) |'.format(res['BCE'][0], res['BCE'][1], 
                                                             res['Hinge'][0], res['Hinge'][1],
                                                             res['eLOTO'][0], res['eLOTO'][1])
     p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['p-unc'].values[0], 
@@ -167,27 +177,22 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='eLOTO Training')
-    parser.add_argument('-D', '--depth', default=1, type=int,
-                        help='depth of the neural network')
-    parser.add_argument('-H', '--width', default=128, type=int,
-                           help='width of the neural network')
-    parser.add_argument('-B', '--batch', default=256, type=int,
+    parser.add_argument('-B', '--batch', default=32, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=300, type=int,
+    parser.add_argument('-e', '--epoch', default=100, type=int,
                            help='number of epochs to train')
-    parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
+    parser.add_argument('-f', '--filename', default='MHIST', type=str,
                            help='filename of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'step_size':10, 'gamma': 0.5}, #please change the argument if you use other LR
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10},
+            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'step_size':5, 'gamma':0.91}, #please change the argument if you use other LR
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
-    H, D = args.width, args.depth
     filename = args.filename
 
-    main(config=config, D=D, H=H, filename=filename)
+    main(config=config, filename=filename)
 
 ## Tabular dataset
 # philippine

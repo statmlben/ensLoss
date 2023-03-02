@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from torchvision import datasets, models, transforms
 
 
 class BinaryClassification(nn.Module):
@@ -58,3 +59,9 @@ class MHIST_CNN(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+
+def MHIST_resnet18(weight=None):
+    model = models.resnet18(weights='DEFAULT')
+    num_features = model.fc.in_features     
+    model.fc = nn.Linear(num_features, 1)   #(num_of_class == 1)
+    return model

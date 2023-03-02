@@ -1,4 +1,4 @@
-# **Numerical Experiments**: All you need is long epochs
+# **Numerical Experiments**
 - *: p-value is provided by **One-Tailed Paired sample T-Test** based on the alternative: `Acc(eLOTO) >= Acc(Other)`
 
 

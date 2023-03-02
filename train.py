@@ -11,6 +11,7 @@ from tqdm import tqdm
 from metric import binary_acc
 import pandas as pd
 import losses
+from torchmetrics.classification import BinaryAUROC
 
 def get_instance(module, name, config, *args):
     # GET THE CORRESPONDING CLASS / FCT 
@@ -32,13 +33,13 @@ class Trainer(object):
 
         loss_ = getattr(losses, self.loss)()
         optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'])
-        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, 50)
+        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, config['optimizer']['step_size'], gamma=config['optimizer']['gamma'])
         
-        self.model.train()
-
         for e in range(1, config['trainer']['epochs']+1):
             epoch_loss_train = 0
             epoch_acc_train = 0
+
+            self.model.train()
             
             tbar = tqdm(self.train_loader, ncols=120)
             for batch_idx, (X_batch, y_batch) in enumerate(tbar):
@@ -61,25 +62,26 @@ class Trainer(object):
 
             scheduler.step()
 
-            ## EVALUATION
+            # EVALUATION
             if e%(config['trainer']['val_per_epochs'])==0:
                 print('\n###### EVALUATION ######')
                 epoch_loss_val = 0
                 epoch_acc_val = 0
 
                 self.model.eval()
-                tbar = tqdm(self.val_loader, ncols=120)
-                for batch_idx, (X_batch, y_batch) in enumerate(tbar):
+                with torch.no_grad():
+                    tbar = tqdm(self.val_loader, ncols=120)
+                    for batch_idx, (X_batch, y_batch) in enumerate(tbar):
 
-                    X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
-                    y_pred = self.model(X_batch)
-                    acc = binary_acc(y_pred, y_batch.unsqueeze(1))
+                        X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+                        y_pred = self.model(X_batch)
+                        acc = binary_acc(y_pred, y_batch.unsqueeze(1))
+                        
+                        # epoch_loss_valid += loss.item()
+                        epoch_acc_val += acc.item()
                     
-                    # epoch_loss_valid += loss.item()
-                    epoch_acc_val += acc.item()                
-                
-                    tbar.set_description('VALID ({}) SGD({}) | Acc: {:.3f}'.format(
-                            e, self.loss, epoch_acc_val/(batch_idx+1)))
+                        tbar.set_description('VALID ({}) SGD({}) | Acc: {:.3f}'.format(
+                                e, self.loss, epoch_acc_val/(batch_idx+1)))
                 print('\n')
                 path_['epoch'].append(e)
                 path_['loss'].append(self.loss)
@@ -88,4 +90,3 @@ class Trainer(object):
                 path_['test_acc'].append(epoch_acc_val/len(self.val_loader))
 
         return path_, epoch_acc_val/len(self.val_loader)
-
