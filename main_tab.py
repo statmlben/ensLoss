@@ -56,17 +56,17 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
-        ## eLOTO ##
-        print('\n-- TRAIN eLOTO --\n')
+        ## COTO ##
+        print('\n-- TRAIN COTO --\n')
         model = BinaryClassification(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='eLOTO', 
+        trainer_ = Trainer(model=model, loss='COTO', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test = trainer_.train(path_)
         Acc['trial'].append(h)
-        Acc['loss'].append('eLOTO')
+        Acc['loss'].append('COTO')
         Acc['test_acc'].append(acc_test)
 
         ## BCE loss ##
@@ -127,12 +127,12 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
     p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
                     alternative='less').round(5)
     p_less = p_less[['A', 'B', 'p-unc', 'alternative']]
-    p_less = p_less[p_less['B'] == 'eLOTO']
+    p_less = p_less[p_less['B'] == 'COTO']
 
     p_greater = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
                     alternative='greater').round(5)
     p_greater = p_greater[['A', 'B', 'p-unc', 'alternative']]
-    p_greater = p_greater[p_greater['B'] == 'eLOTO']
+    p_greater = p_greater[p_greater['B'] == 'COTO']
 
     res = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
     res[('test_acc', 'std')] /= np.sqrt(n_trials)
@@ -149,7 +149,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
 
     out = '| ({}, {}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format(H, D, res['BCE'][0], res['BCE'][1], 
                                                             res['Hinge'][0], res['Hinge'][1],
-                                                            res['eLOTO'][0], res['eLOTO'][1])
+                                                            res['COTO'][0], res['COTO'][1])
     p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['p-unc'].values[0], 
                                         p_less[p_less['A']=='Hinge']['p-unc'].values[0])
     print('\n-- Result --\n')
@@ -166,7 +166,7 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
 
 if __name__=='__main__':
     # PARSE THE ARGS
-    parser = argparse.ArgumentParser(description='eLOTO Training')
+    parser = argparse.ArgumentParser(description='COTO Training')
     parser.add_argument('-D', '--depth', default=1, type=int,
                         help='depth of the neural network')
     parser.add_argument('-H', '--width', default=128, type=int,
