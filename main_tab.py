@@ -1,4 +1,4 @@
-""" eloto in tabular datasets"""
+""" COTO in tabular datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -20,7 +20,7 @@ from sklearn.metrics import confusion_matrix, classification_report, accuracy_sc
 
 from loader import TrainData, TestData, openml_data
 from model import BinaryClassification
-from base import evaluate
+from base import evaluate, pairwise_ttest
 from sklearn.model_selection import KFold
 import scipy
 from train import Trainer
@@ -124,14 +124,20 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
     # fig.show()
 
     # Hypothesis Testing    
-    p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
-                    alternative='less').round(5)
-    p_less = p_less[['A', 'B', 'p-unc', 'alternative']]
+    # p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
+    #                 alternative='less').round(5)
+    # p_less = p_less[['A', 'B', 'p-unc', 'alternative']]
+    # p_less = p_less[p_less['B'] == 'COTO']
+
+    p_less = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='less').round(5)
     p_less = p_less[p_less['B'] == 'COTO']
 
-    p_greater = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
-                    alternative='greater').round(5)
-    p_greater = p_greater[['A', 'B', 'p-unc', 'alternative']]
+    # p_greater = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
+    #                 alternative='greater').round(5)
+    # p_greater = p_greater[['A', 'B', 'p-unc', 'alternative']]
+    # p_greater = p_greater[p_greater['B'] == 'COTO']
+
+    p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
     p_greater = p_greater[p_greater['B'] == 'COTO']
 
     res = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
@@ -147,11 +153,12 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
     print(p_less.round(4).to_markdown())
     print(p_greater.round(4).to_markdown())
 
-    out = '| ({}, {}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format(H, D, res['BCE'][0], res['BCE'][1], 
+    out = '| ({}, {}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format(H, D, 
+                                                            res['BCE'][0], res['BCE'][1], 
                                                             res['Hinge'][0], res['Hinge'][1],
                                                             res['COTO'][0], res['COTO'][1])
-    p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['p-unc'].values[0], 
-                                        p_less[p_less['A']=='Hinge']['p-unc'].values[0])
+    p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['pvalue'].values[0], 
+                                        p_less[p_less['A']=='Hinge']['pvalue'].values[0])
     print('\n-- Result --\n')
     print(out)
     print(p_pair)
@@ -195,6 +202,6 @@ if __name__=='__main__':
 # SantanderCustomerSatisfaction
 
 ## Image dataset
-# Age and gender prediction: https://talhassner.github.io/home/projects/Adience/Adience-data.html
+# CIFAR2: 
 # PCam: https://github.com/basveeling/pcam
 # MHIST: https://bmirds.github.io/MHIST/

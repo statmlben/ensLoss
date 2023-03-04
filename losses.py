@@ -5,9 +5,9 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-class eLOTO(nn.Module):
+class COTO(nn.Module):
     def __init__(self, dist=torch.distributions.exponential.Exponential(1 / 1.)):
-        super(eLOTO, self).__init__()
+        super(COTO, self).__init__()
         self.dist = dist
 
     def forward(self, output, target):

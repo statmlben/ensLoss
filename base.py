@@ -5,7 +5,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
-
+from scipy.stats import ttest_ind, ttest_1samp
+from itertools import combinations, permutations
 
 def evaluate(model, loader, y_test, device):
     y_pred_list = []
@@ -22,3 +23,21 @@ def evaluate(model, loader, y_test, device):
     y_pred_list = np.array(y_pred_list).flatten()
     acc = accuracy_score(y_test, y_pred_list)
     return acc, y_pred_list
+
+
+def pairwise_ttest(df, val_col, group_col, subject='trial', alternative='less'):
+    res = {'A': [], 'B':[], 'pvalue': [], 'stat': [], 'alternative': []}
+    group_lst = df[group_col].unique()
+    perm = permutations(group_lst, 2)
+    for g1, g2 in perm:
+        diff = df[df[group_col] == g1].set_index(subject)[val_col] - df[df[group_col] == g2].set_index(subject)[val_col]
+        test_res = ttest_1samp(diff, popmean=0.0, alternative=alternative)
+        res['A'].append(g1)
+        res['B'].append(g2)
+        res['pvalue'].append(test_res.pvalue)
+        res['alternative'].append(alternative)
+        res['stat'].append(test_res.statistic)
+    res = pd.DataFrame(res)
+    return res
+
+
