@@ -188,7 +188,7 @@ if __name__=='__main__':
 
     config = { 'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'step_size':10, 'gamma': 0.5}, #please change the argument if you use other LR
+            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'step_size':30, 'gamma': 0.1}, #please change the argument if you use other LR
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth
