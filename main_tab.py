@@ -33,24 +33,27 @@ import argparse
 import wandb
 import plotly.graph_objs as go
 from plot import line
+import sys
+from tab_transformer_pytorch import TabTransformer
 
-def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
+
+def main(config, D, H, data_id=43969, n_trials=10, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=filename+str(D)+'-'+str(H))
+        wandb.init(project="COTO", name=str(data_id)+str(D)+'-'+str(H))
 
     ## Reproducibility
-    torch.manual_seed(1024)
-    random.seed(1024)
-    np.random.seed(1024)
+    torch.manual_seed(0)
+    random.seed(0)
+    np.random.seed(0)
 
     Acc = {'trial': [], 'loss': [], 'test_acc': []}
     path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
-        train_data, test_data = openml_data(name=filename, random_state=h)
+        train_data, test_data = openml_data(data_id=data_id, random_state=h)
         input_shape = train_data.X_data.shape[1]
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
@@ -144,7 +147,14 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
     res[('test_acc', 'std')] /= np.sqrt(n_trials)
     res = res.T.round(4)
 
-    print('#### D: %d, H: %d ####' %(D, H))
+    ## Save outcome
+    orig_stdout = sys.stdout
+    out_file = open('out.txt', 'a+')
+    sys.stdout = out_file
+
+    print('\n#### %d - D: %d, H: %d ####\n' %(data_id, D, H))
+
+    print('\n Step Size: %s \n' %config['optimizer'])
 
     print('\n-- Performance --\n')
     print((res.round(4)).to_markdown())
@@ -170,6 +180,9 @@ def main(config, D, H, filename='sylva_prior', n_trials=20, wandb_log=True):
                    "p_greater": p_greater,
                    })
         wandb.finish()
+    
+    sys.stdout = orig_stdout
+    out_file.close()
 
 if __name__=='__main__':
     # PARSE THE ARGS
@@ -182,24 +195,28 @@ if __name__=='__main__':
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=300, type=int,
                            help='number of epochs to train')
-    parser.add_argument('-f', '--filename', default='sylva_prior', type=str,
-                           help='filename of the dataset')
+    parser.add_argument('-ID', '--data_id', default=43969, type=int,
+                           help='data_id of the dataset')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'step_size':30, 'gamma': 0.1}, #please change the argument if you use other LR
+            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':20, 'gamma': .618}}, #please change the argument if you use other LR
+            # 'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-3, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth
-    filename = args.filename
+    data_id = args.data_id
 
-    main(config=config, D=D, H=H, filename=filename)
+    main(config=config, D=D, H=H, data_id=data_id)
 
 ## Tabular dataset
 # philippine
 # sylva_prior
 # SantanderCustomerSatisfaction
+
+# Tabular Benchmark
+# house_16H: 43969
 
 ## Image dataset
 # CIFAR2: 

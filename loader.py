@@ -124,7 +124,7 @@ def biodeg_data(random_state=0):
     X = X.values
     y = y.values
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_state)
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
@@ -133,12 +133,15 @@ def biodeg_data(random_state=0):
     test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
     return train_data, test_data
 
-def openml_data(random_state=0, name='sylva_prior'):
-    dataset = fetch_openml(name=name)
+def openml_data(random_state=0, data_id=43969):
+    dataset = fetch_openml(data_id=data_id)
     target_set = list(set(dataset.target))
+    #if condition returns True, then nothing happens:
+    assert len(target_set) == 2, "Only binary classification is considered."
+
     encode_map = {target_set[0]: 0, target_set[1]: 1}
 
-    if name == 'SantanderCustomerSatisfaction':
+    if data_id == 'SantanderCustomerSatisfaction':
         del dataset.data['ID_code']
     X = dataset.data
     y = dataset.target
@@ -146,7 +149,7 @@ def openml_data(random_state=0, name='sylva_prior'):
     X = X.values
     y = y.values
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_state)
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)

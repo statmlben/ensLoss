@@ -1,0 +1,145 @@
+
+#### sylva_prior - D: 1, H: 128 ####
+
+
+ Step Size: {'lr': 1e-05, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-05, 'max_lr': 0.001, 'step_size_up': 10, 'mode': 'triangular2', 'cycle_momentum': False}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |   Hinge |
+|:---------------------|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.9933 | 0.994  |  0.9935 |
+| ('test_acc', 'std')  | 0.0001 | 0.0001 |  0.0002 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  2 | BCE   | COTO |   0      | -4.9897 | less          |
+|  4 | Hinge | COTO |   0.0137 | -2.3891 | less          |
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  2 | BCE   | COTO |   1      | -4.9897 | greater       |
+|  4 | Hinge | COTO |   0.9863 | -2.3891 | greater       |
+
+-- Result --
+
+| (128, 1) | mean(std) | 0.9933(0.0001) | 0.9935(0.0002) | 0.994(0.0001) |
+|          | p_value   | 4e-05        | 0.01371        | ---            |
+
+#### sylva_prior - D: 2, H: 128 ####
+
+
+ Step Size: {'lr': 1e-05, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-05, 'max_lr': 0.001, 'step_size_up': 10, 'mode': 'triangular2', 'cycle_momentum': False}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |   Hinge |
+|:---------------------|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.9928 | 0.9944 |  0.9929 |
+| ('test_acc', 'std')  | 0.0002 | 0.0001 |  0.0002 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  2 | BCE   | COTO |        0 | -8.4953 | less          |
+|  4 | Hinge | COTO |        0 | -5.9727 | less          |
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  2 | BCE   | COTO |        1 | -8.4953 | greater       |
+|  4 | Hinge | COTO |        1 | -5.9727 | greater       |
+
+-- Result --
+
+| (128, 2) | mean(std) | 0.9928(0.0002) | 0.9929(0.0002) | 0.9944(0.0001) |
+|          | p_value   | 0.0        | 0.0        | ---            |
+
+#### 43969 - D: 1, H: 128 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 0.0001, 'max_lr': 0.001, 'step_size_up': 5, 'mode': 'triangular2', 'cycle_momentum': False}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |   Hinge |
+|:---------------------|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8554 | 0.8515 |  0.8532 |
+| ('test_acc', 'std')  | 0.001  | 0.0014 |  0.0014 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |   stat | alternative   |
+|---:|:------|:-----|---------:|-------:|:--------------|
+|  2 | BCE   | COTO |   0.9928 | 2.6941 | less          |
+|  4 | Hinge | COTO |   0.9251 | 1.5011 | less          |
+|    | A     | B    |   pvalue |   stat | alternative   |
+|---:|:------|:-----|---------:|-------:|:--------------|
+|  2 | BCE   | COTO |   0.0072 | 2.6941 | greater       |
+|  4 | Hinge | COTO |   0.0749 | 1.5011 | greater       |
+
+-- Result --
+
+| (128, 1) | mean(std) | 0.8554(0.001) | 0.8532(0.0014) | 0.8515(0.0014) |
+|          | p_value   | 0.99281        | 0.92512        | ---            |
+
+#### 43969 - D: 2, H: 128 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size': 10, 'gamma': 0.618}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |   Hinge |
+|:---------------------|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8556 | 0.8341 |  0.8526 |
+| ('test_acc', 'std')  | 0.0021 | 0.0157 |  0.002  |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |   stat | alternative   |
+|---:|:------|:-----|---------:|-------:|:--------------|
+|  2 | BCE   | COTO |   0.899  | 1.376  | less          |
+|  4 | Hinge | COTO |   0.8563 | 1.1309 | less          |
+|    | A     | B    |   pvalue |   stat | alternative   |
+|---:|:------|:-----|---------:|-------:|:--------------|
+|  2 | BCE   | COTO |   0.101  | 1.376  | greater       |
+|  4 | Hinge | COTO |   0.1437 | 1.1309 | greater       |
+
+-- Result --
+
+| (128, 2) | mean(std) | 0.8556(0.0021) | 0.8526(0.002) | 0.8341(0.0157) |
+|          | p_value   | 0.89896        | 0.85634        | ---            |
+
+#### 43969 - D: 3, H: 128 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size': 20, 'gamma': 0.618}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |   Hinge |
+|:---------------------|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8605 | 0.7934 |  0.8559 |
+| ('test_acc', 'std')  | 0.0017 | 0.037  |  0.0012 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |   stat | alternative   |
+|---:|:------|:-----|---------:|-------:|:--------------|
+|  2 | BCE   | COTO |   0.9442 | 1.7638 | less          |
+|  4 | Hinge | COTO |   0.935  | 1.6661 | less          |
+|    | A     | B    |   pvalue |   stat | alternative   |
+|---:|:------|:-----|---------:|-------:|:--------------|
+|  2 | BCE   | COTO |   0.0558 | 1.7638 | greater       |
+|  4 | Hinge | COTO |   0.065  | 1.6661 | greater       |
+
+-- Result --
+
+| (128, 3) | mean(std) | 0.8605(0.0017) | 0.8559(0.0012) | 0.7934(0.037) |
+|          | p_value   | 0.9442        | 0.93498        | ---            |

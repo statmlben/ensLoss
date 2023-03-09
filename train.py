@@ -33,7 +33,8 @@ class Trainer(object):
 
         loss_ = getattr(losses, self.loss)()
         optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'])
-        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, config['optimizer']['step_size'], gamma=config['optimizer']['gamma'])
+        # scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, config['optimizer']['A1'], config['optimizer']['A2'])
+        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, **config['optimizer']['args'])
         
         for e in range(1, config['trainer']['epochs']+1):
             epoch_loss_train = 0
@@ -57,8 +58,8 @@ class Trainer(object):
                 # epoch_loss_train += loss.item()
                 epoch_acc_train += acc.item()
                 
-                tbar.set_description('TRAIN ({}) SGD({}) | Acc: {:.3f}'.format(
-                        e, self.loss, epoch_acc_train/(batch_idx+1)))
+                tbar.set_description('TRAIN ({}) SGD({}) LR({:.2E}) | Acc: {:.3f}'.format(
+                        e, self.loss, optimizer.param_groups[0]["lr"], epoch_acc_train/(batch_idx+1)))
 
             scheduler.step()
 
