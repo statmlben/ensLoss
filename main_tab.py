@@ -37,7 +37,7 @@ import sys
 from tab_transformer_pytorch import TabTransformer
 
 
-def main(config, D, H, data_id=43969, n_trials=10, wandb_log=False):
+def main(config, D, H, data_id=43969, n_trials=2, wandb_log=False):
 
     ## wandb log
     if wandb_log:
@@ -201,8 +201,8 @@ if __name__=='__main__':
 
     config = { 'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':20, 'gamma': .618}}, #please change the argument if you use other LR
-            # 'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-3, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
+            # 'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':20, 'gamma': .618}}, #please change the argument if you use other LR
+            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-2, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth

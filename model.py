@@ -13,15 +13,24 @@ class BinaryClassification(nn.Module):
         super(BinaryClassification, self).__init__()        # Number of input features is 12.
         self.H = H
         self.D = D
-        self.layer_1 = nn.Linear(input_shape, int(input_shape/2)) 
-        self.layer_2 = nn.Linear(int(input_shape/2), int(input_shape/4))
-        self.layer_3 = nn.Linear(int(input_shape/4), int(input_shape/8))
-        self.layer_out = nn.Linear(int(input_shape/(2**D)), 1)
+        self.layer_1 = nn.Linear(input_shape, H) 
+        self.layer_2 = nn.Linear(H, H)
+        self.layer_3 = nn.Linear(H, H)
+        self.layer_out = nn.Linear(H, 1)
         self.relu = nn.ReLU()
         # self.dropout = nn.Dropout(p=0.1)
-        self.batchnorm1 = nn.BatchNorm1d(int(input_shape/2))
-        self.batchnorm2 = nn.BatchNorm1d(int(input_shape/4))
-        self.batchnorm3 = nn.BatchNorm1d(int(input_shape/8))
+        self.batchnorm1 = nn.BatchNorm1d(H)
+        self.batchnorm2 = nn.BatchNorm1d(H)
+        self.batchnorm3 = nn.BatchNorm1d(H)
+        # self.layer_1 = nn.Linear(input_shape, int(input_shape/2)) 
+        # self.layer_2 = nn.Linear(int(input_shape/2), int(input_shape/4))
+        # self.layer_3 = nn.Linear(int(input_shape/4), int(input_shape/8))
+        # self.layer_out = nn.Linear(int(input_shape/(2**D)), 1)
+        # self.relu = nn.ReLU()
+        # # self.dropout = nn.Dropout(p=0.1)
+        # self.batchnorm1 = nn.BatchNorm1d(int(input_shape/2))
+        # self.batchnorm2 = nn.BatchNorm1d(int(input_shape/4))
+        # self.batchnorm3 = nn.BatchNorm1d(int(input_shape/8))
 
     def forward(self, inputs):
         x = self.relu(self.layer_1(inputs))
