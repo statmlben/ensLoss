@@ -61,6 +61,10 @@ class Trainer(object):
                 tbar.set_description('TRAIN ({}) SGD({}) LR({:.2E}) | Acc: {:.3f}'.format(
                         e, self.loss, optimizer.param_groups[0]["lr"], epoch_acc_train/(batch_idx+1)))
 
+            # loss_.dist = torch.distributions.Beta(torch.rand(1), torch.rand(1))
+            # loss_.dist = torch.distributions.Uniform(0,1)
+            # loss_.dist = torch.distributions.exponential.Exponential(10*torch.rand(1))
+
             scheduler.step()
 
             # EVALUATION

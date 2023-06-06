@@ -141,7 +141,7 @@ def openml_data(random_state=0, data_id=43969):
 
     encode_map = {target_set[0]: 0, target_set[1]: 1}
 
-    if data_id == 'SantanderCustomerSatisfaction':
+    if data_id == 42395:
         del dataset.data['ID_code']
     X = dataset.data
     y = dataset.target

@@ -10,7 +10,7 @@ from torchvision import datasets, models, transforms
 
 class BinaryClassification(nn.Module):
     def __init__(self, input_shape=12, H=128, D=1):
-        super(BinaryClassification, self).__init__()        # Number of input features is 12.
+        super(BinaryClassification, self).__init__()
         self.H = H
         self.D = D
         self.layer_1 = nn.Linear(input_shape, H) 

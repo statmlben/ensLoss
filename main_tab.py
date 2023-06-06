@@ -98,6 +98,19 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=False):
         Acc['loss'].append('Hinge')
         Acc['test_acc'].append(acc_test)
 
+        ## EXP loss ##
+        print('\n-- TRAIN EXP --\n')
+        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        model.to(config['device'])
+
+        trainer_ = Trainer(model=model, loss='EXP', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader)
+        path_, acc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('EXP')
+        Acc['test_acc'].append(acc_test)
+
     path_ = pd.DataFrame(path_)
     path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
@@ -197,25 +210,32 @@ if __name__=='__main__':
                            help='number of epochs to train')
     parser.add_argument('-ID', '--data_id', default=43969, type=int,
                            help='data_id of the dataset')
+    parser.add_argument('-R', '--n_trials', default=20, type=int,
+                           help='number of trials for the experiments')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            # 'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':20, 'gamma': .618}}, #please change the argument if you use other LR
-            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-2, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
+            # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':30, 'gamma': .5}}, #please change the argument if you use other LR
+            # 'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-4, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
+            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
+            # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'LinearLR', 'args': {'start_factor': 0.1, 'total_iters': 100}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     H, D = args.width, args.depth
     data_id = args.data_id
+    n_trials = args.n_trials
 
-    main(config=config, D=D, H=H, data_id=data_id)
+    main(config=config, D=D, H=H, data_id=data_id, n_trials=n_trials)
 
 ## Tabular dataset
-# philippine
-# sylva_prior
-# SantanderCustomerSatisfaction
+# philippine: 41145
+# SantanderCustomerSatisfaction: 42395
+# MagicTelescope (13376, 10): 44125
+# MiniBooNE (72998, 50): 44128
 
 # Tabular Benchmark
+# electricity: 44120
 # house_16H: 43969
 
 ## Image dataset

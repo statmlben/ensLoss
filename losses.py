@@ -18,14 +18,28 @@ class COTO(nn.Module):
 
         ## generate random gradient
         g_batch = torch.zeros(batch_size_tmp+1)
-        rd_grad = - self.dist.sample((batch_size_tmp+1,))
+        rd_grad = - self.dist.sample((batch_size_tmp+1,)).flatten()
         rd_grad, _ = torch.sort(rd_grad)
         _, ind_tmp = torch.sort(s_batch)
         g_batch[ind_tmp] = rd_grad
+
+        ## generate log gradient
+        # exp_batch = (-1.0/(1.0+torch.exp(torch.rand(1)*(s_batch - torch.rand(1))))).detach()
+        # log_batch = -(torch.exp(-torch.rand(1)*s_batch)).detach()
+        # g_batch = exp_batch
+
         ## standarize the scale of a random loss; Grad(0) = -1
-        g_batch = g_batch[:-1] / abs(g_batch[-1])
-        loss = g_batch * s_batch[:-1]
+        g_batch = g_batch / abs(g_batch[-1])
+
+        ## refine grad by heavy tail
+        exp_batch = - torch.exp(-s_batch)
+        g_batch = torch.where(s_batch > 1.0, torch.maximum(exp_batch, g_batch), g_batch)
+
+        g_batch = g_batch.detach()
+        ## final gradient
+        loss = g_batch[:-1] * s_batch[:-1]
         loss = loss.mean()
+        # print(g_batch)
         return loss
 
 class BCELoss(nn.Module):
@@ -46,4 +60,15 @@ class Hinge(nn.Module):
         target = 2.*target - 1.
         score = output * target
         loss = torch.maximum(1. - score, torch.zeros_like(score))
+        return loss.mean()
+
+class EXP(nn.Module):
+    def __init__(self, reduction='mean'):
+        super(EXP, self).__init__()
+        self.reduction = reduction
+
+    def forward(self, output, target):
+        target = 2.*target - 1.
+        score = output * target
+        loss = torch.exp(-score)
         return loss.mean()
