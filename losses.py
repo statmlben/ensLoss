@@ -5,10 +5,20 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+
+
 class COTO(nn.Module):
     def __init__(self, dist=torch.distributions.exponential.Exponential(1 / 1.)):
         super(COTO, self).__init__()
         self.dist = dist
+        self.lam = 1.0
+
+    def BC_inv(self, z):
+        if self.lam == 0.:
+            return torch.exp(z)
+        else:
+            diff = 1. + self.lam*z
+            return (torch.where(diff > 0.0, diff, 0.0))**(1.0/self.lam)
 
     def forward(self, output, target):
         target = 2.*target - 1.
@@ -17,29 +27,32 @@ class COTO(nn.Module):
         s_batch[:-1] = output.flatten()*target.flatten()
 
         ## generate random gradient
-        g_batch = torch.zeros(batch_size_tmp+1)
-        rd_grad = - self.dist.sample((batch_size_tmp+1,)).flatten()
+        g_num = batch_size_tmp + 1
+        g_batch = torch.zeros(g_num)
+        # sample from dist
+        # rd_grad = - self.dist.sample((g_num,)).flatten()
+        # generate from Box-Cox transformation
+        rd_grad = torch.randn((g_num,))
+        rd_grad = - self.BC_inv(rd_grad)
         rd_grad, _ = torch.sort(rd_grad)
         _, ind_tmp = torch.sort(s_batch)
         g_batch[ind_tmp] = rd_grad
 
-        ## generate log gradient
-        # exp_batch = (-1.0/(1.0+torch.exp(torch.rand(1)*(s_batch - torch.rand(1))))).detach()
-        # log_batch = -(torch.exp(-torch.rand(1)*s_batch)).detach()
-        # g_batch = exp_batch
+        ## genrate gradient via inverse Box-Cox transformation (fair performance)
+        # g_batch = - self.BC_inv(s_batch)
 
         ## standarize the scale of a random loss; Grad(0) = -1
+        g_batch = g_batch.detach() - 1e-6
         g_batch = g_batch / abs(g_batch[-1])
 
-        ## refine grad by heavy tail
-        exp_batch = - torch.exp(-s_batch)
-        g_batch = torch.where(s_batch > 1.0, torch.maximum(exp_batch, g_batch), g_batch)
+        ## refine grad by heavy tail (almost no change)
+        # exp_batch = - torch.exp(-s_batch)
+        # g_batch = torch.where(s_batch > 1.0, torch.maximum(exp_batch, g_batch), g_batch)
 
-        g_batch = g_batch.detach()
         ## final gradient
         loss = g_batch[:-1] * s_batch[:-1]
         loss = loss.mean()
-        # print(g_batch)
+        # print(s_batch)
         return loss
 
 class BCELoss(nn.Module):
