@@ -5,13 +5,11 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-
-
 class COTO(nn.Module):
     def __init__(self, dist=torch.distributions.exponential.Exponential(1 / 1.)):
         super(COTO, self).__init__()
         self.dist = dist
-        self.lam = 1.0
+        self.lam = 0.0
 
     def BC_inv(self, z):
         if self.lam == 0.:
@@ -29,21 +27,24 @@ class COTO(nn.Module):
         ## generate random gradient
         g_num = batch_size_tmp + 1
         g_batch = torch.zeros(g_num)
+        
         # sample from dist
         # rd_grad = - self.dist.sample((g_num,)).flatten()
-        # generate from Box-Cox transformation
+        
+        # generate random loss from Box-Cox transformation
         rd_grad = torch.randn((g_num,))
         rd_grad = - self.BC_inv(rd_grad)
         rd_grad, _ = torch.sort(rd_grad)
+        rd_grad = np.maximum(rd_grad, -1.0)
         _, ind_tmp = torch.sort(s_batch)
         g_batch[ind_tmp] = rd_grad
 
         ## genrate gradient via inverse Box-Cox transformation (fair performance)
-        # g_batch = - self.BC_inv(s_batch)
-
+        # g_batch = - self.BC_inv(-s_batch)
+        
         ## standarize the scale of a random loss; Grad(0) = -1
         g_batch = g_batch.detach() - 1e-6
-        g_batch = g_batch / abs(g_batch[-1])
+        # g_batch = g_batch / abs(g_batch[-1])
 
         ## refine grad by heavy tail (almost no change)
         # exp_batch = - torch.exp(-s_batch)

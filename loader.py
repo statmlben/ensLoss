@@ -146,6 +146,10 @@ def openml_data(random_state=0, data_id=43969):
     X = dataset.data
     y = dataset.target
     y.replace(encode_map, inplace=True)
+    
+    y = y.loc[~pd.isnull(X).any(axis=1)]
+    X = X.loc[~pd.isnull(X).any(axis=1)]
+    
     X = X.values
     y = y.values
 

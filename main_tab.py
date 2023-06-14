@@ -37,11 +37,11 @@ import sys
 from tab_transformer_pytorch import TabTransformer
 
 
-def main(config, D, H, data_id=43969, n_trials=2, wandb_log=False):
+def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=str(data_id)+str(D)+'-'+str(H))
+        wandb.init(project="COTO", name=str(data_id)+'-'+str(D)+'-'+str(H))
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -204,14 +204,16 @@ if __name__=='__main__':
                         help='depth of the neural network')
     parser.add_argument('-H', '--width', default=128, type=int,
                            help='width of the neural network')
-    parser.add_argument('-B', '--batch', default=128, type=int,
+    parser.add_argument('-B', '--batch', default=256, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=300, type=int,
+    parser.add_argument('-e', '--epoch', default=500, type=int,
                            help='number of epochs to train')
     parser.add_argument('-ID', '--data_id', default=43969, type=int,
                            help='data_id of the dataset')
     parser.add_argument('-R', '--n_trials', default=20, type=int,
                            help='number of trials for the experiments')
+    parser.add_argument('-L', '--log', default=False, type=bool,
+                           help='if save the training process in wandb')
     args = parser.parse_args()
 
     config = { 'batch_size': args.batch,
@@ -225,18 +227,31 @@ if __name__=='__main__':
     H, D = args.width, args.depth
     data_id = args.data_id
     n_trials = args.n_trials
+    wandb_log = args.log
 
-    main(config=config, D=D, H=H, data_id=data_id, n_trials=n_trials)
+    main(config=config, D=D, H=H, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
 
 ## Tabular dataset
 # philippine: 41145
 # SantanderCustomerSatisfaction: 42395
-# MagicTelescope (13376, 10): 44125
-# MiniBooNE (72998, 50): 44128
 
-# Tabular Benchmark
-# electricity: 44120
-# house_16H: 43969
+## Open Performance Benchmark on Tabular Data
+# heloc (10k x 23): 45023
+# higgs (98k x 29): 23512
+# california (20.6k x 9): 45025
+
+
+# Tabular data learning benchmark
+# electricity (45.3k x 9): 44120
+# house_16H (13.5k x 17): 44123
+# phoneme (3.17k x 6): 43973
+# MiniBooNE (72998, 50): 44128
+# MagicTelescope (13376, 10): 44125
+# higgs (98k x 29): 23512
+# eye_movements (7.61 x 24): 44157
+# jannis (57.6k x 55): 45021
+# credit (16.7k x 11): 45024
+# california (20.6k x 9): 45025
 
 ## Image dataset
 # CIFAR2: 
