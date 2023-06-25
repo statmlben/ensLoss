@@ -204,7 +204,7 @@ if __name__=='__main__':
                         help='depth of the neural network')
     parser.add_argument('-H', '--width', default=128, type=int,
                            help='width of the neural network')
-    parser.add_argument('-B', '--batch', default=256, type=int,
+    parser.add_argument('-B', '--batch', default=128, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=500, type=int,
                            help='number of epochs to train')
@@ -220,7 +220,7 @@ if __name__=='__main__':
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':30, 'gamma': .5}}, #please change the argument if you use other LR
             # 'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-4, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
-            'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
+            'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
             # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'LinearLR', 'args': {'start_factor': 0.1, 'total_iters': 100}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
@@ -236,22 +236,34 @@ if __name__=='__main__':
 # SantanderCustomerSatisfaction: 42395
 
 ## Open Performance Benchmark on Tabular Data
-# heloc (10k x 23): 45023
-# higgs (98k x 29): 23512
-# california (20.6k x 9): 45025
+# heloc (10k x 23): 45023 (good)
+# higgs (98k x 29): 23512 (good)
+# california (20.6k x 9): 45025 (good)
+
+# Tabular data learning benchmark (1e-4)
+# electricity (45.3k x 9): 44120 
+# house_16H (13.5k x 17): 44123 
+# phoneme (3.17k x 6): 43973 (fair)
+# MiniBooNE (72998, 50): 44128
+# MagicTelescope (13376, 10): 44125 (good)
+# higgs (98k x 29): 23512 
+# eye_movements (7.61k x 24): 44157 
+# jannis (57.6k x 55): 45021 
+# credit (16.7k x 11): 45024
+# california (20.6k x 9): 45025 (good)
 
 
 # Tabular data learning benchmark
-# electricity (45.3k x 9): 44120
-# house_16H (13.5k x 17): 44123
-# phoneme (3.17k x 6): 43973
-# MiniBooNE (72998, 50): 44128
-# MagicTelescope (13376, 10): 44125
-# higgs (98k x 29): 23512
-# eye_movements (7.61 x 24): 44157
-# jannis (57.6k x 55): 45021
-# credit (16.7k x 11): 45024
-# california (20.6k x 9): 45025
+# electricity (45.3k x 9): 44120 (bad)
+# house_16H (13.5k x 17): 44123 (good)
+# phoneme (3.17k x 6): 43973 (fair)
+# MiniBooNE (72998, 50): 44128 (fair - good)
+# MagicTelescope (13376, 10): 44125 (good)
+# higgs (98k x 29): 23512 (good)
+# eye_movements (7.61k x 24): 44157 (fair, potential good)
+# jannis (57.6k x 55): 45021 (good)
+# credit (16.7k x 11): 45024 (good)
+# california (20.6k x 9): 45025 (good)
 
 ## Image dataset
 # CIFAR2: 

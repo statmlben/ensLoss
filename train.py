@@ -44,7 +44,7 @@ class Trainer(object):
         for e in range(1, config['trainer']['epochs']+1):
 
             ## set loss function parameter
-            if (e%10 ==0) and (self.loss=='COTO'):
+            if (e%15 ==0) and (self.loss=='COTO'):
                 if np.random.randn() > 0.:
                     loss_.lam = np.random.rand()
                 else:
