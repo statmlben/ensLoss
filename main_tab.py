@@ -241,15 +241,15 @@ if __name__=='__main__':
 # california (20.6k x 9): 45025 (good)
 
 # Tabular data learning benchmark (1e-4)
-# electricity (45.3k x 9): 44120 
-# house_16H (13.5k x 17): 44123 
+# electricity (45.3k x 9): 44120 (bad)
+# house_16H (13.5k x 17): 44123 (good)
 # phoneme (3.17k x 6): 43973 (fair)
-# MiniBooNE (72998, 50): 44128
+# MiniBooNE (72998, 50): 44128 (good)
 # MagicTelescope (13376, 10): 44125 (good)
-# higgs (98k x 29): 23512 
-# eye_movements (7.61k x 24): 44157 
-# jannis (57.6k x 55): 45021 
-# credit (16.7k x 11): 45024
+# higgs (98k x 29): 23512 (slightly good)
+# eye_movements (7.61k x 24): 44157 (slightly good)
+# jannis (57.6k x 55): 45021 (slightly good)
+# credit (16.7k x 11): 45024 (good)
 # california (20.6k x 9): 45025 (good)
 
 

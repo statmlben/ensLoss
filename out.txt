@@ -400,3 +400,220 @@
 
 | (256, 3) | mean(std) | 0.854(0.0031) | 0.8576(0.002) | 0.8768(0.0012) |
 |          | p_value   | 0.0        | 0.0        | ---            |
+
+#### 44120 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8197 | 0.8223 | 0.8019 |  0.8234 |
+| ('test_acc', 'std')  | 0.0015 | 0.0008 | 0.0068 |  0.0012 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.0514 | -1.745  | less          |
+|  6 | Hinge | COTO |   0.8053 |  0.8883 | less          |
+|  9 | EXP   | COTO |   0.0051 | -2.9711 | less          |
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.9486 | -1.745  | greater       |
+|  6 | Hinge | COTO |   0.1947 |  0.8883 | greater       |
+|  9 | EXP   | COTO |   0.9949 | -2.9711 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.8197(0.0015) | 0.8234(0.0012) | 0.8223(0.0008) |
+|          | p_value   | 0.05145        | 0.80531        | ---            |
+
+#### 44123 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8513 | 0.8651 | 0.8498 |  0.8479 |
+| ('test_acc', 'std')  | 0.0012 | 0.0013 | 0.004  |  0.0009 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0      |  -9.2093 | less          |
+|  6 | Hinge | COTO |   0      | -20.208  | less          |
+|  9 | EXP   | COTO |   0.0013 |  -3.6686 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   1      |  -9.2093 | greater       |
+|  6 | Hinge | COTO |   1      | -20.208  | greater       |
+|  9 | EXP   | COTO |   0.9987 |  -3.6686 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.8513(0.0012) | 0.8479(0.0009) | 0.8651(0.0013) |
+|          | p_value   | 0.0        | 0.0        | ---            |
+
+#### 44128 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.9242 | 0.935  | 0.9243 |  0.9237 |
+| ('test_acc', 'std')  | 0.0005 | 0.0005 | 0.001  |  0.0007 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |        0 | -14.3397 | less          |
+|  6 | Hinge | COTO |        0 | -13.4468 | less          |
+|  9 | EXP   | COTO |        0 |  -9.5809 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |        1 | -14.3397 | greater       |
+|  6 | Hinge | COTO |        1 | -13.4468 | greater       |
+|  9 | EXP   | COTO |        1 |  -9.5809 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.9242(0.0005) | 0.9237(0.0007) | 0.935(0.0005) |
+|          | p_value   | 0.0        | 0.0        | ---            |
+
+#### 23512 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.6562 | 0.6589 | 0.6563 |  0.657  |
+| ('test_acc', 'std')  | 0.0009 | 0.0011 | 0.0009 |  0.0007 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.0432 | -1.845  | less          |
+|  6 | Hinge | COTO |   0.0789 | -1.4923 | less          |
+|  9 | EXP   | COTO |   0.0453 | -1.8179 | less          |
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.9568 | -1.845  | greater       |
+|  6 | Hinge | COTO |   0.9211 | -1.4923 | greater       |
+|  9 | EXP   | COTO |   0.9547 | -1.8179 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.6562(0.0009) | 0.657(0.0007) | 0.6589(0.0011) |
+|          | p_value   | 0.04315        | 0.0789        | ---            |
+
+#### 45021 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7238 | 0.7263 | 0.7013 |  0.7211 |
+| ('test_acc', 'std')  | 0.0011 | 0.0011 | 0.0065 |  0.0006 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.0146 | -2.4289 | less          |
+|  6 | Hinge | COTO |   0.0001 | -4.8214 | less          |
+|  9 | EXP   | COTO |   0.0008 | -3.8884 | less          |
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.9854 | -2.4289 | greater       |
+|  6 | Hinge | COTO |   0.9999 | -4.8214 | greater       |
+|  9 | EXP   | COTO |   0.9992 | -3.8884 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.7238(0.0011) | 0.7211(0.0006) | 0.7263(0.0011) |
+|          | p_value   | 0.0146        | 0.00014        | ---            |
+
+#### 45021 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7238 | 0.7263 | 0.7013 |  0.7211 |
+| ('test_acc', 'std')  | 0.0011 | 0.0011 | 0.0065 |  0.0006 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.0146 | -2.4289 | less          |
+|  6 | Hinge | COTO |   0.0001 | -4.8214 | less          |
+|  9 | EXP   | COTO |   0.0008 | -3.8884 | less          |
+|    | A     | B    |   pvalue |    stat | alternative   |
+|---:|:------|:-----|---------:|--------:|:--------------|
+|  3 | BCE   | COTO |   0.9854 | -2.4289 | greater       |
+|  6 | Hinge | COTO |   0.9999 | -4.8214 | greater       |
+|  9 | EXP   | COTO |   0.9992 | -3.8884 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.7238(0.0011) | 0.7211(0.0006) | 0.7263(0.0011) |
+|          | p_value   | 0.0146        | 0.00014        | ---            |
+
+#### 45024 - D: 3, H: 256 ####
+
+
+ Step Size: {'lr': 0.0001, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 0.3333333333333333, 'total_iters': 1}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7126 | 0.7547 | 0.7116 |  0.7174 |
+| ('test_acc', 'std')  | 0.0028 | 0.0023 | 0.0033 |  0.0023 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |        0 | -14.6815 | less          |
+|  6 | Hinge | COTO |        0 | -20.0926 | less          |
+|  9 | EXP   | COTO |        0 | -10.7921 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |        1 | -14.6815 | greater       |
+|  6 | Hinge | COTO |        1 | -20.0926 | greater       |
+|  9 | EXP   | COTO |        1 | -10.7921 | greater       |
+
+-- Result --
+
+| (256, 3) | mean(std) | 0.7126(0.0028) | 0.7174(0.0023) | 0.7547(0.0023) |
+|          | p_value   | 0.0        | 0.0        | ---            |
