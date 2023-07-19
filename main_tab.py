@@ -19,7 +19,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 from loader import TrainData, TestData, openml_data
-from model import BinaryClassification
 from base import evaluate, pairwise_ttest
 from sklearn.model_selection import KFold
 import scipy
@@ -34,14 +33,13 @@ import wandb
 import plotly.graph_objs as go
 from plot import line
 import sys
-from tab_transformer_pytorch import TabTransformer
+import models
 
-
-def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
+def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=str(data_id)+'-'+str(D)+'-'+str(H))
+        wandb.init(project="COTO", name=str(data_id)+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -61,9 +59,10 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
 
         ## COTO ##
         print('\n-- TRAIN COTO --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
-
+        print(model)
         trainer_ = Trainer(model=model, loss='COTO', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
@@ -74,7 +73,8 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='BCELoss', 
@@ -87,7 +87,8 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
 
         ## Hinge loss ##
         print('\n-- TRAIN Hinge --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='Hinge', 
@@ -100,7 +101,8 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
 
         ## EXP loss ##
         print('\n-- TRAIN EXP --\n')
-        model = BinaryClassification(input_shape=input_shape, H=H, D=D)
+        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='EXP', 
@@ -112,7 +114,7 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
         Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
-    path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
+    path_.to_csv('path_net{}.csv'.format(config['model']['net']), index=False)
     Acc = pd.DataFrame(Acc)
     
     # Plot
@@ -165,7 +167,7 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
     out_file = open('out.txt', 'a+')
     sys.stdout = out_file
 
-    print('\n#### %d - D: %d, H: %d ####\n' %(data_id, D, H))
+    print('\n#### %d - model: %s ####\n' %(data_id, config['model']['net']))
 
     print('\n Step Size: %s \n' %config['optimizer'])
 
@@ -176,7 +178,7 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
     print(p_less.round(4).to_markdown())
     print(p_greater.round(4).to_markdown())
 
-    out = '| ({}, {}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format(H, D, 
+    out = '| ({}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format( config['model']['net'],
                                                             res['BCE'][0], res['BCE'][1], 
                                                             res['Hinge'][0], res['Hinge'][1],
                                                             res['COTO'][0], res['COTO'][1])
@@ -200,10 +202,10 @@ def main(config, D, H, data_id=43969, n_trials=2, wandb_log=True):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='COTO Training')
-    parser.add_argument('-D', '--depth', default=1, type=int,
-                        help='depth of the neural network')
-    parser.add_argument('-H', '--width', default=128, type=int,
-                           help='width of the neural network')
+    # parser.add_argument('-D', '--depth', default=1, type=int,
+    #                     help='depth of the neural network')
+    # parser.add_argument('-H', '--width', default=128, type=int,
+    #                        help='width of the neural network')
     parser.add_argument('-B', '--batch', default=128, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=500, type=int,
@@ -216,7 +218,10 @@ if __name__=='__main__':
                            help='if save the training process in wandb')
     args = parser.parse_args()
 
-    config = { 'batch_size': args.batch,
+    config = {
+            'model': {'net': 'TabMLP5', 'args': {'H': 256}},
+            # 'model': {'net': 'FTTransformer', 'args': {}},
+            'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':30, 'gamma': .5}}, #please change the argument if you use other LR
             # 'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-4, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
@@ -224,23 +229,14 @@ if __name__=='__main__':
             # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'LinearLR', 'args': {'start_factor': 0.1, 'total_iters': 100}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
-    H, D = args.width, args.depth
     data_id = args.data_id
     n_trials = args.n_trials
     wandb_log = args.log
 
-    main(config=config, D=D, H=H, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
+    main(config=config, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
 
-## Tabular dataset
-# philippine: 41145
-# SantanderCustomerSatisfaction: 42395
 
-## Open Performance Benchmark on Tabular Data
-# heloc (10k x 23): 45023 (good)
-# higgs (98k x 29): 23512 (good)
-# california (20.6k x 9): 45025 (good)
-
-# Tabular data learning benchmark (1e-4)
+# Tabular data learning benchmark (MLP:1e-4)
 # electricity (45.3k x 9): 44120 (bad)
 # house_16H (13.5k x 17): 44123 (good)
 # phoneme (3.17k x 6): 43973 (fair)
@@ -252,8 +248,31 @@ if __name__=='__main__':
 # credit (16.7k x 11): 45024 (good)
 # california (20.6k x 9): 45025 (good)
 
+# Tabular data learning benchmark (MLP5:1e-5)
+# electricity (45.3k x 9): 44120 (good)
+# house_16H (13.5k x 17): 44123 (good)
+# phoneme (3.17k x 6): 43973 (fair)
+# MiniBooNE (72998, 50): 44128 (good)
+# MagicTelescope (13376, 10): 44125 (fair)
+# higgs (98k x 29): 23512 (good)
+# eye_movements (7.61k x 24): 44157 (fair)
+# jannis (57.6k x 55): 45021 (good)
+# credit (16.7k x 11): 45024 (good)
+# california (20.6k x 9): 45025 (good)
 
-# Tabular data learning benchmark
+# Tabular data learning benchmark (TabFF:1e-5)
+# electricity (45.3k x 9): 44120
+# house_16H (13.5k x 17): 44123 
+# phoneme (3.17k x 6): 43973 
+# MiniBooNE (72998, 50): 44128 
+# MagicTelescope (13376, 10): 44125 
+# higgs (98k x 29): 23512 
+# eye_movements (7.61k x 24): 44157 
+# jannis (57.6k x 55): 45021 
+# credit (16.7k x 11): 45024 
+# california (20.6k x 9): 45025 
+
+# Tabular data learning benchmark (1e-5)
 # electricity (45.3k x 9): 44120 (bad)
 # house_16H (13.5k x 17): 44123 (good)
 # phoneme (3.17k x 6): 43973 (fair)
