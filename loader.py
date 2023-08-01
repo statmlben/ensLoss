@@ -11,6 +11,7 @@ from scipy.io.arff import loadarff
 from sklearn.datasets import fetch_openml
 import os
 from torchvision.io import read_image
+import torchvision
 
 ## Reproducibility
 torch.manual_seed(1024)
@@ -39,99 +40,6 @@ class TestData(Dataset):
         
     def __len__ (self):
         return len(self.X_data)
-
-## spine dataset
-def spine_data(random_state=0):
-    filename='./dataset/biodeg.csv'
-    df = pd.read_csv(filename)
-    df = df.iloc[:, :-1]
-
-    encode_map = {'Abnormal': 1, 'Normal': 0}
-    df['Class_att'].replace(encode_map, inplace=True)
-    df['Class_att'] = df['Class_att'].astype('float')
-
-    X = df.iloc[:, 0:-1]
-    y = df.iloc[:, -1]
-    X = X.values
-    y = y.values
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
-    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
-    return train_data, test_data
-
-## sonar dataset
-def sonar_data(random_state=0):
-    filename='./dataset/sonar_csv.csv'
-    df = pd.read_csv(filename)
-
-    encode_map = {'Rock': 1, 'Mine': 0}
-    df['Class'].replace(encode_map, inplace=True)
-    df['Class'] = df['Class'].astype('float')
-
-    X = df.iloc[:, 0:-1]
-    y = df.iloc[:, -1]
-    X = X.values
-    y = y.values
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
-    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
-    return train_data, test_data
-
-## qsar-biodeg dataset
-def biodeg_data(random_state=0):
-    filename='./dataset/biodeg.csv'
-    df = pd.read_csv(filename, sep=";", header=None)
-
-    encode_map = {'RB': 1, 'NRB': 0}
-    df[41].replace(encode_map, inplace=True)
-    df[41] = df[41].astype('float')
-
-    X = df.iloc[:, 0:-1]
-    y = df.iloc[:, -1]
-    X = X.values
-    y = y.values
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=random_state)
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
-    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
-    return train_data, test_data
-
-## nomao dataset
-def biodeg_data(random_state=0):
-    filename='./dataset/biodeg.csv'
-    df = pd.read_csv(filename, sep=";", header=None)
-
-    encode_map = {'RB': 1, 'NRB': 0}
-    df[41].replace(encode_map, inplace=True)
-    df[41] = df[41].astype('float')
-
-    X = df.iloc[:, 0:-1]
-    y = df.iloc[:, -1]
-    X = X.values
-    y = y.values
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_state)
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
-
-    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
-    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
-    return train_data, test_data
 
 def openml_data(random_state=0, data_id=43969):
     dataset = fetch_openml(data_id=data_id)
@@ -188,8 +96,22 @@ def img_data(transform, name='MHIST'):
     if name == 'MHIST':
         train_data = MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', transform=transform)
         test_data = MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', partition='test', transform=transform)
-    elif name == 'CIFAR2':
-        pass
+    elif name == 'CIFAR':
+        # ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+        trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
+                                        download=False, transform=transform)
+        train_index = [i for i, t in enumerate(trainset.targets) if (t in [3,5])]
+        train_data = torch.utils.data.Subset(trainset, train_index)
+
+        testset = torchvision.datasets.CIFAR10(root='./dataset', train=False,
+                                       download=False, transform=transform)
+        test_index = [i for i, t in enumerate(testset.targets) if (t in [3,5])]
+        test_data = torch.utils.data.Subset(testset, test_index)
+
+        encode_map = {3: 0, 5: 1}
+        train_data.dataset.targets = list(map(encode_map.get, train_data.dataset.targets))
+        test_data.dataset.targets = list(map(encode_map.get, test_data.dataset.targets))
+
     elif name == 'PCam':
         pass
     else:

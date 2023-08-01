@@ -1,0 +1,31 @@
+
+#### CIFAR - model: ResNet18 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7452 | 0.7927 | 0.6641 |  0.7528 |
+| ('test_acc', 'std')  | 0.002  | 0.0085 | 0.0009 |  0.0028 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0018 |  -6.1156 | less          |
+|  6 | Hinge | COTO |   0.0097 |  -3.7773 | less          |
+|  9 | EXP   | COTO |   0      | -15.3634 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9982 |  -6.1156 | greater       |
+|  6 | Hinge | COTO |   0.9903 |  -3.7773 | greater       |
+|  9 | EXP   | COTO |   1      | -15.3634 | greater       |
+
+-- Result --
+
+| (ResNet18) | mean(std) | 0.7452(0.002) | 0.7528(0.0028) | 0.7927(0.0085) |
+|          | p_value   | 0.00181        | 0.00974        | ---            |

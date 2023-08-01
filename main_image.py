@@ -19,8 +19,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
 
 from loader import TrainData, TestData, openml_data, img_data
-from model import BinaryClassification, MHIST_CNN, MHIST_resnet18
-from base import evaluate
+from base import evaluate, pairwise_ttest
 from sklearn.model_selection import KFold
 import scipy
 from train import Trainer
@@ -33,18 +32,29 @@ import argparse
 import wandb
 import plotly.graph_objs as go
 from plot import line
+import sys
+import models
+from img_models import ResNet18
+import img_models
+
 import torchvision.transforms as transforms
 from torchvision import datasets, models, transforms
 
-def main(config, filename='MHIST', n_trials=2, wandb_log=False):
+def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=filename+str(D)+'-'+str(H))
+        wandb.init(project="COTO", name=filename+'-'+config['model']['net'])
+
+    ## Reproducibility
+    torch.manual_seed(0)
+    random.seed(0)
+    np.random.seed(0)
 
     ## image tranform
     transform = transforms.Compose(
-                [transforms.ToPILImage(),
+                [
+                # transforms.ToPILImage(),
                 transforms.ToTensor(),
                 transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
@@ -53,35 +63,32 @@ def main(config, filename='MHIST', n_trials=2, wandb_log=False):
 
     for h in range(n_trials):
 
-        ## Reproducibility
-        torch.manual_seed(h)
-        random.seed(h)
-        np.random.seed(h)
-
         train_data, test_data = img_data(transform=transform, name=filename)
         input_shape = (3, 224, 224)
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
-        ## eLOTO ##
-        # print('\n-- TRAIN eLOTO --\n')
-        # model = MHIST_CNN()
-        # model.to(config['device'])
+        ## get some random training data
+        # dataiter = iter(train_loader)
+        # images, labels = next(dataiter)
 
-        # trainer_ = Trainer(model=model, loss='eLOTO', 
-        #                     config=config, device=config['device'],
-        #                     train_loader=train_loader, val_loader=test_loader)
-        # path_, acc_test = trainer_.train(path_)
-        # Acc['trial'].append(h)
-        # Acc['loss'].append('eLOTO')
-        # Acc['test_acc'].append(acc_test)
+        ## eLOTO ##
+        print('\n-- TRAIN eLOTO --\n')
+        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model.to(config['device'])
+
+        trainer_ = Trainer(model=model, loss='COTO', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader)
+        path_, acc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('COTO')
+        Acc['test_acc'].append(acc_test)
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        # model = MHIST_CNN()
-        model = MHIST_resnet18()
-
+        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='BCELoss',
@@ -93,17 +100,30 @@ def main(config, filename='MHIST', n_trials=2, wandb_log=False):
         Acc['test_acc'].append(acc_test)
 
         ## Hinge loss ##
-        # print('\n-- TRAIN Hinge --\n')
-        # model = MHIST_CNN()
-        # model.to(config['device'])
+        print('\n-- TRAIN Hinge --\n')
+        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model.to(config['device'])
 
-        # trainer_ = Trainer(model=model, loss='Hinge', 
-        #                     config=config, device=config['device'],
-        #                     train_loader=train_loader, val_loader=test_loader)
-        # path_, acc_test = trainer_.train(path_)
-        # Acc['trial'].append(h)
-        # Acc['loss'].append('Hinge')
-        # Acc['test_acc'].append(acc_test)
+        trainer_ = Trainer(model=model, loss='Hinge', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader)
+        path_, acc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('Hinge')
+        Acc['test_acc'].append(acc_test)
+
+        ## EXP loss ##
+        print('\n-- TRAIN EXP --\n')
+        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model.to(config['device'])
+
+        trainer_ = Trainer(model=model, loss='EXP', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader)
+        path_, acc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('EXP')
+        Acc['test_acc'].append(acc_test)
 
     path_ = pd.DataFrame(path_)
     # path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
@@ -134,21 +154,23 @@ def main(config, filename='MHIST', n_trials=2, wandb_log=False):
     # fig.show()
 
     # Hypothesis Testing    
-    p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
-                    alternative='less').round(5)
-    p_less = p_less[['A', 'B', 'p-unc', 'alternative']]
-    p_less = p_less[p_less['B'] == 'eLOTO']
+    p_less = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='less').round(5)
+    p_less = p_less[p_less['B'] == 'COTO']
 
-    p_greater = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
-                    alternative='greater').round(5)
-    p_greater = p_greater[['A', 'B', 'p-unc', 'alternative']]
-    p_greater = p_greater[p_greater['B'] == 'eLOTO']
+    p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
+    p_greater = p_greater[p_greater['B'] == 'COTO']
 
     res = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
     res[('test_acc', 'std')] /= np.sqrt(n_trials)
     res = res.T.round(4)
 
-    # print('#### D: %d, H: %d ####' %(D, H))
+    ## Save outcome
+    orig_stdout = sys.stdout
+    out_file = open('out_img.txt', 'a+')
+    sys.stdout = out_file
+
+    print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
+    print('\n Step Size: %s \n' %config['optimizer'])
 
     print('\n-- Performance --\n')
     print((res.round(4)).to_markdown())
@@ -157,11 +179,12 @@ def main(config, filename='MHIST', n_trials=2, wandb_log=False):
     print(p_less.round(4).to_markdown())
     print(p_greater.round(4).to_markdown())
 
-    out = '| mean(std) | {}({}) | {}({}) | {}({}) |'.format(res['BCE'][0], res['BCE'][1], 
+    out = '| ({}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format( config['model']['net'],
+                                                            res['BCE'][0], res['BCE'][1], 
                                                             res['Hinge'][0], res['Hinge'][1],
-                                                            res['eLOTO'][0], res['eLOTO'][1])
-    p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['p-unc'].values[0], 
-                                        p_less[p_less['A']=='Hinge']['p-unc'].values[0])
+                                                            res['COTO'][0], res['COTO'][1])
+    p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['pvalue'].values[0], 
+                                        p_less[p_less['A']=='Hinge']['pvalue'].values[0])
     print('\n-- Result --\n')
     print(out)
     print(p_pair)
@@ -177,27 +200,30 @@ def main(config, filename='MHIST', n_trials=2, wandb_log=False):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='eLOTO Training')
-    parser.add_argument('-B', '--batch', default=32, type=int,
+    parser.add_argument('-B', '--batch', default=128, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=100, type=int,
+    parser.add_argument('-e', '--epoch', default=200, type=int,
                            help='number of epochs to train')
-    parser.add_argument('-f', '--filename', default='MHIST', type=str,
+    parser.add_argument('-F', '--filename', default="CIFAR", type=str,
                            help='filename of the dataset')
+    parser.add_argument('-R', '--n_trials', default=5, type=int,
+                           help='number of trials for the experiments')
+    parser.add_argument('-L', '--log', default=False, type=bool,
+                           help='if save the training process in wandb')
     args = parser.parse_args()
 
-    config = { 'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10},
-            'optimizer': {'lr': 1e-3, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'step_size':5, 'gamma':0.91}, #please change the argument if you use other LR
+    config = {
+            'model': {'net': 'ResNet34', 'args': {}},
+            'batch_size': args.batch,
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
+            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
+    n_trials = args.n_trials
+    wandb_log = args.log
 
-    main(config=config, filename=filename)
-
-## Tabular dataset
-# philippine
-# sylva_prior
-# SantanderCustomerSatisfaction
+    main(config=config, filename=filename, n_trials=n_trials, wandb_log=wandb_log)
 
 ## Image dataset
 # Age and gender prediction: https://talhassner.github.io/home/projects/Adience/Adience-data.html

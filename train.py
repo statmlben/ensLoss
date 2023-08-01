@@ -34,7 +34,7 @@ class Trainer(object):
         config = self.config
 
         loss_ = getattr(losses, self.loss)()
-        optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'])
+        optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'], momentum=0.9, weight_decay=5e-4)
         scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, **config['optimizer']['args'])
         
         # opt = Optimizer([(0.0, 10.0)], "GP", 
@@ -44,7 +44,7 @@ class Trainer(object):
         for e in range(1, config['trainer']['epochs']+1):
 
             ## set loss function parameter
-            if (e%15 ==0) and (self.loss=='COTO'):
+            if (e%10 ==0) and (self.loss=='COTO'):
                 if np.random.randn() > 0.:
                     loss_.lam = np.random.rand()
                 else:
@@ -73,6 +73,8 @@ class Trainer(object):
                 acc = binary_acc(y_pred, y_batch.unsqueeze(1))
                 
                 loss.backward()
+                if self.loss=='EXP':
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 optimizer.step()
             # target * y_pred.flatten()
                 
@@ -82,21 +84,6 @@ class Trainer(object):
                 tbar.set_description('TRAIN ({}) SGD({}) LR({:.2E}) | Acc: {:.3f}'.format(
                         e, self.loss, optimizer.param_groups[0]["lr"], epoch_acc_train/(batch_idx+1)))
             
-            # if e%10 == 0:
-                # print('lam: %.3f, Acc: %.3f' %(next_lam, now_acc_train))
-
-            # if e%10 == 0:
-                # loss_.lam = int(e/100)
-                # loss_.lam = 2*np.random.rand()
-            # loss_.lam = np.random.exponential(size=1)[0]
-            # loss_.lam = np.random.gamma(shape=1, size=1)[0]
-            # loss_.dist = torch.distributions.Beta(0.2, 0.7)
-            # if e%10 == 0:
-            #     loss_.dist = torch.distributions.exponential.Exponential(1.0 / 1.0)
-                # loss_.dist = torch.distributions.Beta(1.0, 5*torch.rand(1))
-            # loss_.dist = torch.distributions.Uniform(0,1)
-            # loss_.dist = torch.distributions.exponential.Exponential(10*torch.rand(1))
-
             scheduler.step()
 
             # EVALUATION

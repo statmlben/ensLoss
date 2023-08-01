@@ -9,7 +9,6 @@ from torchvision import datasets, models, transforms
 # from tab_transformer_pytorch import TabTransformer
 from einops import rearrange, repeat
 
-
 # feedforward and attention
 
 class GEGLU(nn.Module):

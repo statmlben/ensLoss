@@ -39,6 +39,11 @@ class COTO(nn.Module):
         _, ind_tmp = torch.sort(s_batch)
         g_batch[ind_tmp] = rd_grad
 
+        ## refine decay of the gradient sequence
+        pos_ind = s_batch > 1.0
+        if len(s_batch[pos_ind]) > 0:
+            g_batch[pos_ind] *= (1 / s_batch[pos_ind]).detach()
+
         ## genrate gradient via inverse Box-Cox transformation (fair performance)
         # g_batch = - self.BC_inv(-s_batch)
         
@@ -53,7 +58,6 @@ class COTO(nn.Module):
         ## final gradient
         loss = g_batch[:-1] * s_batch[:-1]
         loss = loss.mean()
-        # print(s_batch)
         return loss
 
 class BCELoss(nn.Module):
