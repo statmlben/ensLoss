@@ -29,3 +29,406 @@
 
 | (ResNet18) | mean(std) | 0.7452(0.002) | 0.7528(0.0028) | 0.7927(0.0085) |
 |          | p_value   | 0.00181        | 0.00974        | ---            |
+
+#### CIFAR - model: ResNet34 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7509 | 0.7857 | 0.6211 |  0.7548 |
+| ('test_acc', 'std')  | 0.0065 | 0.0092 | 0.0085 |  0.0056 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0194 |  -3.0295 | less          |
+|  6 | Hinge | COTO |   0.0303 |  -2.59   | less          |
+|  9 | EXP   | COTO |   0.0002 | -11.2937 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9806 |  -3.0295 | greater       |
+|  6 | Hinge | COTO |   0.9697 |  -2.59   | greater       |
+|  9 | EXP   | COTO |   0.9998 | -11.2937 | greater       |
+
+-- Result --
+
+| (ResNet34) | mean(std) | 0.7509(0.0065) | 0.7548(0.0056) | 0.7857(0.0092) |
+|          | p_value   | 0.0194        | 0.03034        | ---            |
+
+#### CIFAR - model: ResNet50 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7292 | 0.777  | 0.6432 |  0.7405 |
+| ('test_acc', 'std')  | 0.0032 | 0.0042 | 0.003  |  0.006  |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0001 | -14.1734 | less          |
+|  6 | Hinge | COTO |   0.0052 |  -4.5569 | less          |
+|  9 | EXP   | COTO |   0      | -33.8202 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9999 | -14.1734 | greater       |
+|  6 | Hinge | COTO |   0.9948 |  -4.5569 | greater       |
+|  9 | EXP   | COTO |   1      | -33.8202 | greater       |
+
+-- Result --
+
+| (ResNet50) | mean(std) | 0.7292(0.0032) | 0.7405(0.006) | 0.777(0.0042) |
+|          | p_value   | 7e-05        | 0.00518        | ---            |
+
+#### CIFAR - model: ResNet101 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7075 | 0.7327 | 0.556  |  0.6914 |
+| ('test_acc', 'std')  | 0.0071 | 0.0048 | 0.0069 |  0.0029 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0062 |  -4.33   | less          |
+|  6 | Hinge | COTO |   0.0022 |  -5.8198 | less          |
+|  9 | EXP   | COTO |   0      | -16.6306 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9938 |  -4.33   | greater       |
+|  6 | Hinge | COTO |   0.9978 |  -5.8198 | greater       |
+|  9 | EXP   | COTO |   1      | -16.6306 | greater       |
+
+-- Result --
+
+| (ResNet101) | mean(std) | 0.7075(0.0071) | 0.6914(0.0029) | 0.7327(0.0048) |
+|          | p_value   | 0.00617        | 0.00217        | ---            |
+
+#### CIFAR - model: VGG ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7699 | 0.8062 | 0.7403 |  0.7762 |
+| ('test_acc', 'std')  | 0.005  | 0.0035 | 0.0034 |  0.003  |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0041 |  -4.8688 | less          |
+|  6 | Hinge | COTO |   0.0019 |  -6.0202 | less          |
+|  9 | EXP   | COTO |   0.0001 | -12.6482 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9959 |  -4.8688 | greater       |
+|  6 | Hinge | COTO |   0.9981 |  -6.0202 | greater       |
+|  9 | EXP   | COTO |   0.9999 | -12.6482 | greater       |
+
+-- Result --
+
+| (VGG) | mean(std) | 0.7699(0.005) | 0.7762(0.003) | 0.8062(0.0035) |
+|          | p_value   | 0.00411        | 0.00192        | ---            |
+
+#### CIFAR - model: VGG ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7703 | 0.8001 | 0.7391 |  0.7771 |
+| ('test_acc', 'std')  | 0.0025 | 0.0031 | 0.0027 |  0.0024 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0002 | -11.4208 | less          |
+|  6 | Hinge | COTO |   0.0036 |  -5.0699 | less          |
+|  9 | EXP   | COTO |   0.0001 | -13.4044 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9998 | -11.4208 | greater       |
+|  6 | Hinge | COTO |   0.9964 |  -5.0699 | greater       |
+|  9 | EXP   | COTO |   0.9999 | -13.4044 | greater       |
+
+-- Result --
+
+| (VGG) | mean(std) | 0.7703(0.0025) | 0.7771(0.0024) | 0.8001(0.0031) |
+|          | p_value   | 0.00017        | 0.00357        | ---            |
+
+#### CIFAR - model: VGG ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7741 | 0.8113 | 0.6915 |  0.7746 |
+| ('test_acc', 'std')  | 0.004  | 0.0026 | 0.0039 |  0.0016 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0001 | -12.5524 | less          |
+|  6 | Hinge | COTO |   0.0001 | -14.4571 | less          |
+|  9 | EXP   | COTO |   0      | -19.9567 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9999 | -12.5524 | greater       |
+|  6 | Hinge | COTO |   0.9999 | -14.4571 | greater       |
+|  9 | EXP   | COTO |   1      | -19.9567 | greater       |
+
+-- Result --
+
+| (VGG) | mean(std) | 0.7741(0.004) | 0.7746(0.0016) | 0.8113(0.0026) |
+|          | p_value   | 0.00012        | 7e-05        | ---            |
+
+#### CIFAR - model: VGG ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7679 | 0.8087 | 0.6686 |  0.7687 |
+| ('test_acc', 'std')  | 0.0053 | 0.0024 | 0.0062 |  0.0035 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0012 |  -6.8041 | less          |
+|  6 | Hinge | COTO |   0      | -16.9814 | less          |
+|  9 | EXP   | COTO |   0      | -31.9654 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9988 |  -6.8041 | greater       |
+|  6 | Hinge | COTO |   1      | -16.9814 | greater       |
+|  9 | EXP   | COTO |   1      | -31.9654 | greater       |
+
+-- Result --
+
+| (VGG) | mean(std) | 0.7679(0.0053) | 0.7687(0.0035) | 0.8087(0.0024) |
+|          | p_value   | 0.00122        | 4e-05        | ---            |
+
+#### CIFAR - model: DenseNet121 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8243 | 0.8613 | 0.7431 |  0.8308 |
+| ('test_acc', 'std')  | 0.0021 | 0.0021 | 0.0027 |  0.0029 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0003 | -10.0445 | less          |
+|  6 | Hinge | COTO |   0.0001 | -14.1844 | less          |
+|  9 | EXP   | COTO |   0      | -27.0177 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9997 | -10.0445 | greater       |
+|  6 | Hinge | COTO |   0.9999 | -14.1844 | greater       |
+|  9 | EXP   | COTO |   1      | -27.0177 | greater       |
+
+-- Result --
+
+| (DenseNet121) | mean(std) | 0.8243(0.0021) | 0.8308(0.0029) | 0.8613(0.0021) |
+|          | p_value   | 0.00028        | 7e-05        | ---            |
+
+#### CIFAR - model: DenseNet121 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8299 | 0.8629 | 0.7447 |  0.8288 |
+| ('test_acc', 'std')  | 0.0027 | 0.0024 | 0.0025 |  0.0018 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0002 | -10.2571 | less          |
+|  6 | Hinge | COTO |   0.0002 | -10.8864 | less          |
+|  9 | EXP   | COTO |   0      | -24.8828 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9998 | -10.2571 | greater       |
+|  6 | Hinge | COTO |   0.9998 | -10.8864 | greater       |
+|  9 | EXP   | COTO |   1      | -24.8828 | greater       |
+
+-- Result --
+
+| (DenseNet121) | mean(std) | 0.8299(0.0027) | 0.8288(0.0018) | 0.8629(0.0024) |
+|          | p_value   | 0.00025        | 0.0002        | ---            |
+
+#### CIFAR - model: DenseNet169 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.832  | 0.8612 | 0.7433 |  0.8272 |
+| ('test_acc', 'std')  | 0.0029 | 0.0022 | 0.0027 |  0.0032 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0001 | -14.3714 | less          |
+|  6 | Hinge | COTO |   0      | -15.4323 | less          |
+|  9 | EXP   | COTO |   0      | -52.9886 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9999 | -14.3714 | greater       |
+|  6 | Hinge | COTO |   1      | -15.4323 | greater       |
+|  9 | EXP   | COTO |   1      | -52.9886 | greater       |
+
+-- Result --
+
+| (DenseNet169) | mean(std) | 0.832(0.0029) | 0.8272(0.0032) | 0.8612(0.0022) |
+|          | p_value   | 7e-05        | 5e-05        | ---            |
+
+#### CIFAR - model: DenseNet201 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.8299 | 0.8614 | 0.7432 |  0.832  |
+| ('test_acc', 'std')  | 0.0036 | 0.0044 | 0.0037 |  0.0023 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0002 | -11.028  | less          |
+|  6 | Hinge | COTO |   0.0002 | -10.7477 | less          |
+|  9 | EXP   | COTO |   0      | -17.4681 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9998 | -11.028  | greater       |
+|  6 | Hinge | COTO |   0.9998 | -10.7477 | greater       |
+|  9 | EXP   | COTO |   1      | -17.4681 | greater       |
+
+-- Result --
+
+| (DenseNet201) | mean(std) | 0.8299(0.0036) | 0.832(0.0023) | 0.8614(0.0044) |
+|          | p_value   | 0.00019        | 0.00021        | ---            |
+
+#### CIFAR - model: MobileNet ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.6806 | 0.6995 | 0.5668 |  0.6719 |
+| ('test_acc', 'std')  | 0.003  | 0.0042 | 0.0076 |  0.0029 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0067 |  -4.2278 | less          |
+|  6 | Hinge | COTO |   0.0023 |  -5.739  | less          |
+|  9 | EXP   | COTO |   0      | -20.6115 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9933 |  -4.2278 | greater       |
+|  6 | Hinge | COTO |   0.9977 |  -5.739  | greater       |
+|  9 | EXP   | COTO |   1      | -20.6115 | greater       |
+
+-- Result --
+
+| (MobileNet) | mean(std) | 0.6806(0.003) | 0.6719(0.0029) | 0.6995(0.0042) |
+|          | p_value   | 0.0067        | 0.00228        | ---            |
+
+#### CIFAR - model: MobileNetV2 ####
+
+
+ Step Size: {'lr': 0.001, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}} 
+
+
+-- Performance --
+
+|                      |    BCE |   COTO |    EXP |   Hinge |
+|:---------------------|-------:|-------:|-------:|--------:|
+| ('test_acc', 'mean') | 0.7322 | 0.7743 | 0.6268 |  0.7431 |
+| ('test_acc', 'std')  | 0.0087 | 0.0036 | 0.009  |  0.0038 |
+
+-- Testing --
+
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.0024 |  -5.6366 | less          |
+|  6 | Hinge | COTO |   0.0003 |  -9.851  | less          |
+|  9 | EXP   | COTO |   0.0001 | -12.9776 | less          |
+|    | A     | B    |   pvalue |     stat | alternative   |
+|---:|:------|:-----|---------:|---------:|:--------------|
+|  3 | BCE   | COTO |   0.9976 |  -5.6366 | greater       |
+|  6 | Hinge | COTO |   0.9997 |  -9.851  | greater       |
+|  9 | EXP   | COTO |   0.9999 | -12.9776 | greater       |
+
+-- Result --
+
+| (MobileNetV2) | mean(std) | 0.7322(0.0087) | 0.7431(0.0038) | 0.7743(0.0036) |
+|          | p_value   | 0.00244        | 0.0003        | ---            |

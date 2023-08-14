@@ -44,7 +44,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=filename+'-'+config['model']['net'])
+        wandb.init(project="COTO", name=filename+'19-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -77,7 +77,8 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         print('\n-- TRAIN eLOTO --\n')
         model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
         model.to(config['device'])
-
+        print(model)
+        
         trainer_ = Trainer(model=model, loss='COTO', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
@@ -213,7 +214,7 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     config = {
-            'model': {'net': 'ResNet34', 'args': {}},
+            'model': {'net': 'MobileNetV2', 'args': {}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},

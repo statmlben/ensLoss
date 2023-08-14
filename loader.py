@@ -98,17 +98,18 @@ def img_data(transform, name='MHIST'):
         test_data = MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', partition='test', transform=transform)
     elif name == 'CIFAR':
         # ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+        binary_class_list = [1, 9]
         trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
                                         download=False, transform=transform)
-        train_index = [i for i, t in enumerate(trainset.targets) if (t in [3,5])]
+        train_index = [i for i, t in enumerate(trainset.targets) if (t in binary_class_list)]
         train_data = torch.utils.data.Subset(trainset, train_index)
 
         testset = torchvision.datasets.CIFAR10(root='./dataset', train=False,
                                        download=False, transform=transform)
-        test_index = [i for i, t in enumerate(testset.targets) if (t in [3,5])]
+        test_index = [i for i, t in enumerate(testset.targets) if (t in binary_class_list)]
         test_data = torch.utils.data.Subset(testset, test_index)
-
-        encode_map = {3: 0, 5: 1}
+        # print(set(train_data.dataset.targets))
+        encode_map = {1: 0, 9: 1}
         train_data.dataset.targets = list(map(encode_map.get, train_data.dataset.targets))
         test_data.dataset.targets = list(map(encode_map.get, test_data.dataset.targets))
 
