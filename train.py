@@ -50,7 +50,6 @@ class Trainer(object):
                 else:
                     loss_.lam = 1.0 / np.random.rand()
 
-                    
             #     now_acc_train = epoch_acc_train/len(self.train_loader)
             #     opt.tell([loss_.lam], -now_acc_train)
                 
