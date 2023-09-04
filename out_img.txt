@@ -1,3 +1,4 @@
+# 3 (cat) vs 5 (dog)
 
 #### CIFAR - model: ResNet18 ####
 
@@ -433,6 +434,9 @@
 | (MobileNetV2) | mean(std) | 0.7322(0.0087) | 0.7431(0.0038) | 0.7743(0.0036) |
 |          | p_value   | 0.00244        | 0.0003        | ---            |
 
+
+# 1 (automobile) vs 9 (truck)
+
 #### CIFAR - model: MobileNetV2 ####
 
 
@@ -805,6 +809,7 @@
 | (ResNet34) | mean(std) | 0.9034(0.0022) | 0.9031(0.0015) | 0.9393(0.0017) |
 |          | p_value   | 7e-05        | 1e-05        | ---            |
 
+
 #### CIFAR - model: ResNet18 ####
 
 
@@ -835,3 +840,5 @@
 
 | (ResNet18) | mean(std) | 0.8907(0.0027) | 0.8978(0.0022) | 0.9391(0.0019) |
 |          | p_value   | 0.0        | 3e-05        | ---            |
+
+# 2 (bird) vs 4 (deer)
