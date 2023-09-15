@@ -214,7 +214,8 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     config = {
-            'model': {'net': 'ResNet50', 'args': {}},
+            # 'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
+            'model': {'net': 'MobileNetV2', 'args': {}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
