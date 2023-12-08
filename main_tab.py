@@ -214,7 +214,7 @@ if __name__=='__main__':
                            help='data_id of the dataset')
     parser.add_argument('-R', '--n_trials', default=20, type=int,
                            help='number of trials for the experiments')
-    parser.add_argument('-L', '--log', default=False, type=bool,
+    parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
                            help='if save the training process in wandb')
     args = parser.parse_args()
 

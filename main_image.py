@@ -36,6 +36,7 @@ import sys
 import models
 from img_models import ResNet18
 import img_models
+import Image_Classification_PyTorch
 
 import torchvision.transforms as transforms
 from torchvision import datasets, models, transforms
@@ -44,27 +45,19 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=filename+'24-'+config['model']['net'])
+        wandb.init(project="COTO", name=filename+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
     random.seed(0)
     np.random.seed(0)
 
-    ## image tranform
-    transform = transforms.Compose(
-                [
-                # transforms.ToPILImage(),
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-
     Acc = {'trial': [], 'loss': [], 'test_acc': []}
     path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
-        train_data, test_data = img_data(transform=transform, name=filename)
-        input_shape = (3, 224, 224)
+        train_data, test_data = img_data(name=filename)
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
@@ -209,13 +202,14 @@ if __name__=='__main__':
                            help='filename of the dataset')
     parser.add_argument('-R', '--n_trials', default=5, type=int,
                            help='number of trials for the experiments')
-    parser.add_argument('-L', '--log', default=False, type=bool,
+    parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
                            help='if save the training process in wandb')
     args = parser.parse_args()
 
     config = {
+            'dataset' : args.filename,
             # 'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
-            'model': {'net': 'MobileNetV2', 'args': {}},
+            'model': {'net': 'ResNet18', 'args': {}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
@@ -231,5 +225,3 @@ if __name__=='__main__':
 # Age and gender prediction: https://talhassner.github.io/home/projects/Adience/Adience-data.html
 # PCam: https://github.com/basveeling/pcam
 # MHIST: https://bmirds.github.io/MHIST/
-
-###

@@ -1,3 +1,8 @@
+""" Loss functions for Binary Classification"""
+
+# Authors: Ben Dai <bendai@cuhk.edu.hk>
+# License: MIT License
+
 import numpy as np
 import pandas as pd
 
@@ -10,6 +15,8 @@ class COTO(nn.Module):
         super(COTO, self).__init__()
         self.dist = dist
         self.lam = 0.0
+        ## How often should the loss function be updated in SGD, based on `self.period` the number of steps?
+        self.period = 10
 
     def BC_inv(self, z):
         if self.lam == 0.:

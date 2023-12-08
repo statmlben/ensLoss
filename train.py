@@ -21,13 +21,14 @@ def get_instance(module, name, config, *args):
 
 class Trainer(object):
 
-    def __init__(self, model, loss, config, device, train_loader, val_loader=None):
+    def __init__(self, model, loss, config, device, train_loader, period=10, val_loader=None):
         self.model = model
         self.loss = loss
         self.device = config['device']
         self.train_loader = train_loader
         self.val_loader = val_loader
         self.config = config
+        self.period = period
 
     def train(self, path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}):
         
@@ -44,7 +45,7 @@ class Trainer(object):
         for e in range(1, config['trainer']['epochs']+1):
 
             ## set loss function parameter
-            if (e%10 ==0) and (self.loss=='COTO'):
+            if (e%(self.period) ==0) and (self.loss=='COTO'):
                 if np.random.randn() > 0.:
                     loss_.lam = np.random.rand()
                 else:
@@ -64,6 +65,10 @@ class Trainer(object):
             tbar = tqdm(self.train_loader, ncols=120)
             for batch_idx, (X_batch, y_batch) in enumerate(tbar):
                 y_batch = y_batch.float()
+
+                if self.config['dataset'] == 'MHIST':
+                    X_batch = X_batch.reshape(-1, 3, 224, 224)
+                    y_batch = y_batch.reshape(-1, )
                 X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
                 
                 optimizer.zero_grad()

@@ -23,8 +23,9 @@ from skimage.color import hed2rgb
 from tqdm import tqdm
 from torchvision import transforms
 from PIL import Image
-from albumentations import Compose, Rotate, CenterCrop, HorizontalFlip, RandomScale, Flip, Resize, ShiftScaleRotate, \
+from albumentations import Normalize, Compose, Rotate, CenterCrop, HorizontalFlip, RandomScale, Flip, Resize, ShiftScaleRotate, \
     RandomCrop, IAAAdditiveGaussianNoise, ElasticTransform, HueSaturationValue, LongestMaxSize, RandomBrightnessContrast, Blur
+from albumentations.pytorch import ToTensorV2
 
 ## Reproducibility
 torch.manual_seed(1024)
@@ -86,36 +87,23 @@ def openml_data(random_state=0, data_id=43969):
 
 ## image dataset
 
-# class MHIST_loader(Dataset):
-#     def __init__(self, annotations_file, img_dir, label_map={'SSA': 0, 'HP': 1}, partition='train', transform=None):
-#         self.img_labels = (pd.read_csv(annotations_file) [lambda df: df['Partition'] == partition])
-#         self.label_map = label_map
-#         self.img_labels['Majority Vote Label'] = self.img_labels['Majority Vote Label'].map(self.label_map)
-#         self.img_dir = img_dir
-#         self.transform = transform
-
-#     def __len__(self):
-#         return len(self.img_labels)
-
-#     def __getitem__(self, idx):
-        
-#         img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
-#         image = read_image(img_path)
-#         label = self.img_labels.iloc[idx, 1]
-#         if self.transform:
-#             image = self.transform(image)
-#         return image, label
-
-def img_data(transform, name='MHIST'):
+def img_data(name='CIFAR'):
     if name == 'MHIST':
         train_data = DatasetMHIST_train()
-        test_data = DatasetMHIST_test()
+        test_data = Dataset_MHIST(split_set='test')
         # MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', partition='test', transform=transform)
     elif name == 'CIFAR':
         # ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
         # 3 (cat) vs 5 (dog)
         # 2 (bird) vs 4 (deer)
         # 1 (automobile) vs 9 (truck)
+            ## image tranform
+        transform = transforms.Compose(
+                    [
+                    # transforms.ToPILImage(),
+                    transforms.ToTensor(),
+                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
         binary_class_list = [2, 4]
         trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
                                         download=False, transform=transform)
@@ -137,7 +125,106 @@ def img_data(transform, name='MHIST'):
         raise Exception("Sorry, no dataset provided.") 
     return train_data, test_data
 
+
+####### MHIST dataset
+
+# Apdated from https://github.com/srinidhiPY/ICCV-CDPATH2021-ID-8/tree/main
+
+##### MHIST test loader
+class Dataset_MHIST(Dataset):
+    def __init__(self, dataset_path='./dataset/MHIST/images/', annot_path='./dataset/MHIST/annotations.csv', split_set='train', image_size=224):
+
+        """
+        TBLN dataset class wrapper (train with augmentation)
+        """
+
+        self.image_size = image_size
+        self.split_set = split_set
+        # Resize images
+        self.transform1 = Compose([
+            Resize(image_size, image_size, interpolation=2),
+            ])
+
+        # GT annotation
+        GT = pd.read_csv(annot_path, header=None)
+
+        self.datalist = []
+        img_paths = glob.glob('{}/*.png'.format(dataset_path))
+        with tqdm(enumerate(sorted(img_paths)), disable=True) as t:
+            for wj, img_path in t:
+                head, tail = os.path.split(img_path)
+                img_id = tail  # Get image_id
+
+                # check if it belongs to train/test set
+                set = GT.loc[GT[0] == img_id][3]
+                label = GT.loc[GT[0] == img_id][1]
+
+                # Add only train/val to the corresponding set
+                if set.iloc[0] == self.split_set:
+                    if label.iloc[0] == 'HP':
+                        cls_id = 0
+                    else:
+                        cls_id = 1   # SSA
+                    self.datalist.append((img_path, cls_id))
+                else:
+                    continue
+
+    def __len__(self):
+        return len(self.datalist)
+
+    def __getitem__(self, index):
+
+        img = Image.open(self.datalist[index][0]).convert('RGB')
+
+        # label assignment
+        label = int(self.datalist[index][1])
+
+        #################
+        # Convert PIL image to numpy array
+        img = np.array(img)
+
+        # First image
+        img = self.transform1(image=img)
+        img = Image.fromarray(img['image'])
+        img = np.array(img, dtype='f')
+
+        # Numpy to torch
+        img = torch.from_numpy(img)
+        label = np.array(label)
+        label = torch.from_numpy(label)
+
+        # Change Tensor Dimension to N x C x H x W
+        img = img.permute(2, 0, 1)
+
+        return img, label
+
+
+## Appendix
+
+# class MHIST_loader(Dataset):
+#     def __init__(self, annotations_file, img_dir, label_map={'SSA': 0, 'HP': 1}, partition='train', transform=None):
+#         self.img_labels = (pd.read_csv(annotations_file) [lambda df: df['Partition'] == partition])
+#         self.label_map = label_map
+#         self.img_labels['Majority Vote Label'] = self.img_labels['Majority Vote Label'].map(self.label_map)
+#         self.img_dir = img_dir
+#         self.transform = transform
+
+#     def __len__(self):
+#         return len(self.img_labels)
+
+#     def __getitem__(self, idx):
+        
+#         img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
+#         image = read_image(img_path)
+#         label = self.img_labels.iloc[idx, 1]
+#         if self.transform:
+#             image = self.transform(image)
+#         return image, label
+
+
 ############# List of data augmentations for fine-tuning ########################
+
+# Source: https://github.com/srinidhiPY/ICCV-CDPATH2021-ID-8/tree/main
 
 # def HSV(img):
 #     transform = Compose([HueSaturationValue(hue_shift_limit=(-0.1, 0.1), sat_shift_limit=(-1, 1))])
@@ -180,12 +267,9 @@ def img_data(transform, name='MHIST'):
 #     augs = [HSV, Noise, Scale_Resize_Crop, Shift_Scale_Rotate, Blur_img, Brightness_Contrast, Rotate_Crop]
 #     return augs
 
-####### MHIST dataset
-
 ### MHIST train loader
 class DatasetMHIST_train(Dataset):
-
-    def __init__(self, dataset_path='./dataset/MHIST/images/', annot_path='./dataset/MHIST/annotations.csv', image_size=256):
+    def __init__(self, dataset_path='./dataset/MHIST/images/', annot_path='./dataset/MHIST/annotations.csv', image_size=224):
 
         """
         MHIST dataset class wrapper (train with augmentation)
@@ -256,9 +340,9 @@ class DatasetMHIST_train(Dataset):
         # Aug2_img.show()
 
         # Convert to numpy array
-        img = np.array(img)
-        Aug1_img = np.array(Aug1_img)
-        Aug2_img = np.array(Aug2_img)
+        img = np.array(img, dtype='f')
+        Aug1_img = np.array(Aug1_img, dtype='f')
+        Aug2_img = np.array(Aug2_img, dtype='f')
 
         # Stack along specified dimension
         img = np.stack((img, Aug1_img, Aug2_img), axis=0)
@@ -276,73 +360,5 @@ class DatasetMHIST_train(Dataset):
 
         # Change Tensor Dimension to N x C x H x W
         img = img.permute(0, 3, 1, 2)
-
-        return img, label
-
-
-##### MHIST test loader
-class DatasetMHIST_test(Dataset):
-
-    def __init__(self, dataset_path='./dataset/MHIST/images/', annot_path='./dataset/MHIST/annotations.csv', image_size=256):
-
-        """
-        TBLN dataset class wrapper (train with augmentation)
-        """
-
-        self.image_size = image_size
-
-        # Resize images
-        self.transform1 = Compose([Resize(image_size, image_size, interpolation=2)])
-
-        # GT annotation
-        GT = pd.read_csv(annot_path, header=None)
-
-        self.datalist = []
-        img_paths = glob.glob('{}/*.png'.format(dataset_path))
-        with tqdm(enumerate(sorted(img_paths)), disable=True) as t:
-            for wj, img_path in t:
-                head, tail = os.path.split(img_path)
-                img_id = tail  # Get image_id
-
-                # check if it belongs to train/test set
-                set = GT.loc[GT[0] == img_id][3]
-                label = GT.loc[GT[0] == img_id][1]
-
-                # Add only train/val to the corresponding set
-                if set.iloc[0] == 'test':
-                    if label.iloc[0] == 'HP':
-                        cls_id = 0
-                    else:
-                        cls_id = 1   # SSA
-                    self.datalist.append((img_path, cls_id))
-                else:
-                    continue
-
-    def __len__(self):
-        return len(self.datalist)
-
-    def __getitem__(self, index):
-
-        img = Image.open(self.datalist[index][0]).convert('RGB')
-
-        # label assignment
-        label = int(self.datalist[index][1])
-
-        #################
-        # Convert PIL image to numpy array
-        img = np.array(img)
-
-        # First image
-        img = self.transform1(image=img)
-        img = Image.fromarray(img['image'])
-        img = np.array(img)
-
-        # Numpy to torch
-        img = torch.from_numpy(img)
-        label = np.array(label)
-        label = torch.from_numpy(label)
-
-        # Change Tensor Dimension to N x C x H x W
-        img = img.permute(2, 0, 1)
 
         return img, label
