@@ -98,6 +98,19 @@ def img_data(name='CIFAR'):
         # 2 (bird) vs 4 (deer)
         # 1 (automobile) vs 9 (truck)
             ## image tranform
+
+        # transform_train = transforms.Compose([
+        #     transforms.RandomCrop(32, padding=4),
+        #     transforms.RandomHorizontalFlip(),
+        #     transforms.ToTensor(),
+        #     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        # ])
+
+        # transform_test = transforms.Compose([
+        #     transforms.ToTensor(),
+        #     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+        # ])
+
         transform = transforms.Compose(
                     [
                     # transforms.ToPILImage(),
@@ -120,6 +133,17 @@ def img_data(name='CIFAR'):
         test_data.dataset.targets = list(map(encode_map.get, test_data.dataset.targets))
 
     elif name == 'PCam':
+        
+        transform = transforms.Compose(
+            [
+            # transforms.ToPILImage(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+        train_data = torchvision.datasets.PCAM(root='./dataset', split="train",
+                                download=True, transform=transform)
+        test_data = torchvision.datasets.PCAM(root='./dataset', split="test",
+                                       download=True, transform=transform)
         pass
     else:
         raise Exception("Sorry, no dataset provided.") 

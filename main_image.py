@@ -52,7 +52,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
     random.seed(0)
     np.random.seed(0)
 
-    Acc = {'trial': [], 'loss': [], 'test_acc': []}
+    Acc = {'trial': [], 'loss': [], 'test_acc': [], 'test_auc': []}
     path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
@@ -64,7 +64,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
         ## get some random training data
         # dataiter = iter(train_loader)
-        # images, labels = next(dataiter)
+        # X_batch, y_batch = next(dataiter)
 
         ## eLOTO ##
         print('\n-- TRAIN eLOTO --\n')
@@ -75,10 +75,11 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         trainer_ = Trainer(model=model, loss='COTO', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('COTO')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
@@ -88,10 +89,11 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         trainer_ = Trainer(model=model, loss='BCELoss',
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('BCE')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
         ## Hinge loss ##
         print('\n-- TRAIN Hinge --\n')
@@ -101,10 +103,11 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         trainer_ = Trainer(model=model, loss='Hinge', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('Hinge')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
         ## EXP loss ##
         print('\n-- TRAIN EXP --\n')
@@ -114,10 +117,11 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         trainer_ = Trainer(model=model, loss='EXP', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('EXP')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
     path_ = pd.DataFrame(path_)
     # path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
@@ -154,9 +158,13 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
     p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
     p_greater = p_greater[p_greater['B'] == 'COTO']
 
-    res = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
-    res[('test_acc', 'std')] /= np.sqrt(n_trials)
-    res = res.T.round(4)
+    res_acc = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
+    res_acc[('test_acc', 'std')] /= np.sqrt(n_trials)
+    res_acc = res_acc.T.round(4)
+
+    res_auc = Acc.groupby('loss').agg({'test_auc': ['mean', 'std']})
+    res_auc[('test_auc', 'std')] /= np.sqrt(n_trials)
+    res_auc = res_auc.T.round(4)
 
     ## Save outcome
     orig_stdout = sys.stdout
@@ -167,16 +175,19 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
     print('\n Step Size: %s \n' %config['optimizer'])
 
     print('\n-- Performance --\n')
-    print((res.round(4)).to_markdown())
+    print((res_acc.round(4)).to_markdown())
+    print('\n')
+    print((res_auc.round(4)).to_markdown())
 
     print('\n-- Testing --\n')
     print(p_less.round(4).to_markdown())
+    print('\n')
     print(p_greater.round(4).to_markdown())
 
     out = '| ({}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format( config['model']['net'],
-                                                            res['BCE'][0], res['BCE'][1], 
-                                                            res['Hinge'][0], res['Hinge'][1],
-                                                            res['COTO'][0], res['COTO'][1])
+                                                            res_acc['BCE'][0], res_acc['BCE'][1], 
+                                                            res_acc['Hinge'][0], res_acc['Hinge'][1],
+                                                            res_acc['COTO'][0], res_acc['COTO'][1])
     p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['pvalue'].values[0], 
                                         p_less[p_less['A']=='Hinge']['pvalue'].values[0])
     print('\n-- Result --\n')
@@ -209,7 +220,7 @@ if __name__=='__main__':
     config = {
             'dataset' : args.filename,
             # 'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
-            'model': {'net': 'ResNet18', 'args': {}},
+            'model': {'net': 'ResNet50', 'args': {}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},

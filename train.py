@@ -11,9 +11,9 @@ from tqdm import tqdm
 from metric import binary_acc
 import pandas as pd
 import losses
-from torchmetrics.classification import BinaryAUROC
 import numpy as np
 from skopt import Optimizer
+from torcheval.metrics import BinaryAccuracy, BinaryAUROC
 
 def get_instance(module, name, config, *args):
     # GET THE CORRESPONDING CLASS / FCT 
@@ -62,6 +62,7 @@ class Trainer(object):
 
             self.model.train()
             
+            acc_metric = BinaryAccuracy()
             tbar = tqdm(self.train_loader, ncols=120)
             for batch_idx, (X_batch, y_batch) in enumerate(tbar):
                 y_batch = y_batch.float()
@@ -74,7 +75,8 @@ class Trainer(object):
                 optimizer.zero_grad()
                 y_pred = self.model(X_batch)
                 loss = loss_(y_pred, y_batch.unsqueeze(1).float())
-                acc = binary_acc(y_pred, y_batch.unsqueeze(1))
+                acc_metric.update(1.0*(y_pred > 0).flatten(), y_batch)
+                # acc = binary_acc(y_pred, y_batch.unsqueeze(1))
                 
                 loss.backward()
                 if self.loss=='EXP':
@@ -83,10 +85,11 @@ class Trainer(object):
             # target * y_pred.flatten()
                 
                 # epoch_loss_train += loss.item()
-                epoch_acc_train += acc.item()
+                # epoch_acc_train += acc.item()
+                epoch_acc_train = acc_metric.compute().item()
                 
                 tbar.set_description('TRAIN ({}) SGD({}) LR({:.2E}) | Acc: {:.3f}'.format(
-                        e, self.loss, optimizer.param_groups[0]["lr"], epoch_acc_train/(batch_idx+1)))
+                        e, self.loss, optimizer.param_groups[0]["lr"], epoch_acc_train))
             
             scheduler.step()
 
@@ -95,28 +98,38 @@ class Trainer(object):
                 print('\n###### EVALUATION ######')
                 epoch_loss_val = 0
                 epoch_acc_val = 0
+                epoch_auc_val = 0
 
                 self.model.eval()
                 with torch.no_grad():
+                    acc_metric = BinaryAccuracy()
+                    auc_metric = BinaryAUROC()
                     tbar = tqdm(self.val_loader, ncols=120)
                     for batch_idx, (X_batch, y_batch) in enumerate(tbar):
 
                         X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
                         y_pred = self.model(X_batch)
-                        acc = binary_acc(y_pred, y_batch.unsqueeze(1))
+                        
+                        
+                        acc_metric.update(1.0*(y_pred > 0).flatten(), y_batch)
+                        auc_metric.update(y_pred.flatten(), y_batch)
                         
                         # epoch_loss_valid += loss.item()
-                        epoch_acc_val += acc.item()
+                        epoch_acc_val = acc_metric.compute().item()
+                        epoch_auc_val = auc_metric.compute().item()
                     
-                        tbar.set_description('VALID ({}) SGD({}) | Acc: {:.3f}'.format(
-                                e, self.loss, epoch_acc_val/(batch_idx+1)))
+                        # tbar.set_description('VALID ({}) SGD({}) | Acc: {:.3f}'.format(
+                        #         e, self.loss, epoch_acc_val))
+
+                        tbar.set_description('VALID ({}) SGD({}) | Acc: {:.3f}; AUC: {:.3f}'.format(
+                                e, self.loss, epoch_acc_val, epoch_auc_val))
 
                 print('\n')
                 path_['epoch'].append(e)
                 path_['loss'].append(self.loss)
                 path_['train_loss'].append(epoch_loss_train/len(self.train_loader))
-                path_['train_acc'].append(epoch_acc_train/len(self.train_loader))
-                path_['test_acc'].append(epoch_acc_val/len(self.val_loader))
+                path_['train_acc'].append(epoch_acc_train)
+                path_['test_acc'].append(epoch_acc_val)
 
                 # if self.loss=='COTO':
                 #     # now_acc_train = epoch_acc_train/len(self.train_loader)
@@ -126,4 +139,4 @@ class Trainer(object):
                 #     next_lam = opt.ask()[0]
                 #     loss_.lam = next_lam
 
-        return path_, epoch_acc_val/len(self.val_loader)
+        return path_, epoch_acc_val, epoch_auc_val
