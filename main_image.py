@@ -220,10 +220,10 @@ if __name__=='__main__':
     config = {
             'dataset' : args.filename,
             # 'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
-            'model': {'net': 'ResNet50', 'args': {}},
+            'model': {'net': 'ResNet18', 'args': {}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
+            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
@@ -236,3 +236,5 @@ if __name__=='__main__':
 # Age and gender prediction: https://talhassner.github.io/home/projects/Adience/Adience-data.html
 # PCam: https://github.com/basveeling/pcam
 # MHIST: https://bmirds.github.io/MHIST/
+
+# python main_image.py -B=128 -e=100 -F="PCam" -R=5 --log

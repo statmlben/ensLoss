@@ -46,7 +46,7 @@ class COTO(nn.Module):
         _, ind_tmp = torch.sort(s_batch)
         g_batch[ind_tmp] = rd_grad
 
-        ## refine decay of the gradient sequence
+        ## refine linear decay of the gradient sequence
         pos_ind = s_batch > 1.0
         if len(s_batch[pos_ind]) > 0:
             g_batch[pos_ind] *= (1 / s_batch[pos_ind]).detach()
@@ -58,9 +58,6 @@ class COTO(nn.Module):
         g_batch = g_batch.detach() - 1e-6
         # g_batch = g_batch / abs(g_batch[-1])
 
-        ## refine grad by heavy tail (almost no change)
-        # exp_batch = - torch.exp(-s_batch)
-        # g_batch = torch.where(s_batch > 1.0, torch.maximum(exp_batch, g_batch), g_batch)
 
         ## final gradient
         loss = g_batch[:-1] * s_batch[:-1]

@@ -39,14 +39,17 @@ If you need to switch networks, please modify the parameters in the config.
 
 ### Benchmarks for Image data
 
-Benchmarks for Image data contain two dataset: [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html) and [MHIST](https://bmirds.github.io/MHIST/).
+Benchmarks for Image data contain two dataset: [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html) and [PCam](https://github.com/basveeling/pcam).
 
 - We adopted the MHIST dataloader from (https://github.com/srinidhiPY/ICCV-CDPATH2021-ID-8). 
 
 To run the benchmarks available use the following command:
 
 ```bash
+## run for CIFAR
 python main_image.py -B=128 -e=200 -F="CIFAR" -R=3 --no-log
+## run for PCam
+python main_image.py -B=128 -e=200 -F="PCam" -R=3 --no-log
 ```
 
 The network config is included in `main_image.py`, and the default setting is:
@@ -60,6 +63,13 @@ config = {
         'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 ```
 If you need to switch networks, please modify the parameters in the config.
+
+### Model list
+
+- ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
+- DenseNet121, DenseNet169, DenseNet201, DenseNet161
+- MobileNet, MobileNetV2
+- VGG11, VGG13, VGG16, VGG19
 
 ## References
 
