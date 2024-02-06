@@ -82,7 +82,14 @@ class Hinge(nn.Module):
         target = 2.*target - 1.
         score = output * target
         loss = torch.maximum(1. - score, torch.zeros_like(score))
-        return loss.mean()
+        if self.reduction == 'mean':
+            loss_out = loss.mean()
+        elif self.reduction == 'sum':
+            loss_out = loss.sum()
+        else: 
+            raise Exception("Sorry, reduction of loss must be mean or sum") 
+        return loss_out
+
 
 class EXP(nn.Module):
     def __init__(self, reduction='mean'):
@@ -93,4 +100,10 @@ class EXP(nn.Module):
         target = 2.*target - 1.
         score = output * target
         loss = torch.exp(-score)
-        return loss.mean()
+        if self.reduction == 'mean':
+            loss_out = loss.mean()
+        elif self.reduction == 'sum':
+            loss_out = loss.sum()
+        else: 
+            raise Exception("Sorry, reduction of loss must be mean or sum") 
+        return loss_out

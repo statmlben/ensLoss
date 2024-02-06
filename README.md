@@ -49,7 +49,7 @@ To run the benchmarks available use the following command:
 ## run for CIFAR
 python main_image.py -B=128 -e=200 -F="CIFAR" -R=3 --no-log
 ## run for PCam
-python main_image.py -B=128 -e=200 -F="PCam" -R=3 --no-log
+python main_image.py -B=128 -e=100 -F="PCam" -R=3 --no-log
 ```
 
 The network config is included in `main_image.py`, and the default setting is:

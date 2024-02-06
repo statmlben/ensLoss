@@ -220,10 +220,10 @@ if __name__=='__main__':
     config = {
             'dataset' : args.filename,
             # 'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
-            'model': {'net': 'ResNet18', 'args': {}},
+            'model': {'net': 'ResNet50', 'args': {}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
+            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename

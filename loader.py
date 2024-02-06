@@ -138,7 +138,7 @@ def img_data(name='CIFAR'):
             [
             # transforms.ToPILImage(),
             transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])    
 
         train_data = torchvision.datasets.PCAM(root='./dataset', split="train",
                                 download=True, transform=transform)

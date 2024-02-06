@@ -8,7 +8,6 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from tqdm import tqdm
-from metric import binary_acc
 import pandas as pd
 import losses
 import numpy as np
@@ -80,9 +79,9 @@ class Trainer(object):
                 
                 loss.backward()
                 if self.loss=='EXP':
+                    ## clip grad of EXP loss to [-1,1]; otherwise the grad will lead to explosion
                     torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 optimizer.step()
-            # target * y_pred.flatten()
                 
                 # epoch_loss_train += loss.item()
                 # epoch_acc_train += acc.item()
