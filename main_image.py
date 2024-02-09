@@ -1,51 +1,39 @@
-"""eloto in image datasets"""
+"""ensLoss in image datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
 
+## basics
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import random
-
 import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+## dataloader
+from loader import openml_data, img_data
+from torch.utils.data import DataLoader
 
-from loader import TrainData, TestData, openml_data, img_data
-from base import evaluate, pairwise_ttest
-from sklearn.model_selection import KFold
-import scipy
+## models
+import img_models
+
+## Train
 from train import Trainer
-import plotly.express as px
-import plotly as ply
 
-import pingouin as pg
-from scipy import stats
+## args; print config, figure, out
 import argparse
-import wandb
-import plotly.graph_objs as go
+import pprint
 from plot import line
 import sys
-import models
-from img_models import ResNet18
-import img_models
-import Image_Classification_PyTorch
+from base import pairwise_ttest
 
-import torchvision.transforms as transforms
-from torchvision import datasets, models, transforms
+## log to wandb
+import wandb
 
 def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=filename+config['model']['net'])
+        wandb.init(project="COTO", name=filename+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -67,10 +55,13 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         # X_batch, y_batch = next(dataiter)
 
         ## eLOTO ##
-        print('\n-- TRAIN eLOTO --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
-        print(model)
+        if h==0:
+            ## print the model in the first trial
+            print(model)
+
+        print('\n-- TRAIN eLOTO --\n')
         
         trainer_ = Trainer(model=model, loss='COTO', 
                             config=config, device=config['device'],
@@ -83,7 +74,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='BCELoss',
@@ -97,7 +88,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
         ## Hinge loss ##
         print('\n-- TRAIN Hinge --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='Hinge', 
@@ -111,7 +102,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
         ## EXP loss ##
         print('\n-- TRAIN EXP --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1, **config['model']['args'])
+        model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='EXP', 
@@ -124,7 +115,6 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
         Acc['test_auc'].append(auc_test)
 
     path_ = pd.DataFrame(path_)
-    # path_.to_csv('path_D{}_H{}_Batch{}.csv'.format(D,H,config['batch_size']), index=False)
     Acc = pd.DataFrame(Acc)
     
     # Plot
@@ -172,7 +162,9 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
     sys.stdout = out_file
 
     print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
-    print('\n Step Size: %s \n' %config['optimizer'])
+    # print('\n Step Size: %s \n' %config['optimizer'])
+    print('\n-- CONFIG --\n')
+    pprint.pprint(config, width=1)
 
     print('\n-- Performance --\n')
     print((res_acc.round(4)).to_markdown())
@@ -184,17 +176,9 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
     print('\n')
     print(p_greater.round(4).to_markdown())
 
-    out = '| ({}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format( config['model']['net'],
-                                                            res_acc['BCE'][0], res_acc['BCE'][1], 
-                                                            res_acc['Hinge'][0], res_acc['Hinge'][1],
-                                                            res_acc['COTO'][0], res_acc['COTO'][1])
-    p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['pvalue'].values[0], 
-                                        p_less[p_less['A']=='Hinge']['pvalue'].values[0])
-    print('\n-- Result --\n')
-    print(out)
-    print(p_pair)
     if wandb_log:
         wandb.log({"test_acc_curve": fig,
+                   "perf": Acc.groupby('loss', as_index=False)['test_acc'].agg(['mean', 'std']),
                    "path": path_,
                    "perf_table": Acc,
                    "p_less": p_less,
@@ -211,6 +195,8 @@ if __name__=='__main__':
                            help='number of epochs to train')
     parser.add_argument('-F', '--filename', default="CIFAR", type=str,
                            help='filename of the dataset')
+    parser.add_argument('-N', '--net', default="ResNet50", type=str,
+                           help='the neural net of the classification')
     parser.add_argument('-R', '--n_trials', default=5, type=int,
                            help='number of trials for the experiments')
     parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
@@ -219,22 +205,21 @@ if __name__=='__main__':
 
     config = {
             'dataset' : args.filename,
-            # 'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
-            'model': {'net': 'ResNet50', 'args': {}},
+            'model': {'net': 'ResNet50'},
             'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 3},
+            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
     n_trials = args.n_trials
     wandb_log = args.log
+    config['model']['net'] = args.net
 
     main(config=config, filename=filename, n_trials=n_trials, wandb_log=wandb_log)
 
 ## Image dataset
-# Age and gender prediction: https://talhassner.github.io/home/projects/Adience/Adience-data.html
+# CIFAR10: https://www.cs.toronto.edu/~kriz/cifar.html
 # PCam: https://github.com/basveeling/pcam
-# MHIST: https://bmirds.github.io/MHIST/
 
 # python main_image.py -B=128 -e=100 -F="PCam" -R=5 --log

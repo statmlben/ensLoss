@@ -16,10 +16,7 @@ import torchvision
 ## lib used for argumentation
 import glob
 from os.path import exists
-from skimage import color
 import copy
-from skimage.color import rgb2hed
-from skimage.color import hed2rgb
 from tqdm import tqdm
 from torchvision import transforms
 from PIL import Image

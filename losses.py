@@ -38,7 +38,7 @@ class COTO(nn.Module):
         # sample from dist
         # rd_grad = - self.dist.sample((g_num,)).flatten()
         
-        # generate random loss from Box-Cox transformation
+        # generate random loss from the inverse Box-Cox transformation
         rd_grad = torch.randn((g_num,))
         rd_grad = - self.BC_inv(rd_grad)
         rd_grad, _ = torch.sort(rd_grad)
@@ -50,14 +50,8 @@ class COTO(nn.Module):
         pos_ind = s_batch > 1.0
         if len(s_batch[pos_ind]) > 0:
             g_batch[pos_ind] *= (1 / s_batch[pos_ind]).detach()
-
-        ## genrate gradient via inverse Box-Cox transformation (fair performance)
-        # g_batch = - self.BC_inv(-s_batch)
         
-        ## standarize the scale of a random loss; Grad(0) = -1
         g_batch = g_batch.detach() - 1e-6
-        # g_batch = g_batch / abs(g_batch[-1])
-
 
         ## final gradient
         loss = g_batch[:-1] * s_batch[:-1]

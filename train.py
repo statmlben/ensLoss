@@ -13,6 +13,8 @@ import losses
 import numpy as np
 from skopt import Optimizer
 from torcheval.metrics import BinaryAccuracy, BinaryAUROC
+import os
+import time
 
 def get_instance(module, name, config, *args):
     # GET THE CORRESPONDING CLASS / FCT 
@@ -20,7 +22,7 @@ def get_instance(module, name, config, *args):
 
 class Trainer(object):
 
-    def __init__(self, model, loss, config, device, train_loader, period=10, val_loader=None):
+    def __init__(self, model, loss, config, device, train_loader, period=5, val_loader=None):
         self.model = model
         self.loss = loss
         self.device = config['device']
@@ -137,5 +139,15 @@ class Trainer(object):
                     
                 #     next_lam = opt.ask()[0]
                 #     loss_.lam = next_lam
+
+        ## save model
+        filename = "{0}_B{1}_epoch{2}_{3}.pt".format(self.loss, config['batch_size'], 
+                                                                 config['trainer']['epochs'],
+                                                                 time.strftime("%m%d_%H%M"))
+        pathname = os.path.join('save', config['dataset'], 
+                                          config['model']['net'])
+        os.makedirs(pathname, exist_ok=True) 
+        filename = os.path.join(pathname, filename)
+        torch.save(self.model.state_dict(), filename)
 
         return path_, epoch_acc_val, epoch_auc_val

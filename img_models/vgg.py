@@ -12,14 +12,16 @@ cfg = {
 
 
 class VGG(nn.Module):
-    def __init__(self, vgg_name, num_classes=10):
+    def __init__(self, vgg_name='VGG16', num_classes=10):
         super(VGG, self).__init__()
         self.features = self._make_layers(cfg[vgg_name])
-        self.classifier = nn.Linear(512, num_classes)
+        self.lin = nn.LazyLinear(512)
+        self.classifier = nn.LazyLinear(num_classes)
 
     def forward(self, x):
         out = self.features(x)
         out = out.view(out.size(0), -1)
+        out = self.lin(out)
         out = self.classifier(out)
         return out
 
@@ -36,6 +38,12 @@ class VGG(nn.Module):
                 in_channels = x
         layers += [nn.AvgPool2d(kernel_size=1, stride=1)]
         return nn.Sequential(*layers)
+
+def VGG16(num_classes=10):
+    return VGG(vgg_name='VGG16', num_classes=num_classes)
+
+def VGG19(num_classes=10):
+    return VGG(vgg_name='VGG19', num_classes=num_classes)
 
 
 # def test():
