@@ -82,14 +82,23 @@ def openml_data(random_state=0, data_id=43969):
     test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
     return train_data, test_data
 
-## image dataset
+## Simulated dataset
+def sim_data(n, width=28, height=28):
+    transform = transforms.Compose(
+                [
+                # transforms.ToPILImage(),
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
+    trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
+                                    download=False, transform=transform)
+
+    testset = torchvision.datasets.CIFAR10(root='./dataset', train=False,
+                                    download=False, transform=transform)
+
+## image dataset
 def img_data(name='CIFAR'):
-    if name == 'MHIST':
-        train_data = DatasetMHIST_train()
-        test_data = Dataset_MHIST(split_set='test')
-        # MHIST_loader(annotations_file='./dataset/MHIST/annotations.csv', img_dir='./dataset/MHIST/images/', partition='test', transform=transform)
-    elif name == 'CIFAR':
+    if name == 'CIFAR':
         # ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
         # 3 (cat) vs 5 (dog)
         # 2 (bird) vs 4 (deer)
@@ -114,7 +123,7 @@ def img_data(name='CIFAR'):
                     transforms.ToTensor(),
                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-        binary_class_list = [2, 4]
+        binary_class_list = [3, 5]
         trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
                                         download=False, transform=transform)
         train_index = [i for i, t in enumerate(trainset.targets) if (t in binary_class_list)]
@@ -125,7 +134,7 @@ def img_data(name='CIFAR'):
         test_index = [i for i, t in enumerate(testset.targets) if (t in binary_class_list)]
         test_data = torch.utils.data.Subset(testset, test_index)
         # print(set(train_data.dataset.targets))
-        encode_map = {2: 0, 4: 1}
+        encode_map = {3: 0, 5: 1}
         train_data.dataset.targets = list(map(encode_map.get, train_data.dataset.targets))
         test_data.dataset.targets = list(map(encode_map.get, test_data.dataset.targets))
 
@@ -145,241 +154,3 @@ def img_data(name='CIFAR'):
     else:
         raise Exception("Sorry, no dataset provided.") 
     return train_data, test_data
-
-
-####### MHIST dataset
-
-# Apdated from https://github.com/srinidhiPY/ICCV-CDPATH2021-ID-8/tree/main
-
-##### MHIST test loader
-class Dataset_MHIST(Dataset):
-    def __init__(self, dataset_path='./dataset/MHIST/images/', annot_path='./dataset/MHIST/annotations.csv', split_set='train', image_size=224):
-
-        """
-        TBLN dataset class wrapper (train with augmentation)
-        """
-
-        self.image_size = image_size
-        self.split_set = split_set
-        # Resize images
-        self.transform1 = Compose([
-            Resize(image_size, image_size, interpolation=2),
-            ])
-
-        # GT annotation
-        GT = pd.read_csv(annot_path, header=None)
-
-        self.datalist = []
-        img_paths = glob.glob('{}/*.png'.format(dataset_path))
-        with tqdm(enumerate(sorted(img_paths)), disable=True) as t:
-            for wj, img_path in t:
-                head, tail = os.path.split(img_path)
-                img_id = tail  # Get image_id
-
-                # check if it belongs to train/test set
-                set = GT.loc[GT[0] == img_id][3]
-                label = GT.loc[GT[0] == img_id][1]
-
-                # Add only train/val to the corresponding set
-                if set.iloc[0] == self.split_set:
-                    if label.iloc[0] == 'HP':
-                        cls_id = 0
-                    else:
-                        cls_id = 1   # SSA
-                    self.datalist.append((img_path, cls_id))
-                else:
-                    continue
-
-    def __len__(self):
-        return len(self.datalist)
-
-    def __getitem__(self, index):
-
-        img = Image.open(self.datalist[index][0]).convert('RGB')
-
-        # label assignment
-        label = int(self.datalist[index][1])
-
-        #################
-        # Convert PIL image to numpy array
-        img = np.array(img)
-
-        # First image
-        img = self.transform1(image=img)
-        img = Image.fromarray(img['image'])
-        img = np.array(img, dtype='f')
-
-        # Numpy to torch
-        img = torch.from_numpy(img)
-        label = np.array(label)
-        label = torch.from_numpy(label)
-
-        # Change Tensor Dimension to N x C x H x W
-        img = img.permute(2, 0, 1)
-
-        return img, label
-
-
-## Appendix
-
-# class MHIST_loader(Dataset):
-#     def __init__(self, annotations_file, img_dir, label_map={'SSA': 0, 'HP': 1}, partition='train', transform=None):
-#         self.img_labels = (pd.read_csv(annotations_file) [lambda df: df['Partition'] == partition])
-#         self.label_map = label_map
-#         self.img_labels['Majority Vote Label'] = self.img_labels['Majority Vote Label'].map(self.label_map)
-#         self.img_dir = img_dir
-#         self.transform = transform
-
-#     def __len__(self):
-#         return len(self.img_labels)
-
-#     def __getitem__(self, idx):
-        
-#         img_path = os.path.join(self.img_dir, self.img_labels.iloc[idx, 0])
-#         image = read_image(img_path)
-#         label = self.img_labels.iloc[idx, 1]
-#         if self.transform:
-#             image = self.transform(image)
-#         return image, label
-
-
-############# List of data augmentations for fine-tuning ########################
-
-# Source: https://github.com/srinidhiPY/ICCV-CDPATH2021-ID-8/tree/main
-
-# def HSV(img):
-#     transform = Compose([HueSaturationValue(hue_shift_limit=(-0.1, 0.1), sat_shift_limit=(-1, 1))])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def Noise(img):
-#     transform = Compose([IAAAdditiveGaussianNoise(loc=0, scale=(0 * 255, 0.1 * 255))])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def Scale_Resize_Crop(img):
-#     transform = Compose([Rotate(limit=(-90, 90), interpolation=2), RandomScale(scale_limit=(0.8, 1.2), interpolation=2), Resize(img.shape[1] + 20, img.shape[1] + 20, interpolation=2),
-#                          RandomCrop(img.shape[1], img.shape[1])])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def Shift_Scale_Rotate(img):
-#     transform = Compose([HorizontalFlip(), ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.5, rotate_limit=45, interpolation=2),
-#                          RandomCrop(img.shape[1], img.shape[1])])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def Blur_img(img):
-#     transform = Compose([Blur(blur_limit=(3, 7))])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def Brightness_Contrast(img):
-#     transform = Compose([RandomBrightnessContrast(brightness_limit=(-0.2, 0.2), contrast_limit=(-0.2, 0.2))])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def Rotate_Crop(img):
-#     transform = Compose([Rotate(limit=(-90, 90), interpolation=2), CenterCrop(img.shape[1], img.shape[1])])
-#     Aug_img = transform(image=img)
-#     return Aug_img
-
-# def augment_pool():
-#     augs = [HSV, Noise, Scale_Resize_Crop, Shift_Scale_Rotate, Blur_img, Brightness_Contrast, Rotate_Crop]
-#     return augs
-
-### MHIST train loader
-class DatasetMHIST_train(Dataset):
-    def __init__(self, dataset_path='./dataset/MHIST/images/', annot_path='./dataset/MHIST/annotations.csv', image_size=224):
-
-        """
-        MHIST dataset class wrapper (train with augmentation)
-        """
-
-        self.image_size = image_size
-
-        # Resize images
-        self.transform1 = Compose([Resize(image_size, image_size, interpolation=2)])
-
-        # Data augmentations
-        self.transform4 = Compose([Rotate(limit=(-90, 90), interpolation=2), CenterCrop(image_size, image_size)])
-        self.transform5 = Compose([Rotate(limit=(-90, 90), interpolation=2), RandomScale(scale_limit=(0.8, 1.2), interpolation=2),
-                                   Resize(image_size + 20, image_size + 20, interpolation=2), RandomCrop(image_size, image_size)])
-
-        # GT annotation
-        GT = pd.read_csv(annot_path, header=None)
-
-        self.datalist = []
-        img_paths = glob.glob('{}/*.png'.format(dataset_path))
-        with tqdm(enumerate(sorted(img_paths)), disable=True) as t:
-            for wj, img_path in t:
-                head, tail = os.path.split(img_path)
-                img_id = tail  # Get image_id
-
-                # check if it belongs to train/val set
-                set = GT.loc[GT[0] == img_id][3]
-                label = GT.loc[GT[0] == img_id][1]
-
-                # Add only train/test to the corresponding set
-                if set.iloc[0] == 'train':
-                    if label.iloc[0] == 'HP':
-                        cls_id = 0
-                    else:
-                        cls_id = 1   # SSA
-                    self.datalist.append((img_path, cls_id))
-                else:
-                    continue
-
-    def __len__(self):
-        return len(self.datalist)
-
-    def __getitem__(self, index):
-
-        img = Image.open(self.datalist[index][0]).convert('RGB')
-
-        # label assignment
-        label = int(self.datalist[index][1])
-
-        #################
-        # Convert PIL image to numpy array
-        img = np.array(img)
-
-        # First image
-        img = self.transform1(image=img)
-        img = Image.fromarray(img['image'])
-        img = np.array(img)
-
-        Aug1_img = self.transform4(image=img)
-        Aug2_img = self.transform5(image=img)
-
-        # Convert numpy array to PIL Image
-        img = Image.fromarray(img)
-        # img.show()
-        Aug1_img = Image.fromarray(Aug1_img['image'])
-        # Aug1_img.show()
-        Aug2_img = Image.fromarray(Aug2_img['image'])
-        # Aug2_img.show()
-
-        # Convert to numpy array
-        img = np.array(img, dtype='f')
-        Aug1_img = np.array(Aug1_img, dtype='f')
-        Aug2_img = np.array(Aug2_img, dtype='f')
-
-        # Stack along specified dimension
-        img = np.stack((img, Aug1_img, Aug2_img), axis=0)
-
-        # Numpy to torch
-        img = torch.from_numpy(img)
-
-        # Randomize the augmentations
-        shuffle_idx = torch.randperm(len(img))
-        img = img[shuffle_idx, :, :, :]
-
-        label = np.array(label)
-        label = torch.from_numpy(label)
-        label = label.repeat(img.shape[0])
-
-        # Change Tensor Dimension to N x C x H x W
-        img = img.permute(0, 3, 1, 2)
-
-        return img, label

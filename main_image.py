@@ -33,7 +33,7 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=filename+'-'+config['model']['net'])
+        wandb.init(project="ensLoss", name=filename+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -63,12 +63,12 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
         print('\n-- TRAIN eLOTO --\n')
         
-        trainer_ = Trainer(model=model, loss='COTO', 
+        trainer_ = Trainer(model=model, loss='ensLoss', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
-        Acc['loss'].append('COTO')
+        Acc['loss'].append('ensLoss')
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
@@ -143,10 +143,10 @@ def main(config, filename='CIFAR', n_trials=5, wandb_log=False):
 
     # Hypothesis Testing    
     p_less = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='less').round(5)
-    p_less = p_less[p_less['B'] == 'COTO']
+    p_less = p_less[p_less['B'] == 'ensLoss']
 
     p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
-    p_greater = p_greater[p_greater['B'] == 'COTO']
+    p_greater = p_greater[p_greater['B'] == 'ensLoss']
 
     res_acc = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
     res_acc[('test_acc', 'std')] /= np.sqrt(n_trials)
@@ -206,6 +206,7 @@ if __name__=='__main__':
     config = {
             'dataset' : args.filename,
             'model': {'net': 'ResNet50'},
+            'save_model': True,
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 3},
             'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},

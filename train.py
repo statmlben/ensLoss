@@ -67,10 +67,6 @@ class Trainer(object):
             tbar = tqdm(self.train_loader, ncols=120)
             for batch_idx, (X_batch, y_batch) in enumerate(tbar):
                 y_batch = y_batch.float()
-
-                if self.config['dataset'] == 'MHIST':
-                    X_batch = X_batch.reshape(-1, 3, 224, 224)
-                    y_batch = y_batch.reshape(-1, )
                 X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
                 
                 optimizer.zero_grad()
@@ -85,7 +81,7 @@ class Trainer(object):
                     torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                 optimizer.step()
                 
-                # epoch_loss_train += loss.item()
+                epoch_loss_train += loss.item()
                 # epoch_acc_train += acc.item()
                 epoch_acc_train = acc_metric.compute().item()
                 
@@ -141,13 +137,14 @@ class Trainer(object):
                 #     loss_.lam = next_lam
 
         ## save model
-        filename = "{0}_B{1}_epoch{2}_{3}.pt".format(self.loss, config['batch_size'], 
-                                                                 config['trainer']['epochs'],
-                                                                 time.strftime("%m%d_%H%M"))
-        pathname = os.path.join('save', config['dataset'], 
-                                          config['model']['net'])
-        os.makedirs(pathname, exist_ok=True) 
-        filename = os.path.join(pathname, filename)
-        torch.save(self.model.state_dict(), filename)
+        if config['save_model']:
+            filename = "{0}_B{1}_epoch{2}_{3}.pt".format(self.loss, config['batch_size'], 
+                                                                    config['trainer']['epochs'],
+                                                                    time.strftime("%m%d_%H%M"))
+            pathname = os.path.join('save', config['dataset'], 
+                                            config['model']['net'])
+            os.makedirs(pathname, exist_ok=True) 
+            filename = os.path.join(pathname, filename)
+            torch.save(self.model.state_dict(), filename)
 
         return path_, epoch_acc_val, epoch_auc_val
