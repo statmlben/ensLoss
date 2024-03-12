@@ -290,34 +290,3 @@ class FTTransformer(nn.Module):
             return logits
 
         return logits, attns
-
-
-class MHIST_CNN(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.conv1 = nn.Conv2d(3, 32, 3)
-        self.conv2 = nn.Conv2d(32, 64, 3)
-        self.conv3 = nn.Conv2d(64, 128, 3)
-        self.pool = nn.MaxPool2d(2, 2)
-
-        self.fc1 = nn.Linear(86528, 1024)
-        self.fc2 = nn.Linear(1024, 512)
-        self.fc3 = nn.Linear(512, 1)
-
-    def forward(self, x):
-        ## 224x224
-        x = self.pool(F.relu(self.conv1(x))) # out_shape= 32x111x111
-        x = self.pool(F.relu(self.conv2(x))) # out_shape= 64x54x54
-        x = self.pool(F.relu(self.conv3(x))) # out_shape= 128x26x26
-
-        x = torch.flatten(x, 1) # out_shape=86528
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-def MHIST_resnet18(weight=None):
-    model = models.resnet18(weights='DEFAULT')
-    num_features = model.fc.in_features     
-    model.fc = nn.Linear(num_features, 1)   #(num_of_class == 1)
-    return model

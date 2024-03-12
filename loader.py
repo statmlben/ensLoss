@@ -83,18 +83,22 @@ def openml_data(random_state=0, data_id=43969):
     return train_data, test_data
 
 ## Simulated dataset
-def sim_data(n, width=28, height=28):
-    transform = transforms.Compose(
-                [
-                # transforms.ToPILImage(),
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+def sim_data(n=3000, d=200, random_state=0):
+    X = torch.randn(n, d)
+    beta = torch.ones(d)
+    score = torch.matmul(torch.relu(X), beta)
+    score = (score - torch.mean(score)) / torch.std(score) * 2
+    score = torch.clamp(score, max=5)
+    score = torch.clamp(score, min=-5)
 
-    trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
-                                    download=False, transform=transform)
+    prob = torch.sigmoid(score)
 
-    testset = torchvision.datasets.CIFAR10(root='./dataset', train=False,
-                                    download=False, transform=transform)
+    y = torch.bernoulli(prob)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=random_state)
+    
+    train_data = TrainData(torch.FloatTensor(X_train), torch.FloatTensor(y_train))
+    test_data = TrainData(torch.FloatTensor(X_test), torch.FloatTensor(y_test))
+    return train_data, test_data
 
 ## image dataset
 def img_data(name='CIFAR'):

@@ -119,7 +119,7 @@ class sqrt_Hinge(nn.Module):
             raise Exception("Sorry, reduction of loss must be mean or sum") 
         return loss_out
 
-class log_Hinge(nn.Module):
+class log_inv_Hinge(nn.Module):
     def __init__(self, reduction='mean'):
         super(log_Hinge, self).__init__()
         self.reduction = reduction
@@ -128,6 +128,23 @@ class log_Hinge(nn.Module):
         target = 2.*target - 1.
         score = output * target
         loss = (score <= 1.0) * (1.0 - score) + (score > 1.0) * (1.0 / torch.log(abs(score) + 1))
+        if self.reduction == 'mean':
+            loss_out = loss.mean()
+        elif self.reduction == 'sum':
+            loss_out = loss.sum()
+        else:
+            raise Exception("Sorry, reduction of loss must be mean or sum") 
+        return loss_out
+
+class log_Hinge(nn.Module):
+    def __init__(self, reduction='mean'):
+        super(log_Hinge, self).__init__()
+        self.reduction = reduction
+
+    def forward(self, output, target):
+        target = 2.*target - 1.
+        score = output * target
+        loss = (score <= 1.0) * (1.0 - score) - (score > 1.0) * torch.log(abs(score))
         if self.reduction == 'mean':
             loss_out = loss.mean()
         elif self.reduction == 'sum':

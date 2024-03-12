@@ -174,3 +174,48 @@
 |  3 | BCE   | COTO |   0.9993 | -27.5724 | greater       |
 |  6 | Hinge | COTO |   0.9977 | -14.6272 | greater       |
 |  9 | EXP   | COTO |   0.9958 | -10.8274 | greater       |
+
+#### PCam - model: ResNet18 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'PCam',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet18'},
+ 'optimizer': {'args': {'T_max': 30},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 30,
+             'val_per_epochs': 3}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7733 | 0.7505 |  0.7751 |    0.8031 |
+| ('test_acc', 'std')  | 0.0052 | 0.0042 |  0.002  |    0.0045 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8984 | 0.8709 |  0.8645 |    0.9153 |
+| ('test_auc', 'std')  | 0.0059 | 0.0039 |  0.0046 |    0.0046 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0011 |  -7.033  | less          |
+|  6 | Hinge | ensLoss |   0.0009 |  -7.4658 | less          |
+|  9 | EXP   | ensLoss |   0      | -27.6962 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9989 |  -7.033  | greater       |
+|  6 | Hinge | ensLoss |   0.9991 |  -7.4658 | greater       |
+|  9 | EXP   | ensLoss |   1      | -27.6962 | greater       |
