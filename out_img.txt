@@ -219,3 +219,138 @@
 |  3 | BCE   | ensLoss |   0.9989 |  -7.033  | greater       |
 |  6 | Hinge | ensLoss |   0.9991 |  -7.4658 | greater       |
 |  9 | EXP   | ensLoss |   1      | -27.6962 | greater       |
+
+#### PCam - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'PCam',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 30},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 30,
+             'val_per_epochs': 3}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.767  | 0.7342 |  0.7747 |    0.7863 |
+| ('test_acc', 'std')  | 0.0047 | 0.0042 |  0.004  |    0.0028 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8799 | 0.8257 |  0.7688 |    0.8839 |
+| ('test_auc', 'std')  | 0.003  | 0.0046 |  0.0055 |    0.003  |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0162 | -3.2151 | less          |
+|  6 | Hinge | ensLoss |   0.0763 | -1.7637 | less          |
+|  9 | EXP   | ensLoss |   0.0003 | -9.6975 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9838 | -3.2151 | greater       |
+|  6 | Hinge | ensLoss |   0.9237 | -1.7637 | greater       |
+|  9 | EXP   | ensLoss |   0.9997 | -9.6975 | greater       |
+
+#### PCam - model: VGG16 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'PCam',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'VGG16'},
+ 'optimizer': {'args': {'T_max': 30},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 30,
+             'val_per_epochs': 3}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8148 | 0.7681 |  0.8263 |    0.8472 |
+| ('test_acc', 'std')  | 0.0033 | 0.0031 |  0.0031 |    0.0029 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9364 | 0.8862 |  0.8551 |    0.9532 |
+| ('test_auc', 'std')  | 0.0038 | 0.0039 |  0.0043 |    0.0009 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0021 |  -5.8629 | less          |
+|  6 | Hinge | ensLoss |   0.0013 |  -6.6651 | less          |
+|  9 | EXP   | ensLoss |   0      | -31.5355 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9979 |  -5.8629 | greater       |
+|  6 | Hinge | ensLoss |   0.9987 |  -6.6651 | greater       |
+|  9 | EXP   | ensLoss |   1      | -31.5355 | greater       |
+
+#### PCam - model: VGG19 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'PCam',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'VGG19'},
+ 'optimizer': {'args': {'T_max': 30},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 30,
+             'val_per_epochs': 3}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8208 | 0.7602 |  0.8278 |    0.8406 |
+| ('test_acc', 'std')  | 0.0022 | 0.003  |  0.0026 |    0.0019 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9381 | 0.8751 |  0.8312 |    0.9483 |
+| ('test_auc', 'std')  | 0.0017 | 0.0046 |  0.0073 |    0.0017 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.002  |  -5.9334 | less          |
+|  6 | Hinge | ensLoss |   0.0136 |  -3.403  | less          |
+|  9 | EXP   | ensLoss |   0      | -17.8821 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.998  |  -5.9334 | greater       |
+|  6 | Hinge | ensLoss |   0.9864 |  -3.403  | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.8821 | greater       |

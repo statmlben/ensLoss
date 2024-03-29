@@ -1,7 +1,8 @@
 #!/bin/bash
 # ResNet
-python main_image.py -B=128 -e=30 -F="PCam" -N="ResNet18" -R=5 --log
+# python main_image.py -B=128 -e=30 -F="PCam" -N="ResNet18" -R=5 --log
 python main_image.py -B=128 -e=30 -F="PCam" -N="ResNet34" -R=5 --log
+python main_image.py -B=128 -e=30 -F="PCam" -N="ResNet50" -R=5 --log
 # VGG
 python main_image.py -B=128 -e=30 -F="PCam" -N="VGG16" -R=5 --log
 python main_image.py -B=128 -e=30 -F="PCam" -N="VGG19" -R=5 --log

@@ -147,7 +147,7 @@ class TabMLP5(nn.Module):
         super(TabMLP5, self).__init__()
         self.H = H
         self.D = 5
-        self.layer_1 = nn.Linear(input_shape, H) 
+        self.layer_1 = nn.Linear(input_shape, H)
         self.layer_2 = nn.Linear(H, H)
         self.layer_3 = nn.Linear(H, H)
         self.layer_4 = nn.Linear(H, H)

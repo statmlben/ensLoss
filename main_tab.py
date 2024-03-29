@@ -235,7 +235,6 @@ if __name__=='__main__':
 
     main(config=config, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
 
-
 # Tabular data learning benchmark (MLP:1e-4)
 # electricity (45.3k x 9): 44120 (bad)
 # house_16H (13.5k x 17): 44123 (good)
@@ -284,7 +283,3 @@ if __name__=='__main__':
 # credit (16.7k x 11): 45024 (good)
 # california (20.6k x 9): 45025 (good)
 
-## Image dataset
-# CIFAR2: 
-# PCam: https://github.com/basveeling/pcam
-# MHIST: https://bmirds.github.io/MHIST/

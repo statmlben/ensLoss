@@ -20,9 +20,9 @@ import copy
 from tqdm import tqdm
 from torchvision import transforms
 from PIL import Image
-from albumentations import Normalize, Compose, Rotate, CenterCrop, HorizontalFlip, RandomScale, Flip, Resize, ShiftScaleRotate, \
-    RandomCrop, IAAAdditiveGaussianNoise, ElasticTransform, HueSaturationValue, LongestMaxSize, RandomBrightnessContrast, Blur
-from albumentations.pytorch import ToTensorV2
+# from albumentations import Normalize, Compose, Rotate, CenterCrop, HorizontalFlip, RandomScale, Flip, Resize, ShiftScaleRotate, \
+#     RandomCrop, IAAAdditiveGaussianNoise, ElasticTransform, HueSaturationValue, LongestMaxSize, RandomBrightnessContrast, Blur
+# from albumentations.pytorch import ToTensorV2
 
 ## Reproducibility
 torch.manual_seed(1024)

@@ -47,9 +47,9 @@ class ensLoss(nn.Module):
         g_batch[ind_tmp] = rd_grad
 
         ## refine linear decay of the gradient sequence
-        pos_ind = s_batch > torch.e
+        pos_ind = s_batch > 1.0
         if len(s_batch[pos_ind]) > 0:
-            g_batch[pos_ind] *= (1 / s_batch[pos_ind] / (torch.log(s_batch[pos_ind]))**2 ).detach()
+            g_batch[pos_ind] *= (1 / s_batch[pos_ind] ).detach()
         
         g_batch = g_batch.detach() - 1e-6
 
@@ -109,7 +109,7 @@ class sqrt_Hinge(nn.Module):
     def forward(self, output, target):
         target = 2.*target - 1.
         score = output * target
-        loss = (score <= 1.0) * (1.0 - score) - 2 * (score > 1.0) * (torch.sqrt(abs(score)) - 1)
+        loss = (score <= 1.0) * (1.0 - score) - 2 * (score > 1.0) * (torch.sqrt(abs(score) - 1))
         # loss = (score <= 1.0) * (1.0 - score) - 0 * (score > 1.0)
         if self.reduction == 'mean':
             loss_out = loss.mean()
@@ -119,15 +119,15 @@ class sqrt_Hinge(nn.Module):
             raise Exception("Sorry, reduction of loss must be mean or sum") 
         return loss_out
 
-class log_inv_Hinge(nn.Module):
+class Inv_Log_Hinge(nn.Module):
     def __init__(self, reduction='mean'):
-        super(log_Hinge, self).__init__()
+        super(Inv_Log_Hinge, self).__init__()
         self.reduction = reduction
 
     def forward(self, output, target):
         target = 2.*target - 1.
         score = output * target
-        loss = (score <= 1.0) * (1.0 - score) + (score > 1.0) * (1.0 / torch.log(abs(score) + 1))
+        loss = (score <= 1.0) * (1.0 - score) + (score > 1.0) * (torch.e / torch.log(abs(score) + torch.e - 1) - torch.e)
         if self.reduction == 'mean':
             loss_out = loss.mean()
         elif self.reduction == 'sum':
@@ -136,9 +136,9 @@ class log_inv_Hinge(nn.Module):
             raise Exception("Sorry, reduction of loss must be mean or sum") 
         return loss_out
 
-class log_Hinge(nn.Module):
+class Log_Hinge(nn.Module):
     def __init__(self, reduction='mean'):
-        super(log_Hinge, self).__init__()
+        super(Log_Hinge, self).__init__()
         self.reduction = reduction
 
     def forward(self, output, target):
@@ -153,15 +153,33 @@ class log_Hinge(nn.Module):
             raise Exception("Sorry, reduction of loss must be mean or sum") 
         return loss_out
 
-class exp_Hinge(nn.Module):
+class Exp_Hinge(nn.Module):
     def __init__(self, reduction='mean'):
-        super(exp_Hinge, self).__init__()
+        super(Exp_Hinge, self).__init__()
         self.reduction = reduction
 
     def forward(self, output, target):
         target = 2.*target - 1.
         score = output * target
         loss = (score <= 1.0) * (1.0 - score) - (score > 1.0) * torch.exp(- (score - 1))
+        if self.reduction == 'mean':
+            loss_out = loss.mean()
+        elif self.reduction == 'sum':
+            loss_out = loss.sum()
+        else:
+            raise Exception("Sorry, reduction of loss must be mean or sum") 
+        return loss_out
+
+
+class Inv_Hinge(nn.Module):
+    def __init__(self, reduction='mean'):
+        super(Inv_Hinge, self).__init__()
+        self.reduction = reduction
+
+    def forward(self, output, target):
+        target = 2.*target - 1.
+        score = output * target
+        loss = (score <= 1.0) * (1.0 - score) + (score > 1.0) * (1 / score - 1)
         if self.reduction == 'mean':
             loss_out = loss.mean()
         elif self.reduction == 'sum':
