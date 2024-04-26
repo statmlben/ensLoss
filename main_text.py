@@ -30,7 +30,7 @@ from base import pairwise_ttest
 ## log to wandb
 import wandb
 
-def main(config, filename='PCam', n_trials=5, wandb_log=False):
+def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
@@ -55,15 +55,14 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
         # dataiter = iter(train_loader)
         # X_batch, y_batch = next(dataiter)
 
-        ## ensLoss ##
+        ## eLOTO ##
         model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
-
         if h==0:
             ## print the model in the first trial
             print(model)
 
-        print('\n-- TRAIN ensLoss --\n')
+        print('\n-- TRAIN eLOTO --\n')
         
         trainer_ = Trainer(model=model, loss='ensLoss', 
                             config=config, device=config['device'],
@@ -150,12 +149,6 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
     p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
     p_greater = p_greater[p_greater['B'] == 'ensLoss']
 
-    p_less_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='less').round(5)
-    p_less_auc = p_less_auc[p_less_auc['B'] == 'ensLoss']
-
-    p_greater_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='greater').round(5)
-    p_greater_auc = p_greater_auc[p_greater_auc['B'] == 'ensLoss']
-
     res_acc = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
     res_acc[('test_acc', 'std')] /= np.sqrt(n_trials)
     res_acc = res_acc.T.round(4)
@@ -184,28 +177,21 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
     print('\n')
     print(p_greater.round(4).to_markdown())
 
-    print(p_less_auc.round(4).to_markdown())
-    print('\n')
-    print(p_greater_auc.round(4).to_markdown())
-
     if wandb_log:
         wandb.log({"test_acc_curve": fig,
-                   "perf": Acc.groupby('loss')['test_acc'].agg(['mean', 'std']),
+                   "perf": Acc.groupby('loss', as_index=False)['test_acc'].agg(['mean', 'std']),
                    "path": path_,
                    "perf_table": Acc,
                    "p_less": p_less,
                    "p_greater": p_greater,
-                   "p_less_auc": p_less_auc,
-                   "p_greater_auc": p_greater_auc,
                    })
         wandb.finish()
-
-    out_file.close()
-    sys.stdout = orig_stdout
+        
+    sys.stdout.close()
 
 if __name__=='__main__':
     # PARSE THE ARGS
-    parser = argparse.ArgumentParser(description='ensLoss Training')
+    parser = argparse.ArgumentParser(description='eLOTO Training')
     parser.add_argument('-B', '--batch', default=128, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=200, type=int,
@@ -245,8 +231,13 @@ if __name__=='__main__':
         ## for a binary classification dataset
         main(config=config, filename=filename, n_trials=n_trials, wandb_log=wandb_log)
 
-## Image dataset
-# CIFAR10: https://www.cs.toronto.edu/~kriz/cifar.html
-# PCam: https://github.com/basveeling/pcam
+## text dataset
+# SST2
+# https://github.com/Doragd/Text-Classification-PyTorch
+# https://pytorch.org/text/main/tutorials/sst2_classification_non_distributed.html
 
-# python main_image.py -B=128 -e=100 -F="PCam" -R=5 --log
+# IMDB
+# https://github.com/JustinCharbonneau/IMDB-Sentiment-Benchmark
+
+
+# python main_image.py -B=128 -e=100 -F="SST2" -R=5 --log

@@ -101,14 +101,14 @@ def sim_data(n=3000, d=200, random_state=0):
     return train_data, test_data
 
 ## image dataset
-def img_data(name='CIFAR'):
-    if name == 'CIFAR':
+def img_data(name='CIFAR35'):
+    if 'CIFAR' in name:
         # ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
         # 3 (cat) vs 5 (dog)
         # 2 (bird) vs 4 (deer)
         # 1 (automobile) vs 9 (truck)
-            ## image tranform
-
+        
+        ## image tranform
         # transform_train = transforms.Compose([
         #     transforms.RandomCrop(32, padding=4),
         #     transforms.RandomHorizontalFlip(),
@@ -120,6 +120,9 @@ def img_data(name='CIFAR'):
         #     transforms.ToTensor(),
         #     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
         # ])
+        
+        ## target binary class of the list
+        binary_class_list = [int(name[-2]), int(name[-1])]
 
         transform = transforms.Compose(
                     [
@@ -127,7 +130,6 @@ def img_data(name='CIFAR'):
                     transforms.ToTensor(),
                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-        binary_class_list = [3, 5]
         trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
                                         download=False, transform=transform)
         train_index = [i for i, t in enumerate(trainset.targets) if (t in binary_class_list)]
@@ -137,8 +139,8 @@ def img_data(name='CIFAR'):
                                        download=False, transform=transform)
         test_index = [i for i, t in enumerate(testset.targets) if (t in binary_class_list)]
         test_data = torch.utils.data.Subset(testset, test_index)
-        # print(set(train_data.dataset.targets))
-        encode_map = {3: 0, 5: 1}
+        
+        encode_map = {int(name[-2]): 0, int(name[-1]): 1}
         train_data.dataset.targets = list(map(encode_map.get, train_data.dataset.targets))
         test_data.dataset.targets = list(map(encode_map.get, test_data.dataset.targets))
 
