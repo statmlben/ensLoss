@@ -9,3 +9,5 @@ for ((u=0; u<10; u++)); do
         python main_image.py -B=128 -e=200 -F="$filename_tmp" -N="MobileNetV2" -R=5 --log
     done
 done
+
+# nohup bash ./runs_cifar_mobilenet.sh >/dev/null 2>&1 &
