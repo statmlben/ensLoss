@@ -12368,3 +12368,3879 @@
 |  3 | BCE   | ensLoss |   0.973  |  -2.7003 | greater       |
 |  6 | Hinge | ensLoss |   0.9855 |  -3.3306 | greater       |
 |  9 | EXP   | ensLoss |   1      | -30.658  | greater       |
+
+#### CIFAR23 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR23',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7787 | 0.5977 |  0.7819 |    0.7995 |
+| ('test_acc', 'std')  | 0.003  | 0.0026 |  0.0029 |    0.0083 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.858  | 0.6447 |  0.8365 |    0.8767 |
+| ('test_auc', 'std')  | 0.0027 | 0.0057 |  0.0043 |    0.0086 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0536 |  -2.0706 | less          |
+|  6 | Hinge | ensLoss |   0.0751 |  -1.7776 | less          |
+|  9 | EXP   | ensLoss |   0      | -19.3587 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9464 |  -2.0706 | greater       |
+|  6 | Hinge | ensLoss |   0.9249 |  -1.7776 | greater       |
+|  9 | EXP   | ensLoss |   1      | -19.3587 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0563 |  -2.0269 | less          |
+|  6 | Hinge | ensLoss |   0.0148 |  -3.3109 | less          |
+|  9 | EXP   | ensLoss |   0      | -17.3909 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9437 |  -2.0269 | greater       |
+|  6 | Hinge | ensLoss |   0.9852 |  -3.3109 | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.3909 | greater       |
+
+#### CIFAR06 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR06',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.959  | 0.9369 |  0.9584 |    0.9745 |
+| ('test_acc', 'std')  | 0.0015 | 0.0018 |  0.0013 |    0.0015 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9913 | 0.9824 |  0.9925 |    0.9962 |
+| ('test_auc', 'std')  | 0.0005 | 0.0007 |  0.0002 |    0.0005 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0023 |  -5.727  | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -8.9514 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.6803 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9977 |  -5.727  | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -8.9514 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.6803 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0038 |  -4.9666 | less          |
+|  6 | Hinge | ensLoss |   0.0026 |  -5.5636 | less          |
+|  9 | EXP   | ensLoss |   0      | -17.0883 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9962 |  -4.9666 | greater       |
+|  6 | Hinge | ensLoss |   0.9974 |  -5.5636 | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.0883 | greater       |
+
+#### CIFAR02 - model: DenseNet121 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR02',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet121'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9276 | 0.9014 |  0.9271 |    0.9495 |
+| ('test_acc', 'std')  | 0.0012 | 0.0017 |  0.0022 |    0.0019 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.979  | 0.9629 |  0.9794 |    0.9865 |
+| ('test_auc', 'std')  | 0.0007 | 0.0009 |  0.0007 |    0.0013 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0004 |  -9.351  | less          |
+|  6 | Hinge | ensLoss |   0.0024 |  -5.6924 | less          |
+|  9 | EXP   | ensLoss |   0      | -20.6322 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9996 |  -9.351  | greater       |
+|  6 | Hinge | ensLoss |   0.9976 |  -5.6924 | greater       |
+|  9 | EXP   | ensLoss |   1      | -20.6322 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0024 |  -5.6836 | less          |
+|  6 | Hinge | ensLoss |   0.0063 |  -4.299  | less          |
+|  9 | EXP   | ensLoss |   0      | -22.121  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9976 |  -5.6836 | greater       |
+|  6 | Hinge | ensLoss |   0.9937 |  -4.299  | greater       |
+|  9 | EXP   | ensLoss |   1      | -22.121  | greater       |
+
+#### CIFAR07 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR07',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9354 | 0.8963 |  0.9287 |    0.9495 |
+| ('test_acc', 'std')  | 0.0012 | 0.0039 |  0.0012 |    0.0015 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9806 | 0.9573 |  0.9779 |    0.984  |
+| ('test_auc', 'std')  | 0.0009 | 0.0012 |  0.0005 |    0.0007 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -25.324  | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -12.1307 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -10.8504 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -25.324  | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -12.1307 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -10.8504 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0156 |  -3.2567 | less          |
+|  6 | Hinge | ensLoss |   0.0018 |  -6.152  | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.7829 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9844 |  -3.2567 | greater       |
+|  6 | Hinge | ensLoss |   0.9982 |  -6.152  | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.7829 | greater       |
+
+#### CIFAR24 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR24',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7914 | 0.6614 |  0.8073 |    0.7979 |
+| ('test_acc', 'std')  | 0.003  | 0.0069 |  0.0061 |    0.0306 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8734 | 0.72   |  0.8663 |    0.8725 |
+| ('test_auc', 'std')  | 0.0024 | 0.0063 |  0.0037 |    0.0303 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.4183 | -0.22   | less          |
+|  6 | Hinge | ensLoss |   0.6321 |  0.3619 | less          |
+|  9 | EXP   | ensLoss |   0.0061 | -4.3463 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.5817 | -0.22   | greater       |
+|  6 | Hinge | ensLoss |   0.3679 |  0.3619 | greater       |
+|  9 | EXP   | ensLoss |   0.9939 | -4.3463 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.5121 |  0.0322 | less          |
+|  6 | Hinge | ensLoss |   0.4156 | -0.2274 | less          |
+|  9 | EXP   | ensLoss |   0.0044 | -4.7761 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.4879 |  0.0322 | greater       |
+|  6 | Hinge | ensLoss |   0.5844 | -0.2274 | greater       |
+|  9 | EXP   | ensLoss |   0.9956 | -4.7761 | greater       |
+
+#### CIFAR07 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR07',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9491 | 0.917  |  0.9438 |    0.9643 |
+| ('test_acc', 'std')  | 0.0011 | 0.0021 |  0.0008 |    0.0025 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9872 | 0.972  |  0.9863 |    0.9921 |
+| ('test_auc', 'std')  | 0.0005 | 0.0007 |  0.0008 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0027 |  -5.4635 | less          |
+|  6 | Hinge | ensLoss |   0.0009 |  -7.2821 | less          |
+|  9 | EXP   | ensLoss |   0      | -24.4582 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9973 |  -5.4635 | greater       |
+|  6 | Hinge | ensLoss |   0.9991 |  -7.2821 | greater       |
+|  9 | EXP   | ensLoss |   1      | -24.4582 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0012 |  -6.829  | less          |
+|  6 | Hinge | ensLoss |   0.002  |  -5.9656 | less          |
+|  9 | EXP   | ensLoss |   0      | -27.0908 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9988 |  -6.829  | greater       |
+|  6 | Hinge | ensLoss |   0.998  |  -5.9656 | greater       |
+|  9 | EXP   | ensLoss |   1      | -27.0908 | greater       |
+
+#### CIFAR24 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR24',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7642 | 0.6527 |  0.754  |    0.8478 |
+| ('test_acc', 'std')  | 0.0047 | 0.0062 |  0.0045 |    0.0021 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8406 | 0.7087 |  0.8251 |    0.9219 |
+| ('test_auc', 'std')  | 0.0062 | 0.0063 |  0.008  |    0.0016 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |        0 | -15.2226 | less          |
+|  6 | Hinge | ensLoss |        0 | -24.288  | less          |
+|  9 | EXP   | ensLoss |        0 | -34.43   | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |        1 | -15.2226 | greater       |
+|  6 | Hinge | ensLoss |        1 | -24.288  | greater       |
+|  9 | EXP   | ensLoss |        1 | -34.43   | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -12.8497 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -13.3942 | less          |
+|  9 | EXP   | ensLoss |   0      | -35.5323 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -12.8497 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -13.3942 | greater       |
+|  9 | EXP   | ensLoss |   1      | -35.5323 | greater       |
+
+#### CIFAR08 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR08',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8474 | 0.6943 |  0.8418 |    0.8892 |
+| ('test_acc', 'std')  | 0.0021 | 0.0059 |  0.0025 |    0.0031 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9255 | 0.7603 |   0.923 |    0.9457 |
+| ('test_auc', 'std')  | 0.0004 | 0.0076 |   0.001 |    0.0017 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.4696 | less          |
+|  6 | Hinge | ensLoss |   0      | -15.8796 | less          |
+|  9 | EXP   | ensLoss |   0      | -24.0571 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.4696 | greater       |
+|  6 | Hinge | ensLoss |   1      | -15.8796 | greater       |
+|  9 | EXP   | ensLoss |   1      | -24.0571 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.9642 | less          |
+|  6 | Hinge | ensLoss |   0      | -23.1455 | less          |
+|  9 | EXP   | ensLoss |   0      | -21.5773 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.9642 | greater       |
+|  6 | Hinge | ensLoss |   1      | -23.1455 | greater       |
+|  9 | EXP   | ensLoss |   1      | -21.5773 | greater       |
+
+#### CIFAR08 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR08',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8925 | 0.7852 |  0.8948 |    0.9306 |
+| ('test_acc', 'std')  | 0.0015 | 0.004  |  0.0021 |    0.0024 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9591 | 0.8692 |  0.9576 |    0.978  |
+| ('test_auc', 'std')  | 0.0018 | 0.0051 |  0.0011 |    0.0008 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -12.9656 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -14.5971 | less          |
+|  9 | EXP   | ensLoss |   0      | -50.2876 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -12.9656 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -14.5971 | greater       |
+|  9 | EXP   | ensLoss |   1      | -50.2876 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -13.2628 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -13.7121 | less          |
+|  9 | EXP   | ensLoss |   0      | -22.1013 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -13.2628 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -13.7121 | greater       |
+|  9 | EXP   | ensLoss |   1      | -22.1013 | greater       |
+
+#### CIFAR09 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR09',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8957 | 0.833  |  0.9006 |    0.9243 |
+| ('test_acc', 'std')  | 0.002  | 0.0027 |  0.0034 |    0.0027 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.962  | 0.9148 |  0.9587 |    0.9703 |
+| ('test_auc', 'std')  | 0.0003 | 0.002  |  0.0017 |    0.002  |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -12.7458 | less          |
+|  6 | Hinge | ensLoss |   0.0058 |  -4.4208 | less          |
+|  9 | EXP   | ensLoss |   0      | -23.0311 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -12.7458 | greater       |
+|  6 | Hinge | ensLoss |   0.9942 |  -4.4208 | greater       |
+|  9 | EXP   | ensLoss |   1      | -23.0311 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0075 |  -4.085  | less          |
+|  6 | Hinge | ensLoss |   0.0095 |  -3.8086 | less          |
+|  9 | EXP   | ensLoss |   0      | -19.0772 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9925 |  -4.085  | greater       |
+|  6 | Hinge | ensLoss |   0.9905 |  -3.8086 | greater       |
+|  9 | EXP   | ensLoss |   1      | -19.0772 | greater       |
+
+#### CIFAR24 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR24',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7402 | 0.5732 |  0.7546 |    0.8293 |
+| ('test_acc', 'std')  | 0.0056 | 0.0084 |  0.0058 |    0.0024 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8163 | 0.6006 |  0.7914 |    0.9041 |
+| ('test_auc', 'std')  | 0.005  | 0.0065 |  0.0085 |    0.0037 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -19.0135 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -11.5554 | less          |
+|  9 | EXP   | ensLoss |   0      | -32.0225 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -19.0135 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -11.5554 | greater       |
+|  9 | EXP   | ensLoss |   1      | -32.0225 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -32.9272 | less          |
+|  6 | Hinge | ensLoss |   0.0003 | -10.1768 | less          |
+|  9 | EXP   | ensLoss |   0      | -33.3343 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -32.9272 | greater       |
+|  6 | Hinge | ensLoss |   0.9997 | -10.1768 | greater       |
+|  9 | EXP   | ensLoss |   1      | -33.3343 | greater       |
+
+#### CIFAR02 - model: DenseNet169 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR02',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet169'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9231 | 0.8979 |  0.9208 |    0.9478 |
+| ('test_acc', 'std')  | 0.0019 | 0.0023 |  0.0014 |    0.0011 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9783 | 0.9618 |  0.9777 |    0.986  |
+| ('test_auc', 'std')  | 0.0005 | 0.0008 |  0.0007 |    0.0005 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |        0 | -18.0867 | less          |
+|  6 | Hinge | ensLoss |        0 | -16.0641 | less          |
+|  9 | EXP   | ensLoss |        0 | -17.7705 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |        1 | -18.0867 | greater       |
+|  6 | Hinge | ensLoss |        1 | -16.0641 | greater       |
+|  9 | EXP   | ensLoss |        1 | -17.7705 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -22.4726 | less          |
+|  6 | Hinge | ensLoss |   0.0005 |  -8.6361 | less          |
+|  9 | EXP   | ensLoss |   0      | -27.3322 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -22.4726 | greater       |
+|  6 | Hinge | ensLoss |   0.9995 |  -8.6361 | greater       |
+|  9 | EXP   | ensLoss |   1      | -27.3322 | greater       |
+
+#### CIFAR25 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR25',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8152 | 0.7263 |  0.825  |    0.8505 |
+| ('test_acc', 'std')  | 0.0039 | 0.0024 |  0.0024 |    0.0066 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8962 | 0.8081 |  0.8966 |    0.9255 |
+| ('test_auc', 'std')  | 0.0027 | 0.0031 |  0.0017 |    0.003  |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0042 |  -4.8334 | less          |
+|  6 | Hinge | ensLoss |   0.0069 |  -4.1851 | less          |
+|  9 | EXP   | ensLoss |   0      | -15.8905 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9958 |  -4.8334 | greater       |
+|  6 | Hinge | ensLoss |   0.9931 |  -4.1851 | greater       |
+|  9 | EXP   | ensLoss |   1      | -15.8905 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.5209 | less          |
+|  6 | Hinge | ensLoss |   0.0006 |  -8.3551 | less          |
+|  9 | EXP   | ensLoss |   0      | -21.9744 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.5209 | greater       |
+|  6 | Hinge | ensLoss |   0.9994 |  -8.3551 | greater       |
+|  9 | EXP   | ensLoss |   1      | -21.9744 | greater       |
+
+#### CIFAR09 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR09',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9241 | 0.8709 |  0.9253 |    0.9462 |
+| ('test_acc', 'std')  | 0.0034 | 0.005  |  0.0034 |    0.0012 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.979  | 0.945  |  0.9789 |    0.9868 |
+| ('test_auc', 'std')  | 0.0009 | 0.0014 |  0.0012 |    0.001  |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0012 |  -6.7609 | less          |
+|  6 | Hinge | ensLoss |   0.0031 |  -5.2857 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -13.8252 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9988 |  -6.7609 | greater       |
+|  6 | Hinge | ensLoss |   0.9969 |  -5.2857 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -13.8252 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -11.3647 | less          |
+|  6 | Hinge | ensLoss |   0.0026 |  -5.5276 | less          |
+|  9 | EXP   | ensLoss |   0      | -18.6185 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -11.3647 | greater       |
+|  6 | Hinge | ensLoss |   0.9974 |  -5.5276 | greater       |
+|  9 | EXP   | ensLoss |   1      | -18.6185 | greater       |
+
+#### CIFAR12 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR12',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9466 | 0.8963 |  0.9442 |    0.9654 |
+| ('test_acc', 'std')  | 0.0012 | 0.0044 |  0.0015 |    0.0015 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.989  | 0.9636 |  0.986  |    0.9916 |
+| ('test_auc', 'std')  | 0.0005 | 0.0017 |  0.0008 |    0.0006 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0003 |  -9.7213 | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.0686 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.1613 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9997 |  -9.7213 | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.0686 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.1613 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.023  |  -2.8579 | less          |
+|  6 | Hinge | ensLoss |   0.0036 |  -5.0543 | less          |
+|  9 | EXP   | ensLoss |   0      | -17.3321 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.977  |  -2.8579 | greater       |
+|  6 | Hinge | ensLoss |   0.9964 |  -5.0543 | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.3321 | greater       |
+
+#### CIFAR25 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR25',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8108 | 0.742  |  0.8136 |    0.8356 |
+| ('test_acc', 'std')  | 0.005  | 0.0011 |  0.0027 |    0.0047 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8947 | 0.8187 |  0.8927 |    0.9131 |
+| ('test_auc', 'std')  | 0.0039 | 0.0029 |  0.0021 |    0.0035 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0148 |  -3.3158 | less          |
+|  6 | Hinge | ensLoss |   0.008  |  -4.005  | less          |
+|  9 | EXP   | ensLoss |   0      | -18.3706 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9852 |  -3.3158 | greater       |
+|  6 | Hinge | ensLoss |   0.992  |  -4.005  | greater       |
+|  9 | EXP   | ensLoss |   1      | -18.3706 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0082 |  -3.985  | less          |
+|  6 | Hinge | ensLoss |   0.0007 |  -8.0082 | less          |
+|  9 | EXP   | ensLoss |   0      | -16.946  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9918 |  -3.985  | greater       |
+|  6 | Hinge | ensLoss |   0.9993 |  -8.0082 | greater       |
+|  9 | EXP   | ensLoss |   1      | -16.946  | greater       |
+
+#### CIFAR12 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR12',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9646 | 0.9282 |  0.9645 |    0.9798 |
+| ('test_acc', 'std')  | 0.0014 | 0.0046 |  0.0007 |    0.0009 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9945 | 0.9809 |  0.9947 |    0.9986 |
+| ('test_auc', 'std')  | 0.0003 | 0.0012 |  0.0003 |    0.0001 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0003 |  -9.781  | less          |
+|  6 | Hinge | ensLoss |   0      | -16.9479 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -10.6533 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9997 |  -9.781  | greater       |
+|  6 | Hinge | ensLoss |   1      | -16.9479 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -10.6533 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -11.45   | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -13.7844 | less          |
+|  9 | EXP   | ensLoss |   0      | -16.1007 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -11.45   | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -13.7844 | greater       |
+|  9 | EXP   | ensLoss |   1      | -16.1007 | greater       |
+
+#### CIFAR03 - model: DenseNet121 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR03',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet121'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9595 | 0.9443 |  0.9533 |    0.9715 |
+| ('test_acc', 'std')  | 0.0015 | 0.0009 |  0.0015 |    0.0009 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9917 | 0.9858 |  0.9902 |    0.9943 |
+| ('test_auc', 'std')  | 0.0005 | 0.0005 |  0.0006 |    0.0005 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0033 |  -5.2002 | less          |
+|  6 | Hinge | ensLoss |   0.0005 |  -8.7616 | less          |
+|  9 | EXP   | ensLoss |   0      | -90.6679 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9967 |  -5.2002 | greater       |
+|  6 | Hinge | ensLoss |   0.9995 |  -8.7616 | greater       |
+|  9 | EXP   | ensLoss |   1      | -90.6679 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0025 |  -5.5908 | less          |
+|  6 | Hinge | ensLoss |   0.0014 |  -6.5587 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.6889 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9975 |  -5.5908 | greater       |
+|  6 | Hinge | ensLoss |   0.9986 |  -6.5587 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.6889 | greater       |
+
+#### CIFAR13 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR13',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9432 | 0.9017 |  0.945  |    0.9551 |
+| ('test_acc', 'std')  | 0.0015 | 0.002  |  0.0007 |    0.0007 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9865 | 0.9641 |  0.9862 |    0.986  |
+| ('test_auc', 'std')  | 0.0005 | 0.0015 |  0.0008 |    0.0007 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0008 |  -7.6655 | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.4803 | less          |
+|  9 | EXP   | ensLoss |   0      | -25.3567 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9992 |  -7.6655 | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.4803 | greater       |
+|  9 | EXP   | ensLoss |   1      | -25.3567 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.7102 |   0.602  | less          |
+|  6 | Hinge | ensLoss |   0.5859 |   0.2316 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -10.3595 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.2898 |   0.602  | greater       |
+|  6 | Hinge | ensLoss |   0.4141 |   0.2316 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -10.3595 | greater       |
+
+#### CIFAR25 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR25',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8021 | 0.6376 |  0.7968 |    0.842  |
+| ('test_acc', 'std')  | 0.0045 | 0.0036 |  0.0061 |    0.0052 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8843 | 0.6982 |  0.8615 |    0.9154 |
+| ('test_auc', 'std')  | 0.0033 | 0.0058 |  0.0057 |    0.0062 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0047 |  -4.693  | less          |
+|  6 | Hinge | ensLoss |   0.0023 |  -5.7247 | less          |
+|  9 | EXP   | ensLoss |   0      | -36.3554 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9953 |  -4.693  | greater       |
+|  6 | Hinge | ensLoss |   0.9977 |  -5.7247 | greater       |
+|  9 | EXP   | ensLoss |   1      | -36.3554 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0104 |  -3.7038 | less          |
+|  6 | Hinge | ensLoss |   0.0022 |  -5.7639 | less          |
+|  9 | EXP   | ensLoss |   0      | -36.6734 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9896 |  -3.7038 | greater       |
+|  6 | Hinge | ensLoss |   0.9978 |  -5.7639 | greater       |
+|  9 | EXP   | ensLoss |   1      | -36.6734 | greater       |
+
+#### CIFAR13 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR13',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9536 | 0.9274 |  0.9578 |    0.972  |
+| ('test_acc', 'std')  | 0.0012 | 0.0027 |  0.0017 |    0.0005 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9909 | 0.9794 |  0.992  |    0.9953 |
+| ('test_auc', 'std')  | 0.0006 | 0.0015 |  0.0003 |    0.0006 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -14.39   | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.2828 | less          |
+|  9 | EXP   | ensLoss |   0      | -17.685  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -14.39   | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.2828 | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.685  | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0032 | -5.2269 | less          |
+|  6 | Hinge | ensLoss |   0.0046 | -4.7224 | less          |
+|  9 | EXP   | ensLoss |   0.0005 | -8.5434 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9968 | -5.2269 | greater       |
+|  6 | Hinge | ensLoss |   0.9954 | -4.7224 | greater       |
+|  9 | EXP   | ensLoss |   0.9995 | -8.5434 | greater       |
+
+#### CIFAR26 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR26',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8619 | 0.7797 |  0.871  |    0.8901 |
+| ('test_acc', 'std')  | 0.0035 | 0.0016 |  0.0028 |    0.0055 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9394 | 0.8588 |  0.9413 |    0.9506 |
+| ('test_auc', 'std')  | 0.0025 | 0.0033 |  0.0018 |    0.0058 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0152 |  -3.2845 | less          |
+|  6 | Hinge | ensLoss |   0.017  |  -3.1686 | less          |
+|  9 | EXP   | ensLoss |   0      | -20.3921 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9848 |  -3.2845 | greater       |
+|  6 | Hinge | ensLoss |   0.983  |  -3.1686 | greater       |
+|  9 | EXP   | ensLoss |   1      | -20.3921 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.1187 |  -1.3883 | less          |
+|  6 | Hinge | ensLoss |   0.0782 |  -1.7422 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -10.8536 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.8813 |  -1.3883 | greater       |
+|  6 | Hinge | ensLoss |   0.9218 |  -1.7422 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -10.8536 | greater       |
+
+#### CIFAR14 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR14',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9584 | 0.9167 |  0.957  |    0.9746 |
+| ('test_acc', 'std')  | 0.0011 | 0.0034 |  0.0019 |    0.0016 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9919 | 0.9748 |  0.9917 |    0.9956 |
+| ('test_auc', 'std')  | 0.0003 | 0.0016 |  0.0007 |    0.0008 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0014 |  -6.5646 | less          |
+|  6 | Hinge | ensLoss |   0.0033 |  -5.1765 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.9679 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9986 |  -6.5646 | greater       |
+|  6 | Hinge | ensLoss |   0.9967 |  -5.1765 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.9679 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0095 | -3.8016 | less          |
+|  6 | Hinge | ensLoss |   0.0157 | -3.2508 | less          |
+|  9 | EXP   | ensLoss |   0.0004 | -8.9068 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9905 | -3.8016 | greater       |
+|  6 | Hinge | ensLoss |   0.9843 | -3.2508 | greater       |
+|  9 | EXP   | ensLoss |   0.9996 | -8.9068 | greater       |
+
+#### CIFAR26 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR26',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8564 | 0.7825 |  0.8539 |    0.8782 |
+| ('test_acc', 'std')  | 0.001  | 0.0028 |  0.0015 |    0.0031 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9311 | 0.8631 |  0.9286 |    0.95   |
+| ('test_auc', 'std')  | 0.0022 | 0.0015 |  0.0011 |    0.0015 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0007 |  -7.8106 | less          |
+|  6 | Hinge | ensLoss |   0.0013 |  -6.6284 | less          |
+|  9 | EXP   | ensLoss |   0      | -24.1794 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9993 |  -7.8106 | greater       |
+|  6 | Hinge | ensLoss |   0.9987 |  -6.6284 | greater       |
+|  9 | EXP   | ensLoss |   1      | -24.1794 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.001  |  -7.1656 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -10.9362 | less          |
+|  9 | EXP   | ensLoss |   0      | -45.3686 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.999  |  -7.1656 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -10.9362 | greater       |
+|  9 | EXP   | ensLoss |   1      | -45.3686 | greater       |
+
+#### CIFAR14 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR14',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9714 | 0.9452 |  0.9713 |    0.9879 |
+| ('test_acc', 'std')  | 0.0011 | 0.0025 |  0.0016 |    0.0006 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9959 | 0.9868 |  0.9964 |    0.999  |
+| ('test_auc', 'std')  | 0.0004 | 0.0008 |  0.0003 |    0.0002 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -12.5629 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -10.426  | less          |
+|  9 | EXP   | ensLoss |   0      | -17.784  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -12.5629 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -10.426  | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.784  | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0027 |  -5.4759 | less          |
+|  6 | Hinge | ensLoss |   0.0008 |  -7.5155 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.7978 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9973 |  -5.4759 | greater       |
+|  6 | Hinge | ensLoss |   0.9992 |  -7.5155 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.7978 | greater       |
+
+#### CIFAR15 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR15',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9582 | 0.9274 |  0.9552 |    0.9682 |
+| ('test_acc', 'std')  | 0.0009 | 0.0021 |  0.0013 |    0.0009 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9926 | 0.9816 |  0.9924 |    0.9932 |
+| ('test_auc', 'std')  | 0.0005 | 0.0011 |  0.0007 |    0.0005 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0027 |  -5.4841 | less          |
+|  6 | Hinge | ensLoss |   0      | -18.3846 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -13.8604 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9973 |  -5.4841 | greater       |
+|  6 | Hinge | ensLoss |   1      | -18.3846 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -13.8604 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.2135 |  -0.8831 | less          |
+|  6 | Hinge | ensLoss |   0.2216 |  -0.8501 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -13.9264 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.7865 |  -0.8831 | greater       |
+|  6 | Hinge | ensLoss |   0.7784 |  -0.8501 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -13.9264 | greater       |
+
+#### CIFAR03 - model: DenseNet169 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR03',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet169'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9594 | 0.9455 |  0.9547 |    0.9715 |
+| ('test_acc', 'std')  | 0.0006 | 0.0021 |  0.0011 |    0.001  |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9916 | 0.9861 |  0.9904 |    0.9933 |
+| ('test_auc', 'std')  | 0.0004 | 0.0007 |  0.0004 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0006 |  -8.0937 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -10.389  | less          |
+|  9 | EXP   | ensLoss |   0.0003 |  -9.6896 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9994 |  -8.0937 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -10.389  | greater       |
+|  9 | EXP   | ensLoss |   0.9997 |  -9.6896 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0115 |  -3.5841 | less          |
+|  6 | Hinge | ensLoss |   0.0031 |  -5.2969 | less          |
+|  9 | EXP   | ensLoss |   0.0003 | -10.1246 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9885 |  -3.5841 | greater       |
+|  6 | Hinge | ensLoss |   0.997  |  -5.2969 | greater       |
+|  9 | EXP   | ensLoss |   0.9997 | -10.1246 | greater       |
+
+#### CIFAR15 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR15',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9689 | 0.9481 |  0.9682 |    0.9858 |
+| ('test_acc', 'std')  | 0.0018 | 0.0016 |  0.001  |    0.0011 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9958 | 0.9893 |  0.9956 |    0.9987 |
+| ('test_auc', 'std')  | 0.0003 | 0.0006 |  0.0002 |    0.0002 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0012 |  -6.837  | less          |
+|  6 | Hinge | ensLoss |   0      | -18.4496 | less          |
+|  9 | EXP   | ensLoss |   0      | -31.6931 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9988 |  -6.837  | greater       |
+|  6 | Hinge | ensLoss |   1      | -18.4496 | greater       |
+|  9 | EXP   | ensLoss |   1      | -31.6931 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0024 |  -5.6824 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -11.5029 | less          |
+|  9 | EXP   | ensLoss |   0      | -18.5251 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9976 |  -5.6824 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -11.5029 | greater       |
+|  9 | EXP   | ensLoss |   1      | -18.5251 | greater       |
+
+#### CIFAR26 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR26',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8546 | 0.6212 |  0.8578 |    0.8609 |
+| ('test_acc', 'std')  | 0.0013 | 0.0092 |  0.0023 |    0.0087 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9274 | 0.6696 |  0.909  |    0.9345 |
+| ('test_auc', 'std')  | 0.0012 | 0.0112 |  0.0015 |    0.0071 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.2723 |  -0.6611 | less          |
+|  6 | Hinge | ensLoss |   0.3865 |  -0.3086 | less          |
+|  9 | EXP   | ensLoss |   0      | -29.889  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.7277 |  -0.6611 | greater       |
+|  6 | Hinge | ensLoss |   0.6135 |  -0.3086 | greater       |
+|  9 | EXP   | ensLoss |   1      | -29.889  | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.1651 |  -1.1073 | less          |
+|  6 | Hinge | ensLoss |   0.01   |  -3.7491 | less          |
+|  9 | EXP   | ensLoss |   0      | -37.4123 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.8349 |  -1.1073 | greater       |
+|  6 | Hinge | ensLoss |   0.99   |  -3.7491 | greater       |
+|  9 | EXP   | ensLoss |   1      | -37.4123 | greater       |
+
+#### CIFAR16 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR16',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9613 | 0.9302 |  0.9614 |    0.9698 |
+| ('test_acc', 'std')  | 0.0007 | 0.0068 |  0.0025 |    0.002  |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.993  | 0.9807 |  0.9928 |    0.9939 |
+| ('test_auc', 'std')  | 0.0001 | 0.0024 |  0.0007 |    0.0009 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0104 | -3.7009 | less          |
+|  6 | Hinge | ensLoss |   0.0593 | -1.9821 | less          |
+|  9 | EXP   | ensLoss |   0.0037 | -5.0056 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9896 | -3.7009 | greater       |
+|  6 | Hinge | ensLoss |   0.9407 | -1.9821 | greater       |
+|  9 | EXP   | ensLoss |   0.9963 | -5.0056 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.2154 | -0.8755 | less          |
+|  6 | Hinge | ensLoss |   0.2432 | -0.7658 | less          |
+|  9 | EXP   | ensLoss |   0.0051 | -4.5844 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.7846 | -0.8755 | greater       |
+|  6 | Hinge | ensLoss |   0.7568 | -0.7658 | greater       |
+|  9 | EXP   | ensLoss |   0.9949 | -4.5844 | greater       |
+
+#### CIFAR27 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR27',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8808 | 0.7872 |  0.8824 |    0.9038 |
+| ('test_acc', 'std')  | 0.003  | 0.0038 |  0.0018 |    0.0029 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9497 | 0.8676 |  0.9504 |    0.9655 |
+| ('test_auc', 'std')  | 0.0023 | 0.0041 |  0.0008 |    0.0013 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -14.7698 | less          |
+|  6 | Hinge | ensLoss |   0.0012 |  -6.8676 | less          |
+|  9 | EXP   | ensLoss |   0      | -28.916  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -14.7698 | greater       |
+|  6 | Hinge | ensLoss |   0.9988 |  -6.8676 | greater       |
+|  9 | EXP   | ensLoss |   1      | -28.916  | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0018 |  -6.1153 | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.0407 | less          |
+|  9 | EXP   | ensLoss |   0      | -20.4688 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9982 |  -6.1153 | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.0407 | greater       |
+|  9 | EXP   | ensLoss |   1      | -20.4688 | greater       |
+
+#### CIFAR16 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR16',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9716 | 0.9532 |  0.9735 |    0.9855 |
+| ('test_acc', 'std')  | 0.0016 | 0.0028 |  0.0012 |    0.0015 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.996  | 0.9912 |  0.9964 |    0.9989 |
+| ('test_auc', 'std')  | 0.0003 | 0.0005 |  0.0003 |    0.0002 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0036 |  -5.0554 | less          |
+|  6 | Hinge | ensLoss |   0.0009 |  -7.4066 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -11.3038 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9964 |  -5.0554 | greater       |
+|  6 | Hinge | ensLoss |   0.9991 |  -7.4066 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -11.3038 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0012 |  -6.7601 | less          |
+|  6 | Hinge | ensLoss |   0.0012 |  -6.7638 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.0429 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9988 |  -6.7601 | greater       |
+|  6 | Hinge | ensLoss |   0.9988 |  -6.7638 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.0429 | greater       |
+
+#### CIFAR17 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR17',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9561 | 0.9002 |  0.9574 |    0.9743 |
+| ('test_acc', 'std')  | 0.0023 | 0.0069 |  0.0012 |    0.0014 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9923 | 0.965  |  0.9922 |    0.9961 |
+| ('test_auc', 'std')  | 0.0006 | 0.0038 |  0.0005 |    0.0007 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0023 |  -5.751  | less          |
+|  6 | Hinge | ensLoss |   0      | -15.6912 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -10.6583 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9977 |  -5.751  | greater       |
+|  6 | Hinge | ensLoss |   1      | -15.6912 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -10.6583 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0078 | -4.0485 | less          |
+|  6 | Hinge | ensLoss |   0.0039 | -4.9342 | less          |
+|  9 | EXP   | ensLoss |   0.0009 | -7.3042 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9922 | -4.0485 | greater       |
+|  6 | Hinge | ensLoss |   0.9961 | -4.9342 | greater       |
+|  9 | EXP   | ensLoss |   0.9991 | -7.3042 | greater       |
+
+#### CIFAR27 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR27',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8744 | 0.7943 |  0.8705 |    0.9045 |
+| ('test_acc', 'std')  | 0.0037 | 0.0054 |  0.0007 |    0.0025 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.944  | 0.8756 |  0.9426 |    0.9638 |
+| ('test_auc', 'std')  | 0.0026 | 0.0049 |  0.0018 |    0.0029 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0011 |  -7.0152 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -14.3039 | less          |
+|  9 | EXP   | ensLoss |   0      | -25.6106 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9989 |  -7.0152 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -14.3039 | greater       |
+|  9 | EXP   | ensLoss |   1      | -25.6106 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0014 |  -6.6133 | less          |
+|  6 | Hinge | ensLoss |   0.0009 |  -7.4162 | less          |
+|  9 | EXP   | ensLoss |   0      | -23.7641 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9986 |  -6.6133 | greater       |
+|  6 | Hinge | ensLoss |   0.9991 |  -7.4162 | greater       |
+|  9 | EXP   | ensLoss |   1      | -23.7641 | greater       |
+
+#### CIFAR04 - model: DenseNet121 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR04',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet121'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9621 | 0.9514 |  0.9622 |    0.9751 |
+| ('test_acc', 'std')  | 0.0009 | 0.0013 |  0.0007 |    0.0011 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9944 | 0.99   |  0.994  |    0.996  |
+| ('test_auc', 'std')  | 0.0004 | 0.0004 |  0.0001 |    0.0006 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0004 |  -9.0248 | less          |
+|  6 | Hinge | ensLoss |   0      | -16.5169 | less          |
+|  9 | EXP   | ensLoss |   0      | -18.0974 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9996 |  -9.0248 | greater       |
+|  6 | Hinge | ensLoss |   1      | -16.5169 | greater       |
+|  9 | EXP   | ensLoss |   1      | -18.0974 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0151 |  -3.2897 | less          |
+|  6 | Hinge | ensLoss |   0.0197 |  -3.0123 | less          |
+|  9 | EXP   | ensLoss |   0.0003 | -10.1197 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9849 |  -3.2897 | greater       |
+|  6 | Hinge | ensLoss |   0.9803 |  -3.0123 | greater       |
+|  9 | EXP   | ensLoss |   0.9997 | -10.1197 | greater       |
+
+#### CIFAR17 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR17',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.969  | 0.9342 |  0.9692 |    0.9886 |
+| ('test_acc', 'std')  | 0.0031 | 0.0026 |  0.0007 |    0.0006 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9957 | 0.9831 |  0.9959 |    0.9988 |
+| ('test_auc', 'std')  | 0.0007 | 0.0008 |  0.0002 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0022 |  -5.7772 | less          |
+|  6 | Hinge | ensLoss |   0      | -48.4992 | less          |
+|  9 | EXP   | ensLoss |   0      | -24.1837 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9978 |  -5.7772 | greater       |
+|  6 | Hinge | ensLoss |   1      | -48.4992 | greater       |
+|  9 | EXP   | ensLoss |   1      | -24.1837 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0112 |  -3.6185 | less          |
+|  6 | Hinge | ensLoss |   0.0008 |  -7.6221 | less          |
+|  9 | EXP   | ensLoss |   0      | -15.6093 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9888 |  -3.6185 | greater       |
+|  6 | Hinge | ensLoss |   0.9992 |  -7.6221 | greater       |
+|  9 | EXP   | ensLoss |   1      | -15.6093 | greater       |
+
+#### CIFAR18 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR18',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9207 | 0.8299 |  0.9173 |    0.9396 |
+| ('test_acc', 'std')  | 0.002  | 0.0029 |  0.0029 |    0.0028 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9753 | 0.9099 |  0.9697 |    0.9816 |
+| ('test_auc', 'std')  | 0.0011 | 0.0028 |  0.002  |    0.0008 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0007 |  -7.9443 | less          |
+|  6 | Hinge | ensLoss |   0.0044 |  -4.7663 | less          |
+|  9 | EXP   | ensLoss |   0      | -29.1988 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9993 |  -7.9443 | greater       |
+|  6 | Hinge | ensLoss |   0.9956 |  -4.7663 | greater       |
+|  9 | EXP   | ensLoss |   1      | -29.1988 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0081 |  -3.9976 | less          |
+|  6 | Hinge | ensLoss |   0.0035 |  -5.0792 | less          |
+|  9 | EXP   | ensLoss |   0      | -27.9169 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9919 |  -3.9976 | greater       |
+|  6 | Hinge | ensLoss |   0.9965 |  -5.0792 | greater       |
+|  9 | EXP   | ensLoss |   1      | -27.9169 | greater       |
+
+#### CIFAR27 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR27',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8654 | 0.6716 |  0.8577 |    0.9011 |
+| ('test_acc', 'std')  | 0.0058 | 0.0035 |  0.0039 |    0.0036 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9422 | 0.7415 |  0.9191 |    0.9627 |
+| ('test_auc', 'std')  | 0.0034 | 0.0035 |  0.0033 |    0.0013 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0028 |  -5.4181 | less          |
+|  6 | Hinge | ensLoss |   0.0012 |  -6.9111 | less          |
+|  9 | EXP   | ensLoss |   0      | -37.8835 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9972 |  -5.4181 | greater       |
+|  6 | Hinge | ensLoss |   0.9988 |  -6.9111 | greater       |
+|  9 | EXP   | ensLoss |   1      | -37.8835 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0031 |  -5.2672 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -11.3831 | less          |
+|  9 | EXP   | ensLoss |   0      | -58.3769 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9969 |  -5.2672 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -11.3831 | greater       |
+|  9 | EXP   | ensLoss |   1      | -58.3769 | greater       |
+
+#### CIFAR28 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR28',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9392 | 0.8971 |  0.939  |    0.9541 |
+| ('test_acc', 'std')  | 0.0013 | 0.0022 |  0.0031 |    0.002  |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9842 | 0.9632 |  0.9838 |    0.9883 |
+| ('test_auc', 'std')  | 0.0007 | 0.0008 |  0.0007 |    0.0015 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0045 |  -4.7451 | less          |
+|  6 | Hinge | ensLoss |   0.0109 |  -3.6478 | less          |
+|  9 | EXP   | ensLoss |   0      | -34.689  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9955 |  -4.7451 | greater       |
+|  6 | Hinge | ensLoss |   0.9891 |  -3.6478 | greater       |
+|  9 | EXP   | ensLoss |   1      | -34.689  | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0347 |  -2.4629 | less          |
+|  6 | Hinge | ensLoss |   0.03   |  -2.5992 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.387  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9653 |  -2.4629 | greater       |
+|  6 | Hinge | ensLoss |   0.97   |  -2.5992 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.387  | greater       |
+
+#### CIFAR18 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR18',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9459 | 0.8654 |  0.9481 |    0.9655 |
+| ('test_acc', 'std')  | 0.0019 | 0.0082 |  0.0019 |    0.0009 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9871 | 0.9435 |  0.9883 |    0.9929 |
+| ('test_auc', 'std')  | 0.0008 | 0.0042 |  0.0005 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0003 |  -9.944  | less          |
+|  6 | Hinge | ensLoss |   0.0007 |  -7.7932 | less          |
+|  9 | EXP   | ensLoss |   0.0002 | -11.3098 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9997 |  -9.944  | greater       |
+|  6 | Hinge | ensLoss |   0.9993 |  -7.7932 | greater       |
+|  9 | EXP   | ensLoss |   0.9998 | -11.3098 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.4374 | less          |
+|  6 | Hinge | ensLoss |   0.0009 |  -7.3643 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.4447 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.4374 | greater       |
+|  6 | Hinge | ensLoss |   0.9991 |  -7.3643 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.4447 | greater       |
+
+#### CIFAR19 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR19',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8331 | 0.6438 |  0.8325 |    0.8832 |
+| ('test_acc', 'std')  | 0.0054 | 0.0148 |  0.0087 |    0.0056 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9116 | 0.7024 |  0.9021 |    0.9428 |
+| ('test_auc', 'std')  | 0.0047 | 0.0191 |  0.0083 |    0.0045 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0013 |  -6.675  | less          |
+|  6 | Hinge | ensLoss |   0.0044 |  -4.7872 | less          |
+|  9 | EXP   | ensLoss |   0      | -25.0362 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9987 |  -6.675  | greater       |
+|  6 | Hinge | ensLoss |   0.9956 |  -4.7872 | greater       |
+|  9 | EXP   | ensLoss |   1      | -25.0362 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0038 |  -4.9692 | less          |
+|  6 | Hinge | ensLoss |   0.0075 |  -4.0913 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -15.0619 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9962 |  -4.9692 | greater       |
+|  6 | Hinge | ensLoss |   0.9925 |  -4.0913 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -15.0619 | greater       |
+
+#### CIFAR04 - model: DenseNet169 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR04',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet169'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.962  | 0.9514 |  0.9631 |    0.9761 |
+| ('test_acc', 'std')  | 0.0017 | 0.0021 |  0.0019 |    0.002  |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9938 | 0.9896 |  0.9935 |    0.9961 |
+| ('test_auc', 'std')  | 0.0003 | 0.0005 |  0.0004 |    0.0006 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0041 | -4.8693 | less          |
+|  6 | Hinge | ensLoss |   0.0096 | -3.7965 | less          |
+|  9 | EXP   | ensLoss |   0.001  | -7.2475 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9959 | -4.8693 | greater       |
+|  6 | Hinge | ensLoss |   0.9904 | -3.7965 | greater       |
+|  9 | EXP   | ensLoss |   0.999  | -7.2475 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0111 | -3.6324 | less          |
+|  6 | Hinge | ensLoss |   0.0191 | -3.0477 | less          |
+|  9 | EXP   | ensLoss |   0.0009 | -7.436  | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9889 | -3.6324 | greater       |
+|  6 | Hinge | ensLoss |   0.9809 | -3.0477 | greater       |
+|  9 | EXP   | ensLoss |   0.9991 | -7.436  | greater       |
+
+#### CIFAR28 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR28',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9343 | 0.8996 |  0.9352 |    0.9495 |
+| ('test_acc', 'std')  | 0.0021 | 0.0033 |  0.0012 |    0.0015 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9807 | 0.966  |  0.9818 |    0.9883 |
+| ('test_auc', 'std')  | 0.0007 | 0.0019 |  0.0006 |    0.0004 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0034 |  -5.1489 | less          |
+|  6 | Hinge | ensLoss |   0.0014 |  -6.5169 | less          |
+|  9 | EXP   | ensLoss |   0      | -19.3358 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9966 |  -5.1489 | greater       |
+|  6 | Hinge | ensLoss |   0.9986 |  -6.5169 | greater       |
+|  9 | EXP   | ensLoss |   1      | -19.3358 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -13.8857 | less          |
+|  6 | Hinge | ensLoss |   0.0003 |  -9.771  | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.779  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -13.8857 | greater       |
+|  6 | Hinge | ensLoss |   0.9997 |  -9.771  | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.779  | greater       |
+
+#### CIFAR19 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR19',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8997 | 0.767  |  0.898  |    0.9323 |
+| ('test_acc', 'std')  | 0.003  | 0.0082 |  0.0043 |    0.0014 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.961  | 0.8429 |  0.9614 |    0.9783 |
+| ('test_auc', 'std')  | 0.0012 | 0.009  |  0.0025 |    0.0008 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -18.7902 | less          |
+|  6 | Hinge | ensLoss |   0.0009 |  -7.4469 | less          |
+|  9 | EXP   | ensLoss |   0      | -19.5604 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -18.7902 | greater       |
+|  6 | Hinge | ensLoss |   0.9991 |  -7.4469 | greater       |
+|  9 | EXP   | ensLoss |   1      | -19.5604 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.7981 | less          |
+|  6 | Hinge | ensLoss |   0.0031 |  -5.292  | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.8007 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.7981 | greater       |
+|  6 | Hinge | ensLoss |   0.9969 |  -5.292  | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.8007 | greater       |
+
+#### CIFAR23 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR23',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7805 | 0.6764 |  0.7743 |    0.7978 |
+| ('test_acc', 'std')  | 0.0032 | 0.005  |  0.0037 |    0.003  |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8597 | 0.7457 |  0.8394 |    0.8656 |
+| ('test_auc', 'std')  | 0.0028 | 0.0054 |  0.0016 |    0.0027 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0007 |  -7.7836 | less          |
+|  6 | Hinge | ensLoss |   0.0046 |  -4.7094 | less          |
+|  9 | EXP   | ensLoss |   0      | -36.0587 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9993 |  -7.7836 | greater       |
+|  6 | Hinge | ensLoss |   0.9954 |  -4.7094 | greater       |
+|  9 | EXP   | ensLoss |   1      | -36.0587 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0819 |  -1.703  | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.3683 | less          |
+|  9 | EXP   | ensLoss |   0      | -25.8012 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9181 |  -1.703  | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.3683 | greater       |
+|  9 | EXP   | ensLoss |   1      | -25.8012 | greater       |
+
+#### CIFAR28 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR28',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9341 | 0.7439 |  0.9281 |    0.9424 |
+| ('test_acc', 'std')  | 0.0013 | 0.0154 |  0.001  |    0.0021 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9803 | 0.8193 |  0.9747 |    0.9839 |
+| ('test_auc', 'std')  | 0.0007 | 0.0163 |  0.001  |    0.0014 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0065 |  -4.2634 | less          |
+|  6 | Hinge | ensLoss |   0.0005 |  -8.8011 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.8628 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9935 |  -4.2634 | greater       |
+|  6 | Hinge | ensLoss |   0.9995 |  -8.8011 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.8628 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0351 | -2.4538 | less          |
+|  6 | Hinge | ensLoss |   0.0042 | -4.8399 | less          |
+|  9 | EXP   | ensLoss |   0.0003 | -9.9713 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9649 | -2.4538 | greater       |
+|  6 | Hinge | ensLoss |   0.9958 | -4.8399 | greater       |
+|  9 | EXP   | ensLoss |   0.9997 | -9.9713 | greater       |
+
+#### CIFAR23 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR23',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8185 | 0.732  |  0.8203 |    0.8549 |
+| ('test_acc', 'std')  | 0.006  | 0.0031 |  0.006  |    0.0021 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8962 | 0.8062 |  0.8959 |    0.9276 |
+| ('test_auc', 'std')  | 0.0032 | 0.0044 |  0.0043 |    0.0018 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0026 |  -5.5616 | less          |
+|  6 | Hinge | ensLoss |   0.003  |  -5.3288 | less          |
+|  9 | EXP   | ensLoss |   0      | -51.3198 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9974 |  -5.5616 | greater       |
+|  6 | Hinge | ensLoss |   0.997  |  -5.3288 | greater       |
+|  9 | EXP   | ensLoss |   1      | -51.3198 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0004 |  -9.3182 | less          |
+|  6 | Hinge | ensLoss |   0.0016 |  -6.3546 | less          |
+|  9 | EXP   | ensLoss |   0      | -28.225  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9996 |  -9.3182 | greater       |
+|  6 | Hinge | ensLoss |   0.9984 |  -6.3546 | greater       |
+|  9 | EXP   | ensLoss |   1      | -28.225  | greater       |
+
+#### CIFAR24 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR24',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.7765 | 0.6368 |  0.7715 |    0.8143 |
+| ('test_acc', 'std')  | 0.0048 | 0.0088 |  0.0068 |    0.0054 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8572 | 0.6877 |  0.8325 |    0.8856 |
+| ('test_auc', 'std')  | 0.0032 | 0.012  |  0.0048 |    0.0048 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.004  |  -4.8896 | less          |
+|  6 | Hinge | ensLoss |   0.0021 |  -5.8727 | less          |
+|  9 | EXP   | ensLoss |   0      | -20.5646 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.996  |  -4.8896 | greater       |
+|  6 | Hinge | ensLoss |   0.9979 |  -5.8727 | greater       |
+|  9 | EXP   | ensLoss |   1      | -20.5646 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0046 |  -4.7309 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -13.5051 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.885  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9954 |  -4.7309 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -13.5051 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.885  | greater       |
+
+#### CIFAR29 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR29',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9373 | 0.8966 |  0.9401 |    0.9577 |
+| ('test_acc', 'std')  | 0.0017 | 0.0023 |  0.0013 |    0.0017 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9849 | 0.961  |  0.9861 |    0.9925 |
+| ('test_auc', 'std')  | 0.0006 | 0.0016 |  0.0006 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.4512 | less          |
+|  6 | Hinge | ensLoss |   0.0003 |  -9.9401 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -15.0715 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.4512 | greater       |
+|  6 | Hinge | ensLoss |   0.9997 |  -9.9401 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -15.0715 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -14.8527 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -10.6139 | less          |
+|  9 | EXP   | ensLoss |   0      | -18.1366 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -14.8527 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -10.6139 | greater       |
+|  9 | EXP   | ensLoss |   1      | -18.1366 | greater       |
+
+#### CIFAR05 - model: DenseNet121 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR05',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet121'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9712 | 0.9591 |  0.968  |    0.9781 |
+| ('test_acc', 'std')  | 0.0005 | 0.0008 |  0.0015 |    0.0011 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9957 | 0.9925 |  0.9948 |    0.9966 |
+| ('test_auc', 'std')  | 0.0001 | 0.0002 |  0.0002 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0011 |  -6.9523 | less          |
+|  6 | Hinge | ensLoss |   0.0022 |  -5.7975 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.8099 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9989 |  -6.9523 | greater       |
+|  6 | Hinge | ensLoss |   0.9978 |  -5.7975 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.8099 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0324 |  -2.5281 | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.2818 | less          |
+|  9 | EXP   | ensLoss |   0.0003 | -10.1405 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9676 |  -2.5281 | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.2818 | greater       |
+|  9 | EXP   | ensLoss |   0.9997 | -10.1405 | greater       |
+
+#### CIFAR24 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR24',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8233 | 0.7258 |  0.8387 |    0.8877 |
+| ('test_acc', 'std')  | 0.005  | 0.0062 |  0.0031 |    0.0028 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9033 | 0.8024 |  0.9092 |    0.9492 |
+| ('test_auc', 'std')  | 0.0049 | 0.0066 |  0.0029 |    0.0016 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |        0 | -22.51   | less          |
+|  6 | Hinge | ensLoss |        0 | -32.8496 | less          |
+|  9 | EXP   | ensLoss |        0 | -18.9965 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |        1 | -22.51   | greater       |
+|  6 | Hinge | ensLoss |        1 | -32.8496 | greater       |
+|  9 | EXP   | ensLoss |        1 | -18.9965 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -11.4238 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -12.7722 | less          |
+|  9 | EXP   | ensLoss |   0      | -19.9654 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -11.4238 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -12.7722 | greater       |
+|  9 | EXP   | ensLoss |   1      | -19.9654 | greater       |
+
+#### CIFAR29 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR29',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9378 | 0.9085 |  0.9349 |    0.9564 |
+| ('test_acc', 'std')  | 0.0025 | 0.0035 |  0.0018 |    0.0018 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9842 | 0.9693 |  0.9825 |    0.9911 |
+| ('test_auc', 'std')  | 0.0007 | 0.0011 |  0.0006 |    0.0007 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0041 |  -4.8829 | less          |
+|  6 | Hinge | ensLoss |   0.0006 |  -8.083  | less          |
+|  9 | EXP   | ensLoss |   0      | -17.1951 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9959 |  -4.8829 | greater       |
+|  6 | Hinge | ensLoss |   0.9994 |  -8.083  | greater       |
+|  9 | EXP   | ensLoss |   1      | -17.1951 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0012 |  -6.8994 | less          |
+|  6 | Hinge | ensLoss |   0      | -16.6022 | less          |
+|  9 | EXP   | ensLoss |   0      | -33.4401 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9988 |  -6.8994 | greater       |
+|  6 | Hinge | ensLoss |   1      | -16.6022 | greater       |
+|  9 | EXP   | ensLoss |   1      | -33.4401 | greater       |
+
+#### CIFAR25 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR25',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8063 | 0.703  |  0.8045 |    0.8314 |
+| ('test_acc', 'std')  | 0.0034 | 0.0041 |  0.0025 |    0.0018 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8892 | 0.7762 |  0.8674 |    0.899  |
+| ('test_auc', 'std')  | 0.0034 | 0.0047 |  0.0024 |    0.0027 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0018 |  -6.0948 | less          |
+|  6 | Hinge | ensLoss |   0      | -20.4222 | less          |
+|  9 | EXP   | ensLoss |   0      | -31.7448 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9982 |  -6.0948 | greater       |
+|  6 | Hinge | ensLoss |   1      | -20.4222 | greater       |
+|  9 | EXP   | ensLoss |   1      | -31.7448 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0315 |  -2.554  | less          |
+|  6 | Hinge | ensLoss |   0      | -16.3417 | less          |
+|  9 | EXP   | ensLoss |   0      | -18.9902 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9685 |  -2.554  | greater       |
+|  6 | Hinge | ensLoss |   1      | -16.3417 | greater       |
+|  9 | EXP   | ensLoss |   1      | -18.9902 | greater       |
+
+#### CIFAR25 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR25',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8556 | 0.7722 |  0.862  |    0.8882 |
+| ('test_acc', 'std')  | 0.0024 | 0.0033 |  0.0029 |    0.0024 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9286 | 0.8554 |  0.9319 |    0.9518 |
+| ('test_auc', 'std')  | 0.0026 | 0.0024 |  0.0016 |    0.0015 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -27.454  | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.3871 | less          |
+|  9 | EXP   | ensLoss |   0      | -21.9122 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -27.454  | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.3871 | greater       |
+|  9 | EXP   | ensLoss |   1      | -21.9122 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0004 |  -8.8688 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -10.7449 | less          |
+|  9 | EXP   | ensLoss |   0      | -28.5922 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9996 |  -8.8688 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -10.7449 | greater       |
+|  9 | EXP   | ensLoss |   1      | -28.5922 | greater       |
+
+#### CIFAR26 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR26',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8577 | 0.7732 |  0.856  |    0.8674 |
+| ('test_acc', 'std')  | 0.0026 | 0.002  |  0.0047 |    0.0029 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9286 | 0.8537 |  0.9151 |    0.9338 |
+| ('test_auc', 'std')  | 0.0035 | 0.0013 |  0.0055 |    0.0018 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0171 |  -3.1613 | less          |
+|  6 | Hinge | ensLoss |   0.0239 |  -2.8206 | less          |
+|  9 | EXP   | ensLoss |   0      | -34.7698 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9829 |  -3.1613 | greater       |
+|  6 | Hinge | ensLoss |   0.9761 |  -2.8206 | greater       |
+|  9 | EXP   | ensLoss |   1      | -34.7698 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.06   |  -1.9706 | less          |
+|  6 | Hinge | ensLoss |   0.0054 |  -4.5083 | less          |
+|  9 | EXP   | ensLoss |   0      | -33.9871 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.94   |  -1.9706 | greater       |
+|  6 | Hinge | ensLoss |   0.9946 |  -4.5083 | greater       |
+|  9 | EXP   | ensLoss |   1      | -33.9871 | greater       |
+
+#### CIFAR29 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR29',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9324 | 0.7755 |  0.9302 |    0.9508 |
+| ('test_acc', 'std')  | 0.0027 | 0.0115 |  0.0025 |    0.0019 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9812 | 0.8546 |  0.9796 |    0.9892 |
+| ('test_auc', 'std')  | 0.001  | 0.0098 |  0.0011 |    0.0007 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0013 |  -6.6591 | less          |
+|  6 | Hinge | ensLoss |   0.0016 |  -6.3694 | less          |
+|  9 | EXP   | ensLoss |   0      | -15.8667 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9987 |  -6.6591 | greater       |
+|  6 | Hinge | ensLoss |   0.9984 |  -6.3694 | greater       |
+|  9 | EXP   | ensLoss |   1      | -15.8667 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0011 |  -6.967  | less          |
+|  6 | Hinge | ensLoss |   0.0008 |  -7.6229 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -13.9034 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9989 |  -6.967  | greater       |
+|  6 | Hinge | ensLoss |   0.9992 |  -7.6229 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -13.9034 | greater       |
+
+#### CIFAR34 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR34',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8173 | 0.749  |  0.8241 |    0.8364 |
+| ('test_acc', 'std')  | 0.0036 | 0.0037 |  0.0014 |    0.0037 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9015 | 0.828  |  0.897  |    0.9174 |
+| ('test_auc', 'std')  | 0.0032 | 0.0024 |  0.0014 |    0.0027 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.001  |  -7.1009 | less          |
+|  6 | Hinge | ensLoss |   0.0258 |  -2.7459 | less          |
+|  9 | EXP   | ensLoss |   0      | -15.6697 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.999  |  -7.1009 | greater       |
+|  6 | Hinge | ensLoss |   0.9742 |  -2.7459 | greater       |
+|  9 | EXP   | ensLoss |   1      | -15.6697 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0206 |  -2.9692 | less          |
+|  6 | Hinge | ensLoss |   0.0025 |  -5.5774 | less          |
+|  9 | EXP   | ensLoss |   0      | -23.5178 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9794 |  -2.9692 | greater       |
+|  6 | Hinge | ensLoss |   0.9975 |  -5.5774 | greater       |
+|  9 | EXP   | ensLoss |   1      | -23.5178 | greater       |
+
+#### CIFAR05 - model: DenseNet169 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR05',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet169'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9686 | 0.9585 |  0.9667 |    0.9786 |
+| ('test_acc', 'std')  | 0.0012 | 0.0013 |  0.0015 |    0.0007 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9954 | 0.9925 |  0.9944 |    0.9963 |
+| ('test_auc', 'std')  | 0.0003 | 0.0003 |  0.0001 |    0.0004 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0008 |  -7.7267 | less          |
+|  6 | Hinge | ensLoss |   0.0011 |  -7.0061 | less          |
+|  9 | EXP   | ensLoss |   0      | -16.3571 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9992 |  -7.7267 | greater       |
+|  6 | Hinge | ensLoss |   0.9989 |  -7.0061 | greater       |
+|  9 | EXP   | ensLoss |   1      | -16.3571 | greater       |
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0355 | -2.4425 | less          |
+|  6 | Hinge | ensLoss |   0.0044 | -4.7912 | less          |
+|  9 | EXP   | ensLoss |   0.001  | -7.0847 | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9645 | -2.4425 | greater       |
+|  6 | Hinge | ensLoss |   0.9956 | -4.7912 | greater       |
+|  9 | EXP   | ensLoss |   0.999  | -7.0847 | greater       |
+
+#### CIFAR26 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR26',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8686 | 0.8044 |  0.8759 |    0.9055 |
+| ('test_acc', 'std')  | 0.0024 | 0.0042 |  0.002  |    0.0017 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.942  | 0.8848 |  0.9442 |    0.9636 |
+| ('test_auc', 'std')  | 0.0024 | 0.0026 |  0.0009 |    0.0013 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -11.8878 | less          |
+|  6 | Hinge | ensLoss |   0      | -26.9091 | less          |
+|  9 | EXP   | ensLoss |   0      | -24.335  | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -11.8878 | greater       |
+|  6 | Hinge | ensLoss |   1      | -26.9091 | greater       |
+|  9 | EXP   | ensLoss |   1      | -24.335  | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0      | -15.7954 | less          |
+|  6 | Hinge | ensLoss |   0.0001 | -14.5214 | less          |
+|  9 | EXP   | ensLoss |   0      | -22.6585 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   1      | -15.7954 | greater       |
+|  6 | Hinge | ensLoss |   0.9999 | -14.5214 | greater       |
+|  9 | EXP   | ensLoss |   1      | -22.6585 | greater       |
+
+#### CIFAR27 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR27',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8608 | 0.7628 |  0.8583 |    0.8933 |
+| ('test_acc', 'std')  | 0.0032 | 0.0023 |  0.0033 |    0.0025 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9352 | 0.8475 |  0.9246 |    0.9467 |
+| ('test_auc', 'std')  | 0.0023 | 0.003  |  0.004  |    0.0023 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0022 |  -5.7724 | less          |
+|  6 | Hinge | ensLoss |   0      | -16.2747 | less          |
+|  9 | EXP   | ensLoss |   0      | -49.5908 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9978 |  -5.7724 | greater       |
+|  6 | Hinge | ensLoss |   1      | -16.2747 | greater       |
+|  9 | EXP   | ensLoss |   1      | -49.5908 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0345 |  -2.4691 | less          |
+|  6 | Hinge | ensLoss |   0.0056 |  -4.4477 | less          |
+|  9 | EXP   | ensLoss |   0      | -29.8894 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9655 |  -2.4691 | greater       |
+|  6 | Hinge | ensLoss |   0.9944 |  -4.4477 | greater       |
+|  9 | EXP   | ensLoss |   1      | -29.8894 | greater       |
+
+#### CIFAR34 - model: ResNet50 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR34',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet50'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8083 | 0.7631 |  0.8161 |    0.8311 |
+| ('test_acc', 'std')  | 0.0044 | 0.002  |  0.0024 |    0.0012 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8898 | 0.8431 |  0.8892 |    0.912  |
+| ('test_auc', 'std')  | 0.0026 | 0.0034 |  0.0018 |    0.0014 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0052 |  -4.5564 | less          |
+|  6 | Hinge | ensLoss |   0.0025 |  -5.5805 | less          |
+|  9 | EXP   | ensLoss |   0      | -29.8201 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9948 |  -4.5564 | greater       |
+|  6 | Hinge | ensLoss |   0.9975 |  -5.5805 | greater       |
+|  9 | EXP   | ensLoss |   1      | -29.8201 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0002 | -10.6808 | less          |
+|  6 | Hinge | ensLoss |   0.0003 | -10.1997 | less          |
+|  9 | EXP   | ensLoss |   0      | -21.1088 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9998 | -10.6808 | greater       |
+|  6 | Hinge | ensLoss |   0.9997 | -10.1997 | greater       |
+|  9 | EXP   | ensLoss |   1      | -21.1088 | greater       |
+
+#### CIFAR27 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR27',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8851 | 0.8101 |  0.8905 |    0.9181 |
+| ('test_acc', 'std')  | 0.003  | 0.0034 |  0.0017 |    0.0016 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9566 | 0.8892 |  0.9586 |    0.975  |
+| ('test_auc', 'std')  | 0.0012 | 0.0036 |  0.0004 |    0.0002 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0009 |  -7.3153 | less          |
+|  6 | Hinge | ensLoss |   0.0004 |  -9.1069 | less          |
+|  9 | EXP   | ensLoss |   0      | -35.3671 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9991 |  -7.3153 | greater       |
+|  6 | Hinge | ensLoss |   0.9996 |  -9.1069 | greater       |
+|  9 | EXP   | ensLoss |   1      | -35.3671 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -13.7107 | less          |
+|  6 | Hinge | ensLoss |   0      | -33.074  | less          |
+|  9 | EXP   | ensLoss |   0      | -23.5928 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -13.7107 | greater       |
+|  6 | Hinge | ensLoss |   1      | -33.074  | greater       |
+|  9 | EXP   | ensLoss |   1      | -23.5928 | greater       |
+
+#### CIFAR28 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR28',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9289 | 0.887  |  0.9309 |    0.9502 |
+| ('test_acc', 'std')  | 0.0024 | 0.0017 |  0.0024 |    0.0023 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9809 | 0.9544 |  0.9787 |    0.9837 |
+| ('test_auc', 'std')  | 0.0004 | 0.001  |  0.0012 |    0.001  |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0009 |  -7.4315 | less          |
+|  6 | Hinge | ensLoss |   0.0008 |  -7.6201 | less          |
+|  9 | EXP   | ensLoss |   0      | -19.2401 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9991 |  -7.4315 | greater       |
+|  6 | Hinge | ensLoss |   0.9992 |  -7.6201 | greater       |
+|  9 | EXP   | ensLoss |   1      | -19.2401 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0392 |  -2.3518 | less          |
+|  6 | Hinge | ensLoss |   0.0034 |  -5.1216 | less          |
+|  9 | EXP   | ensLoss |   0      | -15.5639 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9608 |  -2.3518 | greater       |
+|  6 | Hinge | ensLoss |   0.9966 |  -5.1216 | greater       |
+|  9 | EXP   | ensLoss |   1      | -15.5639 | greater       |
+
+#### CIFAR34 - model: ResNet101 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR34',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet101'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.8074 | 0.6693 |  0.814  |    0.8246 |
+| ('test_acc', 'std')  | 0.0024 | 0.003  |  0.0037 |    0.0022 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.8902 | 0.734  |  0.8786 |    0.9053 |
+| ('test_auc', 'std')  | 0.0013 | 0.0016 |  0.003  |    0.0022 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0053 |  -4.5224 | less          |
+|  6 | Hinge | ensLoss |   0.0369 |  -2.406  | less          |
+|  9 | EXP   | ensLoss |   0      | -32.1284 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9947 |  -4.5224 | greater       |
+|  6 | Hinge | ensLoss |   0.9631 |  -2.406  | greater       |
+|  9 | EXP   | ensLoss |   1      | -32.1284 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0042 |  -4.8459 | less          |
+|  6 | Hinge | ensLoss |   0.0003 | -10.1656 | less          |
+|  9 | EXP   | ensLoss |   0      | -50.3355 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9958 |  -4.8459 | greater       |
+|  6 | Hinge | ensLoss |   0.9997 | -10.1656 | greater       |
+|  9 | EXP   | ensLoss |   1      | -50.3355 | greater       |
+
+#### CIFAR06 - model: DenseNet121 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR06',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'DenseNet121'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9708 | 0.9662 |  0.9695 |    0.9842 |
+| ('test_acc', 'std')  | 0.0015 | 0.0019 |  0.0014 |    0.001  |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9949 | 0.9932 |  0.9951 |    0.9976 |
+| ('test_auc', 'std')  | 0.0003 | 0.0003 |  0.0003 |    0.0002 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0007 | -7.8892 | less          |
+|  6 | Hinge | ensLoss |   0.0007 | -7.7855 | less          |
+|  9 | EXP   | ensLoss |   0.0009 | -7.458  | less          |
+
+
+|    | A     | B       |   pvalue |    stat | alternative   |
+|---:|:------|:--------|---------:|--------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9993 | -7.8892 | greater       |
+|  6 | Hinge | ensLoss |   0.9993 | -7.7855 | greater       |
+|  9 | EXP   | ensLoss |   0.9991 | -7.458  | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -12.897  | less          |
+|  6 | Hinge | ensLoss |   0.0023 |  -5.7546 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.9246 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -12.897  | greater       |
+|  6 | Hinge | ensLoss |   0.9977 |  -5.7546 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.9246 | greater       |
+
+#### CIFAR28 - model: MobileNetV2 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR28',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNetV2'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9474 | 0.9171 |  0.9474 |    0.9682 |
+| ('test_acc', 'std')  | 0.0027 | 0.0027 |  0.0019 |    0.0021 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9884 | 0.9739 |  0.9877 |    0.9942 |
+| ('test_auc', 'std')  | 0.0006 | 0.0007 |  0.0005 |    0.0003 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0024 |  -5.6737 | less          |
+|  6 | Hinge | ensLoss |   0.0013 |  -6.6992 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -14.3475 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9976 |  -5.6737 | greater       |
+|  6 | Hinge | ensLoss |   0.9987 |  -6.6992 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -14.3475 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0001 | -13.7236 | less          |
+|  6 | Hinge | ensLoss |   0.0002 | -11.5655 | less          |
+|  9 | EXP   | ensLoss |   0      | -21.0527 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9999 | -13.7236 | greater       |
+|  6 | Hinge | ensLoss |   0.9998 | -11.5655 | greater       |
+|  9 | EXP   | ensLoss |   1      | -21.0527 | greater       |
+
+#### CIFAR35 - model: ResNet34 ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR35',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'ResNet34'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.6894 | 0.601  |  0.7039 |    0.7203 |
+| ('test_acc', 'std')  | 0.0045 | 0.0044 |  0.0037 |    0.0071 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.7597 | 0.6439 |  0.7602 |    0.7924 |
+| ('test_auc', 'std')  | 0.0044 | 0.0052 |  0.0032 |    0.0109 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0058 |  -4.4172 | less          |
+|  6 | Hinge | ensLoss |   0.0511 |  -2.1118 | less          |
+|  9 | EXP   | ensLoss |   0.0001 | -12.9502 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9942 |  -4.4172 | greater       |
+|  6 | Hinge | ensLoss |   0.9489 |  -2.1118 | greater       |
+|  9 | EXP   | ensLoss |   0.9999 | -12.9502 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0275 |  -2.6848 | less          |
+|  6 | Hinge | ensLoss |   0.0115 |  -3.5882 | less          |
+|  9 | EXP   | ensLoss |   0      | -15.2304 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9725 |  -2.6848 | greater       |
+|  6 | Hinge | ensLoss |   0.9885 |  -3.5882 | greater       |
+|  9 | EXP   | ensLoss |   1      | -15.2304 | greater       |
+
+#### CIFAR29 - model: MobileNet ####
+
+
+-- CONFIG --
+
+{'batch_size': 128,
+ 'dataset': 'CIFAR29',
+ 'device': device(type='cuda', index=0),
+ 'model': {'net': 'MobileNet'},
+ 'optimizer': {'args': {'T_max': 200},
+               'lr': 0.001,
+               'lr_scheduler': 'CosineAnnealingLR',
+               'type': 'SGD'},
+ 'save_model': True,
+ 'trainer': {'epochs': 200,
+             'val_per_epochs': 5}}
+
+-- Performance --
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_acc', 'mean') | 0.9411 | 0.8899 |  0.9364 |    0.9596 |
+| ('test_acc', 'std')  | 0.0021 | 0.0031 |  0.0025 |    0.0008 |
+
+
+|                      |    BCE |    EXP |   Hinge |   ensLoss |
+|:---------------------|-------:|-------:|--------:|----------:|
+| ('test_auc', 'mean') | 0.9863 | 0.9566 |  0.9825 |    0.9893 |
+| ('test_auc', 'std')  | 0.0004 | 0.0009 |  0.0014 |    0.0009 |
+
+-- Testing --
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0007 |  -7.7658 | less          |
+|  6 | Hinge | ensLoss |   0.0005 |  -8.8225 | less          |
+|  9 | EXP   | ensLoss |   0      | -22.8987 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9993 |  -7.7658 | greater       |
+|  6 | Hinge | ensLoss |   0.9995 |  -8.8225 | greater       |
+|  9 | EXP   | ensLoss |   1      | -22.8987 | greater       |
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.0202 |  -2.9867 | less          |
+|  6 | Hinge | ensLoss |   0.0005 |  -8.7017 | less          |
+|  9 | EXP   | ensLoss |   0      | -28.4971 | less          |
+
+
+|    | A     | B       |   pvalue |     stat | alternative   |
+|---:|:------|:--------|---------:|---------:|:--------------|
+|  3 | BCE   | ensLoss |   0.9798 |  -2.9867 | greater       |
+|  6 | Hinge | ensLoss |   0.9995 |  -8.7017 | greater       |
+|  9 | EXP   | ensLoss |   1      | -28.4971 | greater       |
