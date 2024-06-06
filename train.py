@@ -36,7 +36,7 @@ class Trainer(object):
         config = self.config
 
         loss_ = getattr(losses, self.loss)()
-        optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'], momentum=0.9, weight_decay=5e-4)
+        optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'], momentum=0.9, weight_decay=config['optimizer']['weight_decay'])
         scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, **config['optimizer']['args'])
         
         # opt = Optimizer([(0.0, 10.0)], "GP", 

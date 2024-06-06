@@ -1,5 +1,7 @@
 '''ResNet in PyTorch.
 
+Credict: https://github.com/kuangliu/pytorch-cifar
+
 For Pre-activation ResNet, see 'preact_resnet.py'.
 
 Reference:
@@ -70,9 +72,10 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10):
+    def __init__(self, block, num_blocks, dropout_rate=0.0, num_classes=10):
         super(ResNet, self).__init__()
         self.in_planes = 64
+        self.dropout_rate=dropout_rate
 
         self.conv1 = nn.Conv2d(3, 64, kernel_size=7,
                                stride=2, padding=3, bias=False)
@@ -102,28 +105,30 @@ class ResNet(nn.Module):
         out = F.adaptive_avg_pool2d(out, (1,1))
         out = out.view(out.size(0), -1)
         out = self.linear0(out)
+        if self.dropout_rate > 0.0:
+            out = F.dropout(out, p=self.dropout_rate)
         out = self.linear(out)
         return out
 
 
-def ResNet18(num_classes=10):
-    return ResNet(BasicBlock, [2, 2, 2, 2], num_classes=num_classes)
+def ResNet18(dropout_rate=0.0, num_classes=10):
+    return ResNet(BasicBlock, [2, 2, 2, 2], dropout_rate=dropout_rate, num_classes=num_classes)
 
 
-def ResNet34(num_classes=10):
-    return ResNet(BasicBlock, [3, 4, 6, 3], num_classes=num_classes)
+def ResNet34(dropout_rate=0.0, num_classes=10):
+    return ResNet(BasicBlock, [3, 4, 6, 3], dropout_rate=dropout_rate, num_classes=num_classes)
 
 
-def ResNet50(num_classes=10):
-    return ResNet(Bottleneck, [3, 4, 6, 3], num_classes=num_classes)
+def ResNet50(dropout_rate=0.0, num_classes=10):
+    return ResNet(Bottleneck, [3, 4, 6, 3], dropout_rate=dropout_rate, num_classes=num_classes)
 
 
-def ResNet101(num_classes=10):
-    return ResNet(Bottleneck, [3, 4, 23, 3], num_classes=num_classes)
+def ResNet101(dropout_rate=0.0, num_classes=10):
+    return ResNet(Bottleneck, [3, 4, 23, 3], dropout_rate=dropout_rate, num_classes=num_classes)
 
 
-def ResNet152(num_classes=10):
-    return ResNet(Bottleneck, [3, 8, 36, 3], num_classes=num_classes)
+def ResNet152(dropout_rate=0.0, num_classes=10):
+    return ResNet(Bottleneck, [3, 8, 36, 3], dropout_rate=dropout_rate, num_classes=num_classes)
 
 
 def test():

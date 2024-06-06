@@ -1,4 +1,4 @@
-""" COTO in tabular datasets"""
+""" ensLoss in tabular datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -33,20 +33,22 @@ import wandb
 import plotly.graph_objs as go
 from plot import line
 import sys
-import models
+
+## tab models
+import tab_models
 
 def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="COTO", name=str(data_id)+'-'+config['model']['net'])
+        wandb.init(project="ensLoss", name=str(data_id)+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
     random.seed(0)
     np.random.seed(0)
 
-    Acc = {'trial': [], 'loss': [], 'test_acc': []}
+    Acc = {'trial': [], 'loss': [], 'test_acc': [], 'test_auc': []}
     path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
@@ -57,64 +59,63 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
-        ## COTO ##
-        print('\n-- TRAIN COTO --\n')
+        ## ensLoss ##
+        print('\n-- TRAIN ensLoss --\n')
         model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
-        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
         print(model)
-        trainer_ = Trainer(model=model, loss='COTO', 
+        trainer_ = Trainer(model=model, loss='ensLoss', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
-        Acc['loss'].append('COTO')
+        Acc['loss'].append('ensLoss')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
         model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
-        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='BCELoss', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('BCE')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
         ## Hinge loss ##
         print('\n-- TRAIN Hinge --\n')
         model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
-        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='Hinge', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('Hinge')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
         ## EXP loss ##
         print('\n-- TRAIN EXP --\n')
         model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
-        # model = MLP(input_shape=input_shape, H=H, D=D)
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='EXP', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test = trainer_.train(path_)
+        path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
         Acc['loss'].append('EXP')
         Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
 
     path_ = pd.DataFrame(path_)
-    path_.to_csv('path_net{}.csv'.format(config['model']['net']), index=False)
     Acc = pd.DataFrame(Acc)
     
     # Plot
@@ -142,66 +143,68 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
     # fig.show()
 
     # Hypothesis Testing    
-    # p_less = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
-    #                 alternative='less').round(5)
-    # p_less = p_less[['A', 'B', 'p-unc', 'alternative']]
-    # p_less = p_less[p_less['B'] == 'COTO']
-
     p_less = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='less').round(5)
-    p_less = p_less[p_less['B'] == 'COTO']
-
-    # p_greater = pg.pairwise_tests(dv='test_acc', within='loss', data=Acc, subject='trial',
-    #                 alternative='greater').round(5)
-    # p_greater = p_greater[['A', 'B', 'p-unc', 'alternative']]
-    # p_greater = p_greater[p_greater['B'] == 'COTO']
+    p_less = p_less[p_less['B'] == 'ensLoss']
 
     p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
-    p_greater = p_greater[p_greater['B'] == 'COTO']
+    p_greater = p_greater[p_greater['B'] == 'ensLoss']
 
-    res = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
-    res[('test_acc', 'std')] /= np.sqrt(n_trials)
-    res = res.T.round(4)
+    p_less_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='less').round(5)
+    p_less_auc = p_less_auc[p_less_auc['B'] == 'ensLoss']
+
+    p_greater_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='greater').round(5)
+    p_greater_auc = p_greater_auc[p_greater_auc['B'] == 'ensLoss']
+
+    res_acc = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
+    res_acc[('test_acc', 'std')] /= np.sqrt(n_trials)
+    res_acc = res_acc.T.round(4)
+
+    res_auc = Acc.groupby('loss').agg({'test_auc': ['mean', 'std']})
+    res_auc[('test_auc', 'std')] /= np.sqrt(n_trials)
+    res_auc = res_auc.T.round(4)
 
     ## Save outcome
     orig_stdout = sys.stdout
-    out_file = open('out.txt', 'a+')
+    out_file = open('out_img.txt', 'a+')
     sys.stdout = out_file
 
-    print('\n#### %d - model: %s ####\n' %(data_id, config['model']['net']))
-
-    print('\n Step Size: %s \n' %config['optimizer'])
+    print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
+    # print('\n Step Size: %s \n' %config['optimizer'])
+    print('\n-- CONFIG --\n')
+    pprint.pprint(config, width=1)
 
     print('\n-- Performance --\n')
-    print((res.round(4)).to_markdown())
+    print((res_acc.round(4)).to_markdown())
+    print('\n')
+    print((res_auc.round(4)).to_markdown())
 
     print('\n-- Testing --\n')
     print(p_less.round(4).to_markdown())
+    print('\n')
     print(p_greater.round(4).to_markdown())
 
-    out = '| ({}) | mean(std) | {}({}) | {}({}) | {}({}) |'.format( config['model']['net'],
-                                                            res['BCE'][0], res['BCE'][1], 
-                                                            res['Hinge'][0], res['Hinge'][1],
-                                                            res['COTO'][0], res['COTO'][1])
-    p_pair = '|          | p_value   | {}        | {}        | ---            |'.format(p_less[p_less['A']=='BCE']['pvalue'].values[0], 
-                                        p_less[p_less['A']=='Hinge']['pvalue'].values[0])
-    print('\n-- Result --\n')
-    print(out)
-    print(p_pair)
+    print(p_less_auc.round(4).to_markdown())
+    print('\n')
+    print(p_greater_auc.round(4).to_markdown())
+
     if wandb_log:
         wandb.log({"test_acc_curve": fig,
+                   "perf": Acc.groupby('loss')['test_acc'].agg(['mean', 'std']),
                    "path": path_,
                    "perf_table": Acc,
                    "p_less": p_less,
                    "p_greater": p_greater,
+                   "p_less_auc": p_less_auc,
+                   "p_greater_auc": p_greater_auc,
                    })
         wandb.finish()
-    
-    sys.stdout = orig_stdout
+
     out_file.close()
+    sys.stdout = orig_stdout
 
 if __name__=='__main__':
     # PARSE THE ARGS
-    parser = argparse.ArgumentParser(description='COTO Training')
+    parser = argparse.ArgumentParser(description='ensLoss Training')
     # parser.add_argument('-D', '--depth', default=1, type=int,
     #                     help='depth of the neural network')
     # parser.add_argument('-H', '--width', default=128, type=int,
@@ -212,21 +215,20 @@ if __name__=='__main__':
                            help='number of epochs to train')
     parser.add_argument('-ID', '--data_id', default=43969, type=int,
                            help='data_id of the dataset')
-    parser.add_argument('-R', '--n_trials', default=20, type=int,
+    parser.add_argument('-R', '--n_trials', default=5, type=int,
                            help='number of trials for the experiments')
     parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
                            help='if save the training process in wandb')
     args = parser.parse_args()
 
     config = {
-            'model': {'net': 'TabMLP5', 'args': {'H': 256}},
-            # 'model': {'net': 'FTTransformer', 'args': {}},
+            'dataset' : args.data_id,
+            'model': {'net': 'TabMLP5', 'args': {'H': 64}},
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'StepLR', 'args': {'step_size':30, 'gamma': .5}}, #please change the argument if you use other LR
-            # 'optimizer': {'lr': 1e-5, 'type': 'Adam', 'lr_scheduler': 'CyclicLR', 'args': {'base_lr': 1e-5, 'max_lr': 1e-4, 'step_size_up': 10, 'mode': "triangular2", 'cycle_momentum': False}},
-            'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
-            # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'LinearLR', 'args': {'start_factor': 0.1, 'total_iters': 100}},
+            # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
+            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-5, 
+                          'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     data_id = args.data_id
@@ -258,18 +260,6 @@ if __name__=='__main__':
 # jannis (57.6k x 55): 45021 (good)
 # credit (16.7k x 11): 45024 (good)
 # california (20.6k x 9): 45025 (good)
-
-# Tabular data learning benchmark (TabFF:1e-5)
-# electricity (45.3k x 9): 44120
-# house_16H (13.5k x 17): 44123 
-# phoneme (3.17k x 6): 43973 
-# MiniBooNE (72998, 50): 44128 
-# MagicTelescope (13376, 10): 44125 
-# higgs (98k x 29): 23512 
-# eye_movements (7.61k x 24): 44157 
-# jannis (57.6k x 55): 45021 
-# credit (16.7k x 11): 45024 
-# california (20.6k x 9): 45025 
 
 # Tabular data learning benchmark (1e-5)
 # electricity (45.3k x 9): 44120 (bad)

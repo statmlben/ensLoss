@@ -40,4 +40,14 @@ def pairwise_ttest(df, val_col, group_col, subject='trial', alternative='less'):
     res = pd.DataFrame(res)
     return res
 
-
+# Credict: https://discuss.pytorch.org/t/where-and-how-to-add-dropout-in-resnet18/12869/3
+def append_dropout(model, rate=0.2):
+    for name, module in model.named_children():
+        if len(list(module.children())) > 0:
+            print(name)
+            print(module)
+            append_dropout(module)
+        if isinstance(module, nn.ReLU):
+            print('Dropout layer: %s' %name)
+            new = nn.Sequential(module, nn.Dropout2d(p=rate, inplace=True))
+            setattr(model, name, new)

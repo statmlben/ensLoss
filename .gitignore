@@ -8,6 +8,7 @@ paper/
 
 # wandb
 wandb/
+expt/artifacts/
 
 # dataset
 dataset/
