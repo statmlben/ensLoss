@@ -104,9 +104,9 @@ class ResNet(nn.Module):
         out = self.layer4(out)
         out = F.adaptive_avg_pool2d(out, (1,1))
         out = out.view(out.size(0), -1)
-        out = self.linear0(out)
         if self.dropout_rate > 0.0:
             out = F.dropout(out, p=self.dropout_rate)
+        out = self.linear0(out)
         out = self.linear(out)
         return out
 

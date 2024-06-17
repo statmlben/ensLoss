@@ -33,7 +33,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="ensLoss", name=filename+'-'+config['model']['net'])
+        wandb.init(project="ensLoss-BC", name=filename+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -50,11 +50,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
 
-        ## get some random training data
-        # dataiter = iter(train_loader)
-        # X_batch, y_batch = next(dataiter)
-
-        ## ensLoss ##
+        ## ensLoss: bc = -1 ##
         model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
@@ -62,9 +58,9 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
             ## print the model in the first trial
             print(model)
 
-        print('\n-- TRAIN ensLoss --\n')
+        print('\n-- TRAIN ensLoss + bc = -1 --\n')
         
-        trainer_ = Trainer(model=model, loss='ensLoss', period=config['ensLoss_per_epochs'],
+        trainer_ = Trainer(model=model, loss='ensLoss', period=-1,
                             config=config, device=config['device'], 
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
@@ -73,59 +69,48 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
-        ## Focal loss ##
-        print('\n-- TRAIN Focal --\n')
+        ## ensLoss: bc = 10 ##
         model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='BinFocal',
-                            config=config, device=config['device'],
+        print('\n-- TRAIN ensLoss + bc = 10 --\n')
+        
+        trainer_ = Trainer(model=model, loss='ensLoss', period=10,
+                            config=config, device=config['device'], 
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
-        Acc['loss'].append('Focal')
+        Acc['loss'].append('ensLoss+bc10')
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
-        # BCE loss ##
-        print('\n-- TRAIN BCE --\n')
+        ## ensLoss: bc = 20 ##
         model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='BCELoss',
-                            config=config, device=config['device'],
+        print('\n-- TRAIN ensLoss + bc = 20 --\n')
+        
+        trainer_ = Trainer(model=model, loss='ensLoss', period=20,
+                            config=config, device=config['device'], 
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
-        Acc['loss'].append('BCE')
+        Acc['loss'].append('ensLoss+bc20')
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
-        # Hinge loss ##
-        print('\n-- TRAIN Hinge --\n')
+        ## ensLoss: bc = 50 ##
         model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='Hinge', 
-                            config=config, device=config['device'],
+        print('\n-- TRAIN ensLoss + bc = 50 --\n')
+        
+        trainer_ = Trainer(model=model, loss='ensLoss', period=50,
+                            config=config, device=config['device'], 
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
         Acc['trial'].append(h)
-        Acc['loss'].append('Hinge')
-        Acc['test_acc'].append(acc_test)
-        Acc['test_auc'].append(auc_test)
-
-        # EXP loss ##
-        print('\n-- TRAIN EXP --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1)
-        model.to(config['device'])
-
-        trainer_ = Trainer(model=model, loss='EXP', 
-                            config=config, device=config['device'],
-                            train_loader=train_loader, val_loader=test_loader)
-        path_, acc_test, auc_test = trainer_.train(path_)
-        Acc['trial'].append(h)
-        Acc['loss'].append('EXP')
+        Acc['loss'].append('ensLoss+bc50')
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
@@ -179,7 +164,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
 
     ## Save outcome
     orig_stdout = sys.stdout
-    out_file = open('out_img.txt', 'a+')
+    out_file = open('out_bc.txt', 'a+')
     sys.stdout = out_file
 
     print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
@@ -238,9 +223,9 @@ if __name__=='__main__':
             'model': {'net': args.net},
             'save_model': False,
             'batch_size': args.batch,
-            'ensLoss_per_epochs': -1,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 5},
-            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 5e-4, 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 5e-4, 
+                          'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
@@ -262,4 +247,5 @@ if __name__=='__main__':
 # CIFAR10: https://www.cs.toronto.edu/~kriz/cifar.html
 # PCam: https://github.com/basveeling/pcam
 
-# python main_image.py -B=128 -e=100 -F="PCam" -R=5 --log
+# python main_bc.py -B=128 -F="CIFAR35" -R=5 --log
+# nohup python main_bc.py -B=128 -F="CIFAR35" -R=5 --no-log > out_bc.out &

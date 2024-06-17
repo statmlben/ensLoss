@@ -1,4 +1,4 @@
-"""ensLoss in image datasets"""
+"""ensLoss + reg methods in image datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -34,7 +34,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="ensLoss", name=filename+'-'+config['model']['net'])
+        wandb.init(project="ensLoss", name='Reg'+'-'+filename+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -46,7 +46,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
 
     for h in range(n_trials):
 
-        train_data, test_data = img_data(name=filename)
+        train_data, test_data = img_data(name=filename, aug=config['dataAug'])
 
         train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
         test_loader = DataLoader(dataset=test_data, batch_size=32)
@@ -148,14 +148,9 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
     print((res_auc.round(4)).to_markdown())
 
     if wandb_log:
-        wandb.log({"test_acc_curve": fig,
-                   "perf": Acc.groupby('loss')['test_acc'].agg(['mean', 'std']),
+        wandb.log({"perf": Acc.groupby('loss')['test_acc'].agg(['mean', 'std']),
                    "path": path_,
                    "perf_table": Acc,
-                   "p_less": p_less,
-                   "p_greater": p_greater,
-                   "p_less_auc": p_less_auc,
-                   "p_greater_auc": p_greater_auc,
                    })
         wandb.finish()
 
@@ -179,14 +174,17 @@ if __name__=='__main__':
                            help='the dropout rate of ResNet50')
     parser.add_argument('-R', '--n_trials', default=5, type=int,
                            help='number of trials for the experiments')
+    parser.add_argument('--aug', default=True, action=argparse.BooleanOptionalAction,
+                           help='if data augmentation of CIFAR datasets')
     parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
                            help='if save the training process in wandb')
     args = parser.parse_args()
 
     config = {
             'dataset' : args.filename,
+            'dataAug': args.aug,
             'model': {'net': args.net, 'dropout_rate': args.dropout_rate},
-            'save_model': True,
+            'save_model': False,
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 5},
             'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': args.weight_decay, 
@@ -213,4 +211,4 @@ if __name__=='__main__':
 # PCam: https://github.com/basveeling/pcam
 
 # example bash: 
-# python reg_image.py -B=128 -e=100 -F="CIFAR35" -R=5 --no-log
+# python reg_image.py -F="CIFAR35" -R=5 -dr=0.1 -WD=0.0 --no-log --no-aug

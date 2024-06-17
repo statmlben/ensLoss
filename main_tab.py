@@ -3,45 +3,37 @@
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
 
+## basics
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
 import random
 
+## dataloader
 import torch
-import torch.nn as nn
-import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
-
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
-
 from loader import TrainData, TestData, openml_data
-from base import evaluate, pairwise_ttest
-from sklearn.model_selection import KFold
-import scipy
-from train import Trainer
-import plotly.express as px
-import plotly as ply
 
-import pingouin as pg
-from scipy import stats
+## train
+from train import Trainer
+
+## result
+from base import pairwise_ttest, line
+
+## args; print config, figure, out
 import argparse
 import wandb
-import plotly.graph_objs as go
-from plot import line
 import sys
+import pprint
 
 ## tab models
 import tab_models
 
-def main(config, data_id=43969, n_trials=2, wandb_log=True):
+def main(config, data_id=43969, n_trials=5, wandb_log=True):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="ensLoss", name=str(data_id)+'-'+config['model']['net'])
+        wandb.init(project="ensLoss-tab", name=str(data_id)+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -61,10 +53,10 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
         ## ensLoss ##
         print('\n-- TRAIN ensLoss --\n')
-        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        model = getattr(tab_models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
         model.to(config['device'])
         print(model)
-        trainer_ = Trainer(model=model, loss='ensLoss', 
+        trainer_ = Trainer(model=model, loss='ensLoss', period=config['ensLoss_per_epochs'],
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
@@ -75,7 +67,7 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        model = getattr(tab_models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='BCELoss', 
@@ -89,7 +81,7 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
         ## Hinge loss ##
         print('\n-- TRAIN Hinge --\n')
-        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        model = getattr(tab_models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='Hinge', 
@@ -103,7 +95,7 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
         ## EXP loss ##
         print('\n-- TRAIN EXP --\n')
-        model = getattr(models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
+        model = getattr(tab_models, config['model']['net'])(input_shape=input_shape, **config['model']['args'])
         model.to(config['device'])
 
         trainer_ = Trainer(model=model, loss='EXP', 
@@ -165,10 +157,10 @@ def main(config, data_id=43969, n_trials=2, wandb_log=True):
 
     ## Save outcome
     orig_stdout = sys.stdout
-    out_file = open('out_img.txt', 'a+')
+    out_file = open('out_tab.txt', 'a+')
     sys.stdout = out_file
 
-    print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
+    print('\n#### Data ID: %s - model: %s ####\n' %(data_id, config['model']['net']))
     # print('\n Step Size: %s \n' %config['optimizer'])
     print('\n-- CONFIG --\n')
     pprint.pprint(config, width=1)
@@ -215,6 +207,8 @@ if __name__=='__main__':
                            help='number of epochs to train')
     parser.add_argument('-ID', '--data_id', default=43969, type=int,
                            help='data_id of the dataset')
+    parser.add_argument('-N', '--net', default="TabMLP3", type=str,
+                           help='the neural net of the classification')
     parser.add_argument('-R', '--n_trials', default=5, type=int,
                            help='number of trials for the experiments')
     parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
@@ -223,11 +217,14 @@ if __name__=='__main__':
 
     config = {
             'dataset' : args.data_id,
-            'model': {'net': 'TabMLP5', 'args': {'H': 64}},
+            # 'model': {'net': args.net, 'args': {'H': 256}},
+            'model': {'net': args.net, 'args': {}},
             'batch_size': args.batch,
+            'save_model': False,
+            'ensLoss_per_epochs': 20,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
-            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-5, 
+            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 0.0, 
                           'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
@@ -236,6 +233,8 @@ if __name__=='__main__':
     wandb_log = args.log
 
     main(config=config, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
+
+# python main_tab.py -B=128 -e=300 -ID=44157 -N='TabMLP3' -R=5 --no-log
 
 # Tabular data learning benchmark (MLP:1e-4)
 # electricity (45.3k x 9): 44120 (bad)
@@ -249,27 +248,4 @@ if __name__=='__main__':
 # credit (16.7k x 11): 45024 (good)
 # california (20.6k x 9): 45025 (good)
 
-# Tabular data learning benchmark (MLP5:1e-5)
-# electricity (45.3k x 9): 44120 (good)
-# house_16H (13.5k x 17): 44123 (good)
-# phoneme (3.17k x 6): 43973 (fair)
-# MiniBooNE (72998, 50): 44128 (good)
-# MagicTelescope (13376, 10): 44125 (fair)
-# higgs (98k x 29): 23512 (good)
-# eye_movements (7.61k x 24): 44157 (fair)
-# jannis (57.6k x 55): 45021 (good)
-# credit (16.7k x 11): 45024 (good)
-# california (20.6k x 9): 45025 (good)
-
-# Tabular data learning benchmark (1e-5)
-# electricity (45.3k x 9): 44120 (bad)
-# house_16H (13.5k x 17): 44123 (good)
-# phoneme (3.17k x 6): 43973 (fair)
-# MiniBooNE (72998, 50): 44128 (fair - good)
-# MagicTelescope (13376, 10): 44125 (good)
-# higgs (98k x 29): 23512 (good)
-# eye_movements (7.61k x 24): 44157 (fair, potential good)
-# jannis (57.6k x 55): 45021 (good)
-# credit (16.7k x 11): 45024 (good)
-# california (20.6k x 9): 45025 (good)
 

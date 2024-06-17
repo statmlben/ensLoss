@@ -1,4 +1,4 @@
-"""ensLoss in image datasets"""
+"""ensLoss in text datasets"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -11,11 +11,11 @@ import torch
 from itertools import combinations
 
 ## dataloader
-from loader import openml_data, img_data
+from loader import openml_data, img_data, text_data
 from torch.utils.data import DataLoader
 
 ## models
-import img_models
+import text_models
 
 ## Train
 from train import Trainer
@@ -23,9 +23,8 @@ from train import Trainer
 ## args; print config, figure, out
 import argparse
 import pprint
-from plot import line
 import sys
-from base import pairwise_ttest
+from base import pairwise_ttest, line
 
 ## log to wandb
 import wandb
@@ -34,7 +33,7 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="ensLoss", name=filename+'-'+config['model']['net'])
+        wandb.init(project="ensLoss-txt", name=filename+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -46,23 +45,17 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
     for h in range(n_trials):
 
-        train_data, test_data = img_data(name=filename)
+        train_loader, test_loader = text_data(name='SST2', batch=config['batch_size'])
 
-        train_loader = DataLoader(dataset=train_data, batch_size=config['batch_size'], shuffle=True)
-        test_loader = DataLoader(dataset=test_data, batch_size=32)
-
-        ## get some random training data
-        # dataiter = iter(train_loader)
-        # X_batch, y_batch = next(dataiter)
-
-        ## eLOTO ##
+        ## ensLoss ##
         model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
+
         if h==0:
             ## print the model in the first trial
             print(model)
 
-        print('\n-- TRAIN eLOTO --\n')
+        print('\n-- TRAIN ensLoss --\n')
         
         trainer_ = Trainer(model=model, loss='ensLoss', 
                             config=config, device=config['device'],
@@ -159,7 +152,7 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
     ## Save outcome
     orig_stdout = sys.stdout
-    out_file = open('out_img.txt', 'a+')
+    out_file = open('out_text.txt', 'a+')
     sys.stdout = out_file
 
     print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
@@ -212,7 +205,8 @@ if __name__=='__main__':
             'save_model': True,
             'batch_size': args.batch,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 5},
-            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+            'optimizer': {'lr': 1e-3, 'type': 'SGD', 
+                          'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
@@ -220,16 +214,8 @@ if __name__=='__main__':
     wandb_log = args.log
     config['model']['net'] = args.net
 
-    if filename == 'CIFAR':
-        ## for a multi-class classification dataset
-        ## Currently, we only support experiments that are based on the CIFAR10 dataset.
-        for (u,v) in combinations(range(10), 2):
-            filename_tmp = filename+str(u)+str(v)
-            main(config=config, filename=filename_tmp, n_trials=n_trials, wandb_log=wandb_log)
-    
-    else:
-        ## for a binary classification dataset
-        main(config=config, filename=filename, n_trials=n_trials, wandb_log=wandb_log)
+    ## for a binary classification dataset
+    main(config=config, filename=filename, n_trials=n_trials, wandb_log=wandb_log)
 
 ## text dataset
 # SST2

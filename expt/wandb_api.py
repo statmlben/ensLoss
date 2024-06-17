@@ -55,7 +55,6 @@ plot_df = plot_df.pivot(index="dataset", columns="loss", values="test_acc")
 plot_df = plot_df.reset_index()
 plot_df = plot_df.sort_values("Hinge", ascending=False)
 
-
 # Plot the total crashes
 sns.set_theme("paper", style='white')
 f, ax = plt.subplots(figsize=(15, 6))
@@ -78,12 +77,12 @@ ax = sns.barplot(y="EXP", x="dataset", data=plot_df,
 ax.set_alpha(alpha)
 
 ax.legend(ncol=4, loc="upper right", frameon=True)
-ax.set(ylim=(0.65, 1), xlabel="",
+ax.set(ylim=(0.6, 1), xlabel="",
        ylabel="Test Accuracy")
 sns.despine(left=True, bottom=True)
 plt.xticks(rotation=80)
 plt.tight_layout()
-plt.savefig('perf_list.pdf')
+plt.savefig('perf_list.png')
 
 
 ## Test results

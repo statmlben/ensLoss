@@ -1,4 +1,4 @@
-""" eloto:  """
+""" ensLoss:  """
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
@@ -22,7 +22,7 @@ def get_instance(module, name, config, *args):
 
 class Trainer(object):
 
-    def __init__(self, model, loss, config, device, train_loader, period=5, val_loader=None):
+    def __init__(self, model, loss, config, device, train_loader, period=-1, val_loader=None):
         self.model = model
         self.loss = loss
         self.device = config['device']
@@ -46,11 +46,12 @@ class Trainer(object):
         for e in range(1, config['trainer']['epochs']+1):
 
             ## set loss function parameter
-            if (e%(self.period) ==0) and (self.loss=='COTO'):
-                if np.random.randn() > 0.:
-                    loss_.lam = np.random.rand()
-                else:
-                    loss_.lam = 1.0 / np.random.rand()
+            if ((self.period > 0) and (e%(self.period) == 0) and (self.loss=='ensLoss')):
+                loss_.lam = np.random.rand()
+                # if np.random.randn() > 0.:
+                #     loss_.lam = np.random.rand()
+                # else:
+                #     loss_.lam = 1.0 / np.random.rand()
 
             #     now_acc_train = epoch_acc_train/len(self.train_loader)
             #     opt.tell([loss_.lam], -now_acc_train)

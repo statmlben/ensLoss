@@ -1,1 +1,1 @@
-from .tab_models import TabMLP1, TabMLP3, TabMLP5
+from .tab_models import TabMLP1, TabMLP3, TabMLP5, ResNet3, ResNet5, ResNet7

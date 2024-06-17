@@ -12,14 +12,19 @@ from sklearn.datasets import fetch_openml
 import os
 from torchvision.io import read_image
 import torchvision
+from torchtext.datasets import SST2
 
-## lib used for argumentation
+## lib used for image transform argumentation
 import glob
 from os.path import exists
 import copy
 from tqdm import tqdm
 from torchvision import transforms
 from PIL import Image
+
+## lib used for text transform
+import torchtext.transforms as T
+from torch.hub import load_state_dict_from_url
 # from albumentations import Normalize, Compose, Rotate, CenterCrop, HorizontalFlip, RandomScale, Flip, Resize, ShiftScaleRotate, \
 #     RandomCrop, IAAAdditiveGaussianNoise, ElasticTransform, HueSaturationValue, LongestMaxSize, RandomBrightnessContrast, Blur
 # from albumentations.pytorch import ToTensorV2
@@ -101,34 +106,25 @@ def sim_data(n=3000, d=200, random_state=0):
     return train_data, test_data
 
 ## image dataset
-def img_data(name='CIFAR35'):
+def img_data(name='CIFAR35', aug=False):
     if 'CIFAR' in name:
-        # ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
-        # 3 (cat) vs 5 (dog)
-        # 2 (bird) vs 4 (deer)
-        # 1 (automobile) vs 9 (truck)
+        # classes = ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+        # CIFAR35 = CIFAR2 (cat-dog) -> 3 (cat) vs 5 (dog)
         
-        ## image tranform
-        # transform_train = transforms.Compose([
-        #     transforms.RandomCrop(32, padding=4),
-        #     transforms.RandomHorizontalFlip(),
-        #     transforms.ToTensor(),
-        #     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        # ])
-
-        # transform_test = transforms.Compose([
-        #     transforms.ToTensor(),
-        #     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        # ])
-        
-        ## target binary class of the list
         binary_class_list = [int(name[-2]), int(name[-1])]
-
-        transform = transforms.Compose(
-                    [
-                    # transforms.ToPILImage(),
-                    transforms.ToTensor(),
-                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        if aug:
+            transform = transforms.Compose(
+                        [
+                        transforms.RandomCrop(32, padding=4),
+                        transforms.RandomHorizontalFlip(),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        else:
+            transform = transforms.Compose(
+                        [
+                        # transforms.ToPILImage(),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])            
 
         trainset = torchvision.datasets.CIFAR10(root='./dataset', train=True,
                                         download=False, transform=transform)
@@ -160,3 +156,48 @@ def img_data(name='CIFAR35'):
     else:
         raise Exception("Sorry, no dataset provided.") 
     return train_data, test_data
+
+## Text dataset
+def text_data(name='SST2', batch=64):
+    ## link: https://pytorch.org/text/stable/datasets.html#sst2
+    padding_idx = 1
+    bos_idx = 0
+    eos_idx = 2
+    max_seq_len = 256
+    xlmr_vocab_path = r"https://download.pytorch.org/models/text/xlmr.vocab.pt"
+    xlmr_spm_model_path = r"https://download.pytorch.org/models/text/xlmr.sentencepiece.bpe.model"
+
+    text_transform = T.Sequential(
+        T.SentencePieceTokenizer(xlmr_spm_model_path),
+        T.VocabTransform(load_state_dict_from_url(xlmr_vocab_path)),
+        T.Truncate(max_seq_len - 2),
+        T.AddToken(token=bos_idx, begin=True),
+        T.AddToken(token=eos_idx, begin=False),
+    )      
+
+    if name == 'SST2':
+        ## credict: https://pytorch.org/text/main/tutorials/sst2_classification_non_distributed.html
+        train_datapipe = SST2(root='./dataset/', split="train")
+        test_datapipe = SST2(root='./dataset/', split="test")
+
+
+        testset = torchvision.datasets.CIFAR10(root='./dataset', train=False,
+                                        download=False, transform=transform)
+        
+        # Transform the raw dataset using non-batched API (i.e apply transformation line by line)
+        def apply_transform(x):
+            return text_transform(x[0]), x[1]
+
+        train_datapipe = train_datapipe.map(apply_transform)
+        train_datapipe = train_datapipe.batch(batch_size)
+        train_datapipe = train_datapipe.rows2columnar(["token_ids", "target"])
+        train_dataloader = DataLoader(train_datapipe, batch_size=None)
+
+        test_datapipe = test_datapipe.map(apply_transform)
+        test_datapipe = test_datapipe.batch(batch_size)
+        test_datapipe = test_datapipe.rows2columnar(["token_ids", "target"])
+        test_dataloader = DataLoader(test_datapipe, batch_size=None)
+    else:
+        raise Exception("Sorry, no dataset provided.")
+        
+    return train_dataloader, test_dataloader
