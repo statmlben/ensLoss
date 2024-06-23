@@ -18,7 +18,7 @@ from torch.utils.data import DataLoader
 import img_models
 
 ## Train
-from train import Trainer
+from train import Trainer, Trainer_seq
 
 ## args; print config, figure, out
 import argparse
@@ -55,40 +55,24 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
         # X_batch, y_batch = next(dataiter)
 
         ## ensLoss ##
-        if 'ensLoss' in config['loss_list']:
-            model = getattr(img_models, config['model']['net'])(num_classes=1)
-            model.to(config['device'])
+        # if 'ensLoss' in config['loss_list']:
+        #     model = getattr(img_models, config['model']['net'])(num_classes=1)
+        #     model.to(config['device'])
 
-            if h==0:
-                ## print the model in the first trial
-                print(model)
+        #     if h==0:
+        #         ## print the model in the first trial
+        #         print(model)
 
-            print('\n-- TRAIN ensLoss --\n')
+        #     print('\n-- TRAIN ensLoss --\n')
             
-            trainer_ = Trainer(model=model, loss='ensLoss', period=config['ensLoss_per_epochs'],
-                                config=config, device=config['device'], 
-                                train_loader=train_loader, val_loader=test_loader)
-            path_, acc_test, auc_test = trainer_.train(path_)
-            Acc['trial'].append(h)
-            Acc['loss'].append('ensLoss')
-            Acc['test_acc'].append(acc_test)
-            Acc['test_auc'].append(auc_test)
-
-        
-        ## Focal loss ##
-        if 'Focal' in config['loss_list']:
-            print('\n-- TRAIN Focal --\n')
-            model = getattr(img_models, config['model']['net'])(num_classes=1)
-            model.to(config['device'])
-
-            trainer_ = Trainer(model=model, loss='BinFocal',
-                                config=config, device=config['device'],
-                                train_loader=train_loader, val_loader=test_loader)
-            path_, acc_test, auc_test = trainer_.train(path_)
-            Acc['trial'].append(h)
-            Acc['loss'].append('Focal')
-            Acc['test_acc'].append(acc_test)
-            Acc['test_auc'].append(auc_test)
+        #     trainer_ = Trainer(model=model, loss='ensLoss', period=config['ensLoss_per_epochs'],
+        #                         config=config, device=config['device'], 
+        #                         train_loader=train_loader, val_loader=test_loader)
+        #     path_, acc_test, auc_test = trainer_.train(path_)
+        #     Acc['trial'].append(h)
+        #     Acc['loss'].append('ensLoss')
+        #     Acc['test_acc'].append(acc_test)
+        #     Acc['test_auc'].append(auc_test)
 
         # BCE loss ##
         if 'BCE' in config['loss_list']:
@@ -96,12 +80,12 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
             model = getattr(img_models, config['model']['net'])(num_classes=1)
             model.to(config['device'])
 
-            trainer_ = Trainer(model=model, loss='BCELoss',
+            trainer_ = Trainer_seq(model=model, loss='BCELoss',
                                 config=config, device=config['device'],
                                 train_loader=train_loader, val_loader=test_loader)
             path_, acc_test, auc_test = trainer_.train(path_)
             Acc['trial'].append(h)
-            Acc['loss'].append('BCE')
+            Acc['loss'].append('BCE+ensLoss')
             Acc['test_acc'].append(acc_test)
             Acc['test_auc'].append(auc_test)
 
@@ -111,27 +95,12 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
             model = getattr(img_models, config['model']['net'])(num_classes=1)
             model.to(config['device'])
 
-            trainer_ = Trainer(model=model, loss='Hinge', 
+            trainer_ = Trainer_seq(model=model, loss='Hinge', 
                                 config=config, device=config['device'],
                                 train_loader=train_loader, val_loader=test_loader)
             path_, acc_test, auc_test = trainer_.train(path_)
             Acc['trial'].append(h)
-            Acc['loss'].append('Hinge')
-            Acc['test_acc'].append(acc_test)
-            Acc['test_auc'].append(auc_test)
-
-        # EXP loss ##
-        if 'EXP' in config['loss_list']:
-            print('\n-- TRAIN EXP --\n')
-            model = getattr(img_models, config['model']['net'])(num_classes=1)
-            model.to(config['device'])
-
-            trainer_ = Trainer(model=model, loss='EXP', 
-                                config=config, device=config['device'],
-                                train_loader=train_loader, val_loader=test_loader)
-            path_, acc_test, auc_test = trainer_.train(path_)
-            Acc['trial'].append(h)
-            Acc['loss'].append('EXP')
+            Acc['loss'].append('Hinge+ensLoss')
             Acc['test_acc'].append(acc_test)
             Acc['test_auc'].append(auc_test)
 
@@ -162,17 +131,20 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
     # fig.show()
 
     # Hypothesis Testing
-    p_less = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='less').round(5)
-    p_less = p_less[p_less['B'] == 'ensLoss']
+    try:
+        p_less = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='less').round(5)
+        p_less = p_less[p_less['B'] == 'ensLoss']
 
-    p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
-    p_greater = p_greater[p_greater['B'] == 'ensLoss']
+        p_greater = pairwise_ttest(df=Acc, val_col='test_acc', group_col='loss', alternative='greater').round(5)
+        p_greater = p_greater[p_greater['B'] == 'ensLoss']
 
-    p_less_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='less').round(5)
-    p_less_auc = p_less_auc[p_less_auc['B'] == 'ensLoss']
+        p_less_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='less').round(5)
+        p_less_auc = p_less_auc[p_less_auc['B'] == 'ensLoss']
 
-    p_greater_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='greater').round(5)
-    p_greater_auc = p_greater_auc[p_greater_auc['B'] == 'ensLoss']
+        p_greater_auc = pairwise_ttest(df=Acc, val_col='test_auc', group_col='loss', alternative='greater').round(5)
+        p_greater_auc = p_greater_auc[p_greater_auc['B'] == 'ensLoss']
+    except:
+        pass
 
     res_acc = Acc.groupby('loss').agg({'test_acc': ['mean', 'std']})
     res_acc[('test_acc', 'std')] /= np.sqrt(n_trials)
@@ -184,7 +156,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
 
     ## Save outcome
     orig_stdout = sys.stdout
-    out_file = open('out_img.txt', 'a+')
+    out_file = open('out_seq.txt', 'a+')
     sys.stdout = out_file
 
     print('\n#### %s - model: %s ####\n' %(filename, config['model']['net']))
@@ -239,8 +211,7 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     config = {
-            # 'loss_list': ['ensLoss', 'Focal', 'BCE', 'Hinge', 'EXP'],
-            'loss_list': ['EXP'],
+            'loss_list': ['BCE', 'Hinge'],
             'dataset' : args.filename,
             'model': {'net': args.net},
             'save_model': False,
@@ -269,5 +240,5 @@ if __name__=='__main__':
 # CIFAR10: https://www.cs.toronto.edu/~kriz/cifar.html
 # PCam: https://github.com/basveeling/pcam
 
-# python main_image.py -B=128 -e=100 -F="PCam" -R=5 --log
-# python main_image.py -B=128 -e=200 -F="CIFAR35" -N="VGG16" -R=5 --no-log
+# python main_seq.py -B=128 -e=100 -F="PCam" -R=5 --log
+# python main_seq.py -B=128 -e=200 -F="CIFAR35" -N="VGG16" -R=5 --no-log

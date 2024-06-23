@@ -12,7 +12,7 @@ from sklearn.datasets import fetch_openml
 import os
 from torchvision.io import read_image
 import torchvision
-from torchtext.datasets import SST2
+from torchtext.datasets import SST2, IMDB
 
 ## lib used for image transform argumentation
 import glob
@@ -25,9 +25,7 @@ from PIL import Image
 ## lib used for text transform
 import torchtext.transforms as T
 from torch.hub import load_state_dict_from_url
-# from albumentations import Normalize, Compose, Rotate, CenterCrop, HorizontalFlip, RandomScale, Flip, Resize, ShiftScaleRotate, \
-#     RandomCrop, IAAAdditiveGaussianNoise, ElasticTransform, HueSaturationValue, LongestMaxSize, RandomBrightnessContrast, Blur
-# from albumentations.pytorch import ToTensorV2
+import transformers
 
 ## Reproducibility
 torch.manual_seed(1024)
@@ -157,47 +155,117 @@ def img_data(name='CIFAR35', aug=False):
         raise Exception("Sorry, no dataset provided.") 
     return train_data, test_data
 
-## Text dataset
-def text_data(name='SST2', batch=64):
-    ## link: https://pytorch.org/text/stable/datasets.html#sst2
-    padding_idx = 1
-    bos_idx = 0
-    eos_idx = 2
-    max_seq_len = 256
-    xlmr_vocab_path = r"https://download.pytorch.org/models/text/xlmr.vocab.pt"
-    xlmr_spm_model_path = r"https://download.pytorch.org/models/text/xlmr.sentencepiece.bpe.model"
+# Transform the raw dataset using non-batched API (i.e apply transformation line by line)
+# def text_data(name='SST2', batch_size=128):
+#     train_datapipe = IMDB(split="train")
+#     test_datapipe = IMDB(split="test")
 
-    text_transform = T.Sequential(
-        T.SentencePieceTokenizer(xlmr_spm_model_path),
-        T.VocabTransform(load_state_dict_from_url(xlmr_vocab_path)),
-        T.Truncate(max_seq_len - 2),
-        T.AddToken(token=bos_idx, begin=True),
-        T.AddToken(token=eos_idx, begin=False),
-    )      
+#     train_loader = DataLoader(train_datapipe, 
+#                                  shuffle=True, batch_size=batch_size, 
+#                                  collate_fn=collate_batch)
+#     test_loader = DataLoader(test_datapipe, 
+#                                  batch_size=batch_size,
+#                                  collate_fn=collate_batch)
+#     return train_loader, test_loader
 
-    if name == 'SST2':
-        ## credict: https://pytorch.org/text/main/tutorials/sst2_classification_non_distributed.html
-        train_datapipe = SST2(root='./dataset/', split="train")
-        test_datapipe = SST2(root='./dataset/', split="test")
+# def collate_batch(batch):
+#     ids, types, masks, label_list = [], [], [], []
 
+#     tokenizer = transformers.AlbertTokenizer.from_pretrained("albert-base-v2", do_lower_case=True)
+#     max_input_length = 50
 
-        testset = torchvision.datasets.CIFAR10(root='./dataset', train=False,
-                                        download=False, transform=transform)
+#     for text, label in batch:
+#         tokenized = tokenizer(text,
+#                               padding="max_length", max_length=max_input_length,
+#                               truncation=True, return_tensors="pt")
+#         ids.append(tokenized['input_ids'])
+#         types.append(tokenized['token_type_ids'])
+#         masks.append(tokenized['attention_mask'])
+#         label_list.append(label)
+
+#     input_data = {
+#         "input_ids": torch.squeeze(torch.stack(ids)),
+#         "token_type_ids": torch.squeeze(torch.stack(types)),
+#         "attention_mask": torch.squeeze(torch.stack(masks))
+#     }
+#     label_list = torch.tensor(label_list, dtype=torch.int64)
+#     return input_data, label_list
+
+def text_data(tokenizer, name='SST2', max_seq_len=50):
+    data_path = "./dataset/SST2/"
+    train_df = pd.read_csv(os.path.join(data_path,"train.tsv"),sep='\t',
+                                        header=None, names=['similarity','s1'])
+    test_df = pd.read_csv(os.path.join(data_path,"test.tsv"),sep='\t',
+                                        header=None, names=['similarity','s1'])
+    train_data = DataPrecessForSentence(tokenizer, train_df, max_seq_len = max_seq_len)
+    test_data = DataPrecessForSentence(tokenizer, test_df, max_seq_len = max_seq_len)
+
+    return train_data, test_data
+
+class DataPrecessForSentence(Dataset):
+    """
+    Encoding sentences
+
+    Created on Mon Nov  2 14:24:49 2020
+
+    @author: Jiang Yuxin
+    https://github.com/YJiangcm/SST-2-sentiment-analysis/blob/master/data_sst2.py
+    """
+    
+    def __init__(self, bert_tokenizer, df, max_seq_len = 50):
+        super(DataPrecessForSentence, self).__init__()
+        self.bert_tokenizer = bert_tokenizer
+        self.max_seq_len = max_seq_len
+        self.input_ids, self.attention_mask, self.token_type_ids, self.labels = self.get_input(df)
         
-        # Transform the raw dataset using non-batched API (i.e apply transformation line by line)
-        def apply_transform(x):
-            return text_transform(x[0]), x[1]
+    def __len__(self):
+        return len(self.labels)
 
-        train_datapipe = train_datapipe.map(apply_transform)
-        train_datapipe = train_datapipe.batch(batch_size)
-        train_datapipe = train_datapipe.rows2columnar(["token_ids", "target"])
-        train_dataloader = DataLoader(train_datapipe, batch_size=None)
-
-        test_datapipe = test_datapipe.map(apply_transform)
-        test_datapipe = test_datapipe.batch(batch_size)
-        test_datapipe = test_datapipe.rows2columnar(["token_ids", "target"])
-        test_dataloader = DataLoader(test_datapipe, batch_size=None)
-    else:
-        raise Exception("Sorry, no dataset provided.")
+    def __getitem__(self, idx):
+        return self.input_ids[idx], self.attention_mask[idx], self.token_type_ids[idx], self.labels[idx]
         
-    return train_dataloader, test_dataloader
+    # Convert dataframe to tensor
+    def get_input(self, df):
+        sentences = df['s1'].values
+        labels = df['similarity'].values
+        
+        # tokenizer
+        tokens_seq = list(map(self.bert_tokenizer.tokenize, sentences)) # list of shape [sentence_len, token_len]
+        
+        # Get fixed-length sequence and its mask
+        result = list(map(self.trunate_and_pad, tokens_seq))
+        
+        input_ids = [i[0] for i in result]
+        attention_mask = [i[1] for i in result]
+        token_type_ids = [i[2] for i in result]
+        
+        return (
+               torch.Tensor(input_ids).type(torch.long), 
+               torch.Tensor(attention_mask).type(torch.long),
+               torch.Tensor(token_type_ids).type(torch.long), 
+               torch.Tensor(labels).type(torch.long)
+               )
+    
+    
+    def trunate_and_pad(self, tokens_seq):
+        
+        # Concat '[CLS]' at the beginning
+        tokens_seq = ['[CLS]'] + tokens_seq     
+        # Truncate sequences of which the lengths exceed the max_seq_len
+        if len(tokens_seq) > self.max_seq_len:
+            tokens_seq = tokens_seq[0 : self.max_seq_len]           
+        # Generate padding
+        padding = [0] * (self.max_seq_len - len(tokens_seq))       
+        # Convert tokens_seq to token_ids
+        input_ids = self.bert_tokenizer.convert_tokens_to_ids(tokens_seq)
+        input_ids += padding   
+        # Create attention_mask
+        attention_mask = [1] * len(tokens_seq) + padding     
+        # Create token_type_ids
+        token_type_ids = [0] * (self.max_seq_len)
+        
+        assert len(input_ids) == self.max_seq_len
+        assert len(attention_mask) == self.max_seq_len
+        assert len(token_type_ids) == self.max_seq_len
+        
+        return input_ids, attention_mask, token_type_ids

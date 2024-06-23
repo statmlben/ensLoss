@@ -15,10 +15,10 @@ from loader import openml_data, img_data, text_data
 from torch.utils.data import DataLoader
 
 ## models
-import text_models
+from text_models import trans_models
 
 ## Train
-from train import Trainer
+from train import Trainer, Trainer_txt
 
 ## args; print config, figure, out
 import argparse
@@ -28,6 +28,9 @@ from base import pairwise_ttest, line
 
 ## log to wandb
 import wandb
+
+## text models
+import transformers
 
 def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
@@ -41,23 +44,28 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
     np.random.seed(0)
 
     Acc = {'trial': [], 'loss': [], 'test_acc': [], 'test_auc': []}
-    path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
+    path_={'loss': [], 'epoch': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
-        train_loader, test_loader = text_data(name='SST2', batch=config['batch_size'])
-
-        ## ensLoss ##
-        model = getattr(img_models, config['model']['net'])(num_classes=1)
+        model = getattr(trans_models, config['model']['net'])()
         model.to(config['device'])
 
+        train_data, test_data = text_data(name='SST2', tokenizer=model.tokenizer)
+        train_loader = DataLoader(train_data, shuffle=True, batch_size=config['batch_size'])
+        test_loader = DataLoader(test_data, shuffle=False, batch_size=config['batch_size'])
+        ## get some random training data
+        # dataiter = iter(train_loader)
+        # X_batch, y_batch = next(dataiter)
+
+        ## ensLoss ##        
+        print('\n-- TRAIN ensLoss --\n')
+        
         if h==0:
             ## print the model in the first trial
             print(model)
-
-        print('\n-- TRAIN ensLoss --\n')
         
-        trainer_ = Trainer(model=model, loss='ensLoss', 
+        trainer_ = Trainer_txt(model=model, loss='ensLoss', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
@@ -68,10 +76,11 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
         ## BCE loss ##
         print('\n-- TRAIN BCE --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1)
+        model = getattr(trans_models, config['model']['net'])()
+        # model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='BCELoss',
+        trainer_ = Trainer_txt(model=model, loss='BCELoss',
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
@@ -80,12 +89,32 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
-        ## Hinge loss ##
-        print('\n-- TRAIN Hinge --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1)
+        ## BCE+ensLoss loss ##
+        print('\n-- TRAIN BCE + ensLoss --\n')
+        model = getattr(trans_models, config['model']['net'])()
+        # model = getattr(img_models, config['model']['net'])(num_classes=1)
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='Hinge', 
+        trainer_ = Trainer_txt(model=model, loss='BCELoss',
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader, 
+                            seq_epoch=int(config['trainer']['epochs']*0.6))
+        
+        path_, acc_test, auc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('BCE+ensLoss')
+        Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
+
+        ## Hinge loss ##
+        print('\n-- TRAIN Hinge --\n')
+        model = getattr(trans_models, config['model']['net'])()
+        # model = getattr(transformers, config['model']['net']).from_pretrained(config['model']['pretrain'], 
+        #                                                                     num_labels=1, 
+        #                                                                     return_dict=True)
+        model.to(config['device'])
+
+        trainer_ = Trainer_txt(model=model, loss='Hinge', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
@@ -94,12 +123,27 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
-        ## EXP loss ##
-        print('\n-- TRAIN EXP --\n')
-        model = getattr(img_models, config['model']['net'])(num_classes=1)
+        ## Hinge + ensLoss loss ##
+        print('\n-- TRAIN Hinge + ensLoss --\n')
+        model = getattr(trans_models, config['model']['net'])()
         model.to(config['device'])
 
-        trainer_ = Trainer(model=model, loss='EXP', 
+        trainer_ = Trainer_txt(model=model, loss='Hinge+ensLoss', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader,
+                            seq_epoch=int(config['trainer']['epochs']*0.6))
+        path_, acc_test, auc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('Hinge+ensLoss')
+        Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
+
+        ## EXP loss ##
+        print('\n-- TRAIN EXP --\n')
+        model = getattr(trans_models, config['model']['net'])()
+        model.to(config['device'])
+
+        trainer_ = Trainer_txt(model=model, loss='EXP', 
                             config=config, device=config['device'],
                             train_loader=train_loader, val_loader=test_loader)
         path_, acc_test, auc_test = trainer_.train(path_)
@@ -108,11 +152,25 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
         Acc['test_acc'].append(acc_test)
         Acc['test_auc'].append(auc_test)
 
+        ## EXP+ensLoss loss ##
+        print('\n-- TRAIN EXP+ensLoss --\n')
+        model = getattr(trans_models, config['model']['net'])()
+        model.to(config['device'])
+
+        trainer_ = Trainer_txt(model=model, loss='EXP+ensLoss', 
+                            config=config, device=config['device'],
+                            train_loader=train_loader, val_loader=test_loader,
+                            seq_epoch=int(config['trainer']['epochs']*0.6))
+        path_, acc_test, auc_test = trainer_.train(path_)
+        Acc['trial'].append(h)
+        Acc['loss'].append('EXP+ensLoss')
+        Acc['test_acc'].append(acc_test)
+        Acc['test_auc'].append(auc_test)
+
     path_ = pd.DataFrame(path_)
     Acc = pd.DataFrame(Acc)
     
     # Plot
-    path_ = path_.drop('train_loss', axis=1)
     mean_pd = path_.groupby(['epoch', 'loss'], as_index=False).mean()
     mean_pd = mean_pd.melt(id_vars=['epoch', 'loss'], var_name='type', value_name='mean')
     std_pd = path_.groupby(['epoch', 'loss'], as_index=False).std()
@@ -184,15 +242,17 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
 
 if __name__=='__main__':
     # PARSE THE ARGS
-    parser = argparse.ArgumentParser(description='eLOTO Training')
+    parser = argparse.ArgumentParser(description='ensLoss Training')
     parser.add_argument('-B', '--batch', default=128, type=int,
                            help='batch size of the training set')
     parser.add_argument('-e', '--epoch', default=200, type=int,
                            help='number of epochs to train')
-    parser.add_argument('-F', '--filename', default="CIFAR", type=str,
+    parser.add_argument('-F', '--filename', default="SST2", type=str,
                            help='filename of the dataset')
-    parser.add_argument('-N', '--net', default="ResNet50", type=str,
-                           help='the neural net of the classification')
+    parser.add_argument('-N', '--net', default="AlbertModel", type=str,
+                           help='the transformer model of the text classification')
+    parser.add_argument('-PT', '--pretrain', default="albert-base-v1", type=str,
+                           help='the pre-trained models for transformer')
     parser.add_argument('-R', '--n_trials', default=5, type=int,
                            help='number of trials for the experiments')
     parser.add_argument('--log', default=True, action=argparse.BooleanOptionalAction,
@@ -201,18 +261,23 @@ if __name__=='__main__':
 
     config = {
             'dataset' : args.filename,
-            'model': {'net': 'ResNet50'},
-            'save_model': True,
+            'model': {'net': 'AlbertModel', 'pretrain': 'albert-base-v2'},
+            'save_model': False,
             'batch_size': args.batch,
-            'trainer': {'epochs': args.epoch, 'val_per_epochs': 5},
-            'optimizer': {'lr': 1e-3, 'type': 'SGD', 
-                          'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+            'ensLoss_per_epochs': -1,
+            'trainer': {'epochs': args.epoch, 'val_per_epochs': 2},
+            'optimizer': {'lr': 2e-5, 'type': 'AdamW', 'weight_decay': 5e-5,
+                        #   'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+                          'lr_scheduler': 'ReduceLROnPlateau',
+                          'args': {'mode': "max", 'factor': 0.85, 'patience': 0}},
+                        #   'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
     n_trials = args.n_trials
     wandb_log = args.log
     config['model']['net'] = args.net
+    config['model']['pretrain'] = args.pretrain
 
     ## for a binary classification dataset
     main(config=config, filename=filename, n_trials=n_trials, wandb_log=wandb_log)
@@ -222,8 +287,14 @@ if __name__=='__main__':
 # https://github.com/Doragd/Text-Classification-PyTorch
 # https://pytorch.org/text/main/tutorials/sst2_classification_non_distributed.html
 
-# IMDB
-# https://github.com/JustinCharbonneau/IMDB-Sentiment-Benchmark
+# python main_text.py -e=30 -N="AlbertForSequenceClassification" -PT='albert-base-v2' -F="SST2" -R=5 --no-log
 
+## Candidate Models and Pretrain
+# BertForSequenceClassification + bert-base-uncased
+# AlbertForSequenceClassification + albert-base-v2
+# FlaubertForSequenceClassification + flaubert/flaubert_small_cased
 
-# python main_image.py -B=128 -e=100 -F="SST2" -R=5 --log
+## References
+## pre-train models: https://huggingface.co/transformers/v3.3.1/pretrained_models.html
+## pytorch-sentiment-classification  https://github.com/clairett/pytorch-sentiment-classification
+## other small models: https://github.com/FreedomIntelligence/TextClassificationBenchmark

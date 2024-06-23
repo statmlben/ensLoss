@@ -29,11 +29,11 @@ class ensLoss(nn.Module):
     def forward(self, output, target):
         target = 2.*target - 1.
         batch_size_tmp = len(target)
-        s_batch = torch.zeros(batch_size_tmp+1)
-        s_batch[:-1] = output.flatten()*target.flatten()
+        s_batch = torch.zeros(batch_size_tmp)
+        s_batch = output.flatten()*target.flatten()
 
         ## generate random gradient
-        g_num = batch_size_tmp + 1
+        g_num = batch_size_tmp
         g_batch = torch.zeros(g_num)
         
         # sample from dist
@@ -46,16 +46,18 @@ class ensLoss(nn.Module):
         rd_grad = np.maximum(rd_grad, -1.0)
         _, ind_tmp = torch.sort(s_batch)
         g_batch[ind_tmp] = rd_grad
+        g_batch = g_batch.to("cuda")
 
         ## superlinear tail of the loss-derivatives
-        pos_ind = s_batch > 1.0
-        if len(s_batch[pos_ind]) > 0:
-            g_batch[pos_ind] *= (1 / s_batch[pos_ind] ).detach()
+        s_batch_no_grad = s_batch.detach()
+        pos_ind = (s_batch_no_grad > 1.0)
+        if len(s_batch_no_grad[pos_ind]) > 0:
+            g_batch[pos_ind] *= (1 / s_batch_no_grad[pos_ind] )
         
         g_batch = g_batch.detach() - 1e-6
 
         ## final gradient
-        loss = g_batch[:-1] * s_batch[:-1]
+        loss = g_batch * s_batch
         loss = loss.mean()
         return loss
 
