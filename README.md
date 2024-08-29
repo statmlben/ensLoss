@@ -1,4 +1,4 @@
-# 🔂 Ensemble SGD via Stochastic Classification-Calibrated Losses
+# 🔂 *ensLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification
 ecSGD (ensemble calibrated SGD) is a ensemble method bagging random classification surrogate losses.
 
 ## Results
