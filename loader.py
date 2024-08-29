@@ -13,7 +13,8 @@ import os
 from torchvision.io import read_image
 import torchvision
 from torchtext.datasets import SST2, IMDB
-
+from torchtext.vocab import Vectors, GloVe, CharNGram, FastText
+import torchtext
 ## lib used for image transform argumentation
 import glob
 from os.path import exists
@@ -150,7 +151,22 @@ def img_data(name='CIFAR35', aug=False):
                                 download=True, transform=transform)
         test_data = torchvision.datasets.PCAM(root='./dataset', split="test",
                                        download=True, transform=transform)
-        pass
+
+    elif 'FER' in name:
+        binary_class_list = [int(name[-2]), int(name[-1])]
+        transform = transforms.Compose(
+            [
+            # transforms.ToPILImage(),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+        train_data = torchvision.datasets.FER2013(root='./dataset', split="train", transform=transform)
+        train_index = [i for i, t in enumerate(train_data.targets) if (t in binary_class_list)]
+        train_data = torch.utils.data.Subset(trainset, train_index)
+        
+        test_data = torchvision.datasets.FER2013(root='./dataset', split="val",
+                                       download=False, transform=transform)
+        
     else:
         raise Exception("Sorry, no dataset provided.") 
     return train_data, test_data
@@ -193,10 +209,8 @@ def img_data(name='CIFAR35', aug=False):
 
 def text_data(tokenizer, name='SST2', max_seq_len=50):
     data_path = "./dataset/SST2/"
-    train_df = pd.read_csv(os.path.join(data_path,"train.tsv"),sep='\t',
-                                        header=None, names=['similarity','s1'])
-    test_df = pd.read_csv(os.path.join(data_path,"test.tsv"),sep='\t',
-                                        header=None, names=['similarity','s1'])
+    train_df = pd.read_csv(os.path.join(data_path,"train.tsv"),sep='\t')
+    test_df = pd.read_csv(os.path.join(data_path,"dev.tsv"),sep='\t')
     train_data = DataPrecessForSentence(tokenizer, train_df, max_seq_len = max_seq_len)
     test_data = DataPrecessForSentence(tokenizer, test_df, max_seq_len = max_seq_len)
 
@@ -226,8 +240,8 @@ class DataPrecessForSentence(Dataset):
         
     # Convert dataframe to tensor
     def get_input(self, df):
-        sentences = df['s1'].values
-        labels = df['similarity'].values
+        sentences = df['sentence'].values
+        labels = df['label'].values
         
         # tokenizer
         tokens_seq = list(map(self.bert_tokenizer.tokenize, sentences)) # list of shape [sentence_len, token_len]
@@ -245,7 +259,6 @@ class DataPrecessForSentence(Dataset):
                torch.Tensor(token_type_ids).type(torch.long), 
                torch.Tensor(labels).type(torch.long)
                )
-    
     
     def trunate_and_pad(self, tokens_seq):
         

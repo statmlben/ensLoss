@@ -41,7 +41,7 @@ def main(config, data_id=43969, n_trials=5, wandb_log=True):
     np.random.seed(0)
 
     Acc = {'trial': [], 'loss': [], 'test_acc': [], 'test_auc': []}
-    path_={'loss': [], 'epoch': [], 'train_loss': [], 'train_acc': [], 'test_acc': []}
+    path_={'loss': [], 'epoch': [], 'train_acc': [], 'test_acc': []}
 
     for h in range(n_trials):
 
@@ -111,7 +111,6 @@ def main(config, data_id=43969, n_trials=5, wandb_log=True):
     Acc = pd.DataFrame(Acc)
     
     # Plot
-    path_ = path_.drop('train_loss', axis=1)
     mean_pd = path_.groupby(['epoch', 'loss'], as_index=False).mean()
     mean_pd = mean_pd.melt(id_vars=['epoch', 'loss'], var_name='type', value_name='mean')
     std_pd = path_.groupby(['epoch', 'loss'], as_index=False).std()
@@ -221,10 +220,10 @@ if __name__=='__main__':
             'model': {'net': args.net, 'args': {}},
             'batch_size': args.batch,
             'save_model': False,
-            'ensLoss_per_epochs': 20,
+            'ensLoss_per_epochs': -1,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
             # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
-            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 0.0, 
+            'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-6, 
                           'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
@@ -234,18 +233,22 @@ if __name__=='__main__':
 
     main(config=config, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
 
-# python main_tab.py -B=128 -e=300 -ID=44157 -N='TabMLP3' -R=5 --no-log
+# python main_tab.py -B=128 -e=300 -ID=1142 -N='TabMLP1' -R=5 --no-log
 
-# Tabular data learning benchmark (MLP:1e-4)
-# electricity (45.3k x 9): 44120 (bad)
-# house_16H (13.5k x 17): 44123 (good)
-# phoneme (3.17k x 6): 43973 (fair)
-# MiniBooNE (72998, 50): 44128 (good)
-# MagicTelescope (13376, 10): 44125 (good)
-# higgs (98k x 29): 23512 (slightly good)
-# eye_movements (7.61k x 24): 44157 (slightly good)
-# jannis (57.6k x 55): 45021 (slightly good)
-# credit (16.7k x 11): 45024 (good)
-# california (20.6k x 9): 45025 (good)
+## experiment on Aug 14
+# Bioresponse: 4134
+# guillermo: 41159
+# riccardo: 41161
+# hiva_agnostic: 1039
+# christine: 41142
 
-
+## OVA Datasets
+# OVA_Breast: 1128
+# OVA_Uterus: 1138
+# OVA_Ovary: 1166
+# OVA_Kidney: 1134
+# OVA_Lung: 1130
+# OVA_Omentum: 1139
+# OVA_Colon: 1161
+# OVA_Endometrium: 1142
+# OVA_Prostate: 1146

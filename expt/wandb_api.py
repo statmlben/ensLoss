@@ -46,7 +46,7 @@ def find_record(runs, condition=['CIFAR']):
 def sum_perf(df):
     return df.groupby(['dataset', 'model', 'loss'], as_index=False)[['test_acc', 'test_auc']].agg(['mean', 'std'])
 
-## Performance
+## Image Performance
 df, test_df = find_record(runs, condition=['CIFAR35', 'VGG'])
 perf = sum_perf(df)
 

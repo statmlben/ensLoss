@@ -188,25 +188,25 @@ class Trainer_txt(object):
         
         config = self.config
 
-        param_optimizer = list(self.model.named_parameters())
-        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-        optimizer_grouped_parameters = [
-                {
-                        'params':[p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],
-                        'weight_decay':0.01
-                },
-                {
-                        'params':[p for n, p in param_optimizer if any(nd in n for nd in no_decay)],
-                        'weight_decay':0.0
-                }
-        ]
+        # param_optimizer = list(self.model.named_parameters())
+        # no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+        # optimizer_grouped_parameters = [
+        #         {
+        #                 'params':[p for n, p in param_optimizer if not any(nd in n for nd in no_decay)],
+        #                 'weight_decay':0.01
+        #         },
+        #         {
+        #                 'params':[p for n, p in param_optimizer if any(nd in n for nd in no_decay)],
+        #                 'weight_decay':0.0
+        #         }
+        # ]
 
         loss_ = getattr(losses, self.loss)()
-        # optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), 
-        #                                                              lr=config['optimizer']['lr'], 
-        #                                                              weight_decay=config['optimizer']['weight_decay'])
-        optimizer = getattr(torch.optim, config['optimizer']['type'])(optimizer_grouped_parameters, 
-                                                                     lr=config['optimizer']['lr'])
+        optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), 
+                                                                     lr=config['optimizer']['lr'], 
+                                                                     weight_decay=config['optimizer']['weight_decay'])
+        # optimizer = getattr(torch.optim, config['optimizer']['type'])(optimizer_grouped_parameters, 
+        #                                                              lr=config['optimizer']['lr'])
         scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, **config['optimizer']['args'])
         
         # opt = Optimizer([(0.0, 10.0)], "GP", 
@@ -258,7 +258,8 @@ class Trainer_txt(object):
                 tbar.set_description('TRAIN ({}) SGD({}) LR({:.2E}) | Acc: {:.3f}'.format(
                         e, self.loss, optimizer.param_groups[0]["lr"], epoch_acc_train))
             
-            scheduler.step(epoch_acc_train)
+            # scheduler.step(epoch_acc_train)
+            scheduler.step()
 
             # EVALUATION
             if e%(config['trainer']['val_per_epochs'])==0:
