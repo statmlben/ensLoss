@@ -172,7 +172,7 @@ To execute the methods on a dataset, use the following command:
 python main_text.py -F="SST2"
 ```
 
-The runing configuration is included in `main_img.py`, with the default settings as follows:
+The runing configuration is included in `main_text.py`, with the default settings as follows:
 ```python
 config = {
         'dataset' : args.filename,
