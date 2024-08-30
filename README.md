@@ -6,6 +6,8 @@ In this project, we propose a novel loss ensemble method, namely **EnsLoss**, wh
 
 This repo describes a set of experiments that demonstrate the performance of the proposed **EnsLoss** method compared with existing methods based on a *fixed loss function*, and also assess its *compatibility* with other regularization methods.
 
+![overview](./fig/overview.png)
+
 ## Motivation
 
 ### {ensemble + CC} losses in SGD
