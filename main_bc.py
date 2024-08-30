@@ -1,4 +1,4 @@
-"""ensLoss in image datasets"""
+"""ensLoss with different invBC periods"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License

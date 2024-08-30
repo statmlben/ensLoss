@@ -1,4 +1,4 @@
-""" ensLoss:  """
+""" ensLoss: train.py"""
 
 # Authors: Ben Dai <bendai@cuhk.edu.hk>
 # License: MIT License
