@@ -1,5 +1,32 @@
-# 🔂 *ensLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification
-ecSGD (ensemble calibrated SGD) is a ensemble method bagging random classification surrogate losses.
+# 🔂 *EnsLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification
+
+Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for classification. Notably, the surrogate loss is not arbitrary, typically requiring *convexity* and *calibration* (CC) properties to ensure consistency in maximizing accuracy. 
+
+In this project, we propose a novel loss ensemble method, namely **EnsLoss**, which extends the ensemble learning concept to combine losses within the ERM framework. Unlike existing ensemble methods, our method distinctively preserves the "*legitimacy*" of the combined losses, i.e., ensuring the CC properties.
+
+This repo describes a set of experiments that demonstrate the performance of the proposed **EnsLoss** method compared with existing methods based on a *fixed loss function*, and also assess its *compatibility* with other regularization methods.
+
+## Motivation
+
+### {ensemble + CC} in SGD
+The primary motivation behind consists of two components: **ensemble** and the **calibration** (CC conditions) of the loss functions.
+
+| **SGD + Fixed Loss**                                       | **SGD + Ensemble Loss (EnsLoss; our)**                      |
+|-----------------------------------------------------------|-------------------------------------------------------------|
+| **For each iteration:**                                   | **For each iteration:**                                     |
+| - Minibatch sampling from a training set;                | - Minibatch sampling from a training set;                  |
+| - Implement SGD based on batch samples and a fixed       | - Randomly generate a new "**valid**" surrogate loss;         |
+|   surrogate loss.                                        | - Implement SGD based on batch samples and the generated   |
+|                                                           |   surrogate loss.                                          |
+
+### CC losses | CC loss-derivatives
+
+The key observation of SGD is that the *impact of the loss function $\phi$ on SGD is solely reflected in its loss-derivative $\partial \phi$*. We only need to generate the valid loss derivatives; refer to the following figure illustrating the transformation of the CC conditions of losses into loss-derivatives.
+
+![CC](./fig/ensLoss_CC.png)
+
+Hence, it allows us to bypass the generation of loss and directly generate the loss-derivatives in SGD, thereby inspires *doubly stochastic gradients* (i.e., random batch samples and random calibrated loss-derivatives) of our Algorithm.
+
 
 ## Results
 
