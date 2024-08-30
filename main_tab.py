@@ -202,7 +202,7 @@ if __name__=='__main__':
     #                        help='width of the neural network')
     parser.add_argument('-B', '--batch', default=128, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=500, type=int,
+    parser.add_argument('-e', '--epoch', default=300, type=int,
                            help='number of epochs to train')
     parser.add_argument('-ID', '--data_id', default=43969, type=int,
                            help='data_id of the dataset')
@@ -216,13 +216,11 @@ if __name__=='__main__':
 
     config = {
             'dataset' : args.data_id,
-            # 'model': {'net': args.net, 'args': {'H': 256}},
             'model': {'net': args.net, 'args': {}},
             'batch_size': args.batch,
             'save_model': False,
             'ensLoss_per_epochs': -1,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-            # 'optimizer': {'lr': 1e-4, 'type': 'Adam', 'lr_scheduler': 'ConstantLR', 'args': {'factor': 1./3, 'total_iters': 1}},
             'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-6, 
                           'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
