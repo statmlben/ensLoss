@@ -21,7 +21,7 @@ The key observation of SGD is that the *impact of the loss function $\phi$ on SG
 
 Hence, it allows us to bypass the generation of loss and directly generate the loss-derivatives in SGD, thereby inspires *doubly stochastic gradients* (i.e., random batch samples and random calibrated loss-derivatives) of our Algorithm.
 
-## Overview of the Experiment
+## Overview of the Experiments
 
 Different **loss functions** can be integrated with **various neural networks** and **regularization methods** to tackle the classification problem across **diverse datasets**. In order to compare the advantages of our proposed method, we have provided reproducible benchmark code and results in this repository.
 
@@ -86,6 +86,8 @@ This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/).
 | OVA-Prostate      | 1146        | (1.54, 10.9)      |
 
 ### Replicating Benchmark
+![tab_benchmark](./fig/tab_benchmark.png)
+
 To replicate the benchmark results presented in our paper, please use the following command:
 ```bash
 bash ./sh_files/runs_tab.sh
@@ -121,6 +123,8 @@ This benchmark contains two image datasets: [CIFAR10](https://www.cs.toronto.edu
 - **PCam.** The PCam dataset is an image binary classification dataset consisting of 327,680 96x96 color images derived from histopathologic scans of lymph node sections, with each image annotated with a binary label indicating the presence or absence of metastatic tissue.
 
 ### Replicating Benchmark
+![img_benchmark](./fig/img_benchmark.png)
+
 To replicate the benchmark results presented in our paper, please use the following command:
 ```bash
 bash ./sh_files/runs_cifar_mobilenet.sh
@@ -155,7 +159,7 @@ config = {
 ```
 To customize your experiment, please adjust the parameters in `argument` and `config`.
 
-> Note that the results regarding the compatibility of existing overfitting prevention methods in our paper can also be replicated with customized runs.
+> Note that the results regarding the compatibility of existing overfitting prevention methods in our paper can also be replicated with customized runs, see [main_reg.py](./main_reg.py).
 
 
 ## Benchmarks for Text Data
