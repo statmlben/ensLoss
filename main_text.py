@@ -253,9 +253,9 @@ def main(config, filename='SST2', n_trials=5, wandb_log=False):
 if __name__=='__main__':
     # PARSE THE ARGS
     parser = argparse.ArgumentParser(description='ensLoss Training')
-    parser.add_argument('-B', '--batch', default=128, type=int,
+    parser.add_argument('-B', '--batch', default=32, type=int,
                            help='batch size of the training set')
-    parser.add_argument('-e', '--epoch', default=200, type=int,
+    parser.add_argument('-e', '--epoch', default=50, type=int,
                            help='number of epochs to train')
     parser.add_argument('-F', '--filename', default="SST2", type=str,
                            help='filename of the dataset')
@@ -271,16 +271,13 @@ if __name__=='__main__':
 
     config = {
             'dataset' : args.filename,
-            'model': {'net': 'AlbertModel'},
+            'model': {'net': 'BiLSTM'},
             'save_model': False,
             'batch_size': args.batch,
             'ensLoss_per_epochs': -1,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 5},
             'optimizer': {'lr': 2e-5, 'type': 'AdamW', 'weight_decay': 1e-5,
                           'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
-                        #   'lr_scheduler': 'ReduceLROnPlateau',
-                        #   'args': {'mode': "max", 'factor': 0.85, 'patience': 0}},
-                        #   'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename

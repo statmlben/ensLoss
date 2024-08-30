@@ -28,9 +28,9 @@ Different **loss functions** can be integrated with **various neural networks** 
 This repository supports:
 
 - **Data Modes**
-  - Tabular data ([main_tab.py](./main_tab.py))
-  - Image data ([main_img.py](./main_image.py))
-  - Text data ([main_text.py](./main_text.py))
+  - [x] Tabular data ([main_tab.py](./main_tab.py))
+  - [x] Image data ([main_img.py](./main_image.py))
+  - [ ] Text data ([main_text.py](./main_text.py))
 
 - **Loss** ([losses.py](./losses.py))
   - [x] `ensLoss` (our method)
@@ -52,7 +52,19 @@ This repository supports:
   - [x] `weight_decay`
   - [x] `data augumentation` in [CIFAR](./loader.py) 
 
-## Benchmarks for Tabular data
+Our running results are publicly available in both our W&B projects and this GitHub repository.
+- **W&B projects**
+  - [x] [ensLoss-tab](https://wandb.ai/bdai/ensLoss-tab?nw=nwuserbdai)
+  - [x] [ensLoss-img](https://wandb.ai/bdai/ensLoss-img?nw=nwuserbdai)
+  - [x] [ensLoss-txt](https://wandb.ai/bdai/ensLoss-txt?nw=nwuserbdai)
+- **Markdown reports**
+  - [x] [out_tab](./out/out_tab.md)
+  - [x] [out_cifar](./out/out_cifar.md)
+  - [x] [out_pcam](./out/out_pcam.md)
+  - [x] [out_text](./out/out_text.md)
+  - [x] [out_reg](./out/out_reg.md)
+
+## Benchmarks for Tabular Data
 
 This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/). These datasets were selected based on the following filtering criteria: `verified`, `>1000 instances`, `>1000 features`, `binary class`, `dense`, and with at least one official run. The resulting datasets can be found [here](https://www.openml.org/search?type=data&sort=runs&status=active&qualities.NumberOfInstances=between_1000_10000&qualities.NumberOfFeatures=between_1000_10000&qualities.NumberOfClasses=%3D_2&format=ARFF):
 
@@ -73,12 +85,12 @@ This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/).
 | OVA-Endometrium   | 1142        | (1.54, 10.9)      |
 | OVA-Prostate      | 1146        | (1.54, 10.9)      |
 
-### Replicating Restuls
+### Replicating Benchmark
 To replicate the benchmark results presented in our paper, please use the following command:
 ```bash
 bash ./sh_files/runs_tab.sh
 ``` 
-Our runing results are publicly avaliable in our W\&B project [ensLoss-tab](https://wandb.ai/bdai/ensLoss-tab?nw=nwuserbdai).
+Our runing results are publicly avaliable in our W\&B project [ensLoss-tab](https://wandb.ai/bdai/ensLoss-tab?nw=nwuserbdai) and the markdown report [out_tab](./out/out_tab.md).
 
 ### Customize the Run 
 To execute the methods on a dataset, use the following command:
@@ -99,46 +111,82 @@ config = {
                         'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 300}},
         'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 ```
-To customize your experiment, please adjust the parameters in the configuration file.
+To customize your experiment, please adjust the parameters in `argument` and `config`.
 
-### Benchmarks for Image data
+## Benchmarks for Image Data
 
-Benchmarks for Image data contain two dataset: [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html) and [PCam](https://github.com/basveeling/pcam).
+This benchmark contains two image datasets: [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html) and [PCam](https://github.com/basveeling/pcam).
 
-- We adopted the MHIST dataloader from (https://github.com/srinidhiPY/ICCV-CDPATH2021-ID-8). 
+- **CIFAR.** The CIFAR10 dataset was originally designed for multiclass image classification. In our study, we construct (10 x 9) / 2 = 45 binary CIFAR datasets, denoted as CIFAR2, by selecting all possible pairs of two classes from the CIFAR10 dataset, which enables the evaluation of our method. 
+- **PCam.** The PCam dataset is an image binary classification dataset consisting of 327,680 96x96 color images derived from histopathologic scans of lymph node sections, with each image annotated with a binary label indicating the presence or absence of metastatic tissue.
 
-To run the benchmarks available use the following command:
+### Replicating Benchmark
+To replicate the benchmark results presented in our paper, please use the following command:
+```bash
+bash ./sh_files/runs_cifar_mobilenet.sh
+bash ./sh_files/runs_cifar_resnet.sh
+bash ./sh_files/runs_cifar_vgg.sh
+bash ./sh_files/runs_pcam.sh
+``` 
+Our runing results are publicly avaliable in our W\&B project [ensLoss-img](https://wandb.ai/bdai/ensLoss-img?nw=nwuserbdai) and the markdown report [out_cifar](./out/out_cifar.md) and [out_pcam](./out/out_pcam.md).
 
+### Customize the Run 
+To execute the methods on a dataset, use the following command:
 ```bash
 ## run for CIFAR
-python main_image.py -B=128 -e=200 -F="CIFAR" -R=3 --no-log
+python main_image.py -F="CIFAR35"
 ## run for PCam
-python main_image.py -B=128 -e=100 -F="PCam" -R=3 --no-log
+python main_image.py -F="PCam"
 ```
+> Note that `CIFAR{u}{v}` represents the pairwise CIFAR dataset containing labels {u} and {v}.
 
-The network config is included in `main_image.py`, and the default setting is:
-
+The runing configuration is included in `main_img.py`, with the default settings as follows:
 ```python
 config = {
-        'model': {'net': 'VGG', 'args': {'vgg_name': 'VGG19'}},
-        'batch_size': args.batch,
-        'trainer': {'epochs': args.epoch, 'val_per_epochs': 10}, 
-        'optimizer': {'lr': 1e-3, 'type': 'SGD', 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
+        'loss_list': ['ensLoss', 'Focal', 'BCE', 'Hinge', 'EXP'],
+        'dataset' : 'CIFAR',
+        'model': {'net': 'ResNet50'},
+        'save_model': False,
+        'batch_size': 128,
+        'ensLoss_per_epochs': -1,
+        'trainer': {'epochs': 200, 'val_per_epochs': 5},
+        'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 5e-4, 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 200}},
         'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 ```
-If you need to switch networks, please modify the parameters in the config.
+To customize your experiment, please adjust the parameters in `argument` and `config`.
 
-### Model list
+> Note that the results regarding the compatibility of existing overfitting prevention methods in our paper can also be replicated with customized runs.
 
-- ResNet18, ResNet34, ResNet50, ResNet101, ResNet152
-- DenseNet121, DenseNet169, DenseNet201, DenseNet161
-- MobileNet, MobileNetV2
-- VGG11, VGG13, VGG16, VGG19
+
+## Benchmarks for Text Data
+This benchmark contains one text datasets: [GLUE-SST2](https://huggingface.co/datasets/nyu-mll/glue).
+
+> Currently, the majority of NLP learning employs fine-tuning (often just a few epochs) from large pretrained models. Consequently, `ensLoss` that require extensive epoch training, are not particularly suitable. Therefore, we did not focus on NLP results in this paper; however, we conducted some preliminary experiments.
+
+To execute the methods on a dataset, use the following command:
+```bash
+python main_text.py -F="SST2"
+```
+
+The runing configuration is included in `main_img.py`, with the default settings as follows:
+```python
+config = {
+        'dataset' : args.filename,
+        'model': {'net': 'BiLSTM'},
+        'save_model': False,
+        'batch_size': 32,
+        'ensLoss_per_epochs': -1,
+        'trainer': {'epochs': 50, 'val_per_epochs': 5},
+        'optimizer': {'lr': 2e-5, 'type': 'AdamW', 'weight_decay': 1e-5,
+                        'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+        'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
+```
+To customize your experiment, please adjust the parameters in `argument` and `config`.
+
 
 ## References
-
+- [OpenML](https://www.openml.org/)
+- [Pytorch.data](https://pytorch.org/tutorials/beginner/basics/data_tutorial.html)
 - [Train CIFAR10 with PyTorch](https://github.com/kuangliu/pytorch-cifar)
-
-## More obs
-
-
+- [huggingface.transformers](https://huggingface.co/transformers/v3.3.1/index.html)
+- [GLUE benchmark](https://gluebenchmark.com/leaderboard)

@@ -240,7 +240,6 @@ if __name__=='__main__':
 
     config = {
             'loss_list': ['ensLoss', 'Focal', 'BCE', 'Hinge', 'EXP'],
-            # 'loss_list': ['ensLoss', 'EXP'],
             'dataset' : args.filename,
             'model': {'net': args.net},
             'save_model': False,
