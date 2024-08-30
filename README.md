@@ -8,16 +8,10 @@ This repo describes a set of experiments that demonstrate the performance of the
 
 ## Motivation
 
-### {ensemble + CC} in SGD
+### {ensemble + CC} losses in SGD
 The primary motivation behind consists of two components: **ensemble** and the **calibration** (CC conditions) of the loss functions.
 
-| **SGD + Fixed Loss**                                       | **SGD + Ensemble Loss (EnsLoss; our)**                      |
-|-----------------------------------------------------------|-------------------------------------------------------------|
-| **For each iteration:**                                   | **For each iteration:**                                     |
-| - Minibatch sampling from a training set;                | - Minibatch sampling from a training set;                  |
-| - Implement SGD based on batch samples and a fixed       | - Randomly generate a new "**valid**" surrogate loss;         |
-|   surrogate loss.                                        | - Implement SGD based on batch samples and the generated   |
-|                                                           |   surrogate loss.                                          |
+![alt text](./image.png)
 
 ### CC losses | CC loss-derivatives
 
@@ -27,18 +21,21 @@ The key observation of SGD is that the *impact of the loss function $\phi$ on SG
 
 Hence, it allows us to bypass the generation of loss and directly generate the loss-derivatives in SGD, thereby inspires *doubly stochastic gradients* (i.e., random batch samples and random calibrated loss-derivatives) of our Algorithm.
 
-
 ## Results
 
-In binary classification, different loss functions can be combined with various neural networks to solve the problem. In order to compare the advantages of our proposed method, we have provided reproducible benchmark code and results in this repository.
+Different **loss functions** can be integrated with **various neural networks** and **regularization methods** to tackle the classification problem across **diverse datasets**.
 
-### Dependencies
+This repository supports:
 
-For all benchmarks, it is necessary to install the following packages.
+- Loss functions [[losses.py](./losses.py)]
+  - [x] `ensLoss` (our method)
+  - [x] `BCELoss`: binary cross entropy
+  - [x] `Hinge`: hinge loss
+  - [x] `EXP`: exponential loss
+  - [x] `BinFocal`: binary focal loss
 
-```bash
-pip install pytorch
-```
+In order to compare the advantages of our proposed method, we have provided reproducible benchmark code and results in this repository.
+
 
 ### Benchmarks for Tabular data
 
