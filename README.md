@@ -6,7 +6,9 @@ In this project, we propose a novel loss ensemble method, namely **EnsLoss**, wh
 
 This repo describes a set of experiments that demonstrate the performance of the proposed **EnsLoss** method compared with existing methods based on a *fixed loss function*, and also assess its *compatibility* with other regularization methods.
 
-![overview](./fig/overview.png)
+> **Quick overview.** Comparison of epoch-vs-test\_accuracy curves for various models on CIFAR2 (cat-dog) dataset using **EnsLoss** (ours) and other fixed losses (logistic (BCE), hinge, and exponential losses).
+>
+> ![overview](./fig/overview.png)
 
 ## Motivation
 
@@ -88,7 +90,7 @@ This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/).
 | OVA-Prostate      | 1146        | (1.54, 10.9)      |
 
 ### Replicating Benchmark
-The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in 14 **OpenML** binary classification datasets are presented.
+The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in **14 OpenML** binary classification datasets are presented.
 
 | **Models** | **EnsLoss** | **(vs BCE)**         | **(vs Exp)**         | **(vs Hinge)**       |
 |------------|-------------|----------------------|----------------------|----------------------|
@@ -133,7 +135,7 @@ This benchmark contains two image datasets: [CIFAR10](https://www.cs.toronto.edu
 - **PCam.** The PCam dataset is an image binary classification dataset consisting of 327,680 96x96 color images derived from histopathologic scans of lymph node sections, with each image annotated with a binary label indicating the presence or absence of metastatic tissue.
 
 ### Replicating Benchmark
-The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in 45 **CIFAR2** binary classification datasets are presented.
+The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in **45 CIFAR2** binary classification datasets are presented.
 
 | **Models**       | **EnsLoss** | **(vs BCE)**                  | **(vs Exp)**                  | **(vs Hinge)**                |
 |------------------|-------------|-------------------------------|-------------------------------|-------------------------------|
