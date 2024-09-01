@@ -90,7 +90,13 @@ This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/).
 ### Replicating Benchmark
 The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in 14 **OpenML** binary classification datasets are presented.
 
-![tab_benchmark](./fig/tab_benchmark.png)
+| **Models** | **EnsLoss** | **(vs BCE)**         | **(vs Exp)**         | **(vs Hinge)**       |
+|------------|-------------|----------------------|----------------------|----------------------|
+| **MLP(1)** |             | (9 better, 4 no diff, 1 worse) | (7 better, 5 no diff, 2 worse) | (5 better, 4 no diff, 5 worse) |
+| **MLP(3)** |             | (7 better, 7 no diff, 0 worse) | (8 better, 5 no diff, 1 worse) | (9 better, 3 no diff, 2 worse) |
+| **MLP(5)** |             | (11 better, 3 no diff, 0 worse) | (11 better, 2 no diff, 1 worse) | (13 better, 0 no diff, 1 worse) |
+
+<!-- ![tab_benchmark](./fig/tab_benchmark.png) -->
 
 To replicate the benchmark results presented in our paper, please use the following command:
 ```bash
@@ -129,7 +135,17 @@ This benchmark contains two image datasets: [CIFAR10](https://www.cs.toronto.edu
 ### Replicating Benchmark
 The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in 45 **CIFAR2** binary classification datasets are presented.
 
-![img_benchmark](./fig/img_benchmark.png)
+| **Models**       | **EnsLoss** | **(vs BCE)**                  | **(vs Exp)**                  | **(vs Hinge)**                |
+|------------------|-------------|-------------------------------|-------------------------------|-------------------------------|
+| **ResNet34**     |             | (41 better, 4 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (36 better, 9 no diff, 0 worse) |
+| **ResNet50**     |             | (42 better, 3 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (43 better, 2 no diff, 0 worse) |
+| **ResNet101**    |             | (39 better, 6 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (40 better, 5 no diff, 0 worse) |
+| **VGG16**        |             | (36 better, 9 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (29 better, 16 no diff, 0 worse) |
+| **VGG19**        |             | (36 better, 9 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (27 better, 18 no diff, 0 worse) |
+| **MobileNet**    |             | (45 better, 0 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (44 better, 1 no diff, 0 worse) |
+| **MobileNetV2**  |             | (45 better, 0 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) | (45 better, 0 no diff, 0 worse) |
+
+<!-- ![img_benchmark](./fig/img_benchmark.png) -->
 
 To replicate the benchmark results presented in our paper, please use the following command:
 ```bash
@@ -200,3 +216,4 @@ To customize your experiment, please adjust the parameters in `argument` and `co
 - [Train CIFAR10 with PyTorch](https://github.com/kuangliu/pytorch-cifar)
 - [huggingface.transformers](https://huggingface.co/transformers/v3.3.1/index.html)
 - [GLUE benchmark](https://gluebenchmark.com/leaderboard)
+- [PS3E24: PyTorch Tabular Resnet](https://www.kaggle.com/code/syerramilli/ps3e24-pytorch-tabular-resnet)
