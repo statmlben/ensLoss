@@ -1,9 +1,14 @@
+"""
+CNN for text data
+
+Credict: https://github.com/zachAlbus/pyTorch-text-classification/blob/master/Zhang/model.py
+"""
+
 import torch
 from torch import nn
 from transformers import AutoTokenizer
 from torch.autograd import Variable
 
-#https://github.com/zachAlbus/pyTorch-text-classification/blob/master/Zhang/model.py
 class CNN(nn.Module):
     def __init__(self, embedding_dim=300, hidden_dim=128, output_dim=1):
         self.use_gpu = torch.cuda.is_available()

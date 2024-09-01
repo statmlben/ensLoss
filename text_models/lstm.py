@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-@author: Ben Dai
+(Bi)LSTM for text data
+
+Credict: https://github.com/zachAlbus/pyTorch-text-classification/blob/master/Zhang/model.py
 """
 
 import torch

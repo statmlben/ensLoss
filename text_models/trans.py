@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-
-@author: Ben Dai
+Transformers models for text data
 """
 
 import torch
@@ -14,45 +13,6 @@ from transformers import (
     AutoTokenizer
 )
 from torch.autograd import Variable
-
-class LSTM(nn.Module):
-    def __init__(self, embedding_dim=300, hidden_dim=128, output_dim=1):
-        self.use_gpu = torch.cuda.is_available()
-        self.hidden_dim = hidden_dim
-        self.batch_size = 64
-        super(LSTM, self).__init__()
-        self.tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
-        self.embedding = nn.Embedding(len(self.tokenizer), embedding_dim)
-        self.lstm = nn.LSTM(
-            embedding_dim,
-            hidden_dim,
-        )
-        self.fc = nn.Linear(hidden_dim, output_dim)
-        self.hidden = self.init_hidden()
-
-    def init_hidden(self, batch_size=None):
-        if batch_size is None:
-            batch_size= self.batch_size
-        
-        if self.use_gpu:
-            h0 = Variable(torch.zeros(1, batch_size, self.hidden_dim).cuda())
-            c0 = Variable(torch.zeros(1, batch_size, self.hidden_dim).cuda())
-        else:
-            h0 = Variable(torch.zeros(1, batch_size, self.hidden_dim))
-            c0 = Variable(torch.zeros(1,batch_size, self.hidden_dim))
-        return (h0, c0)
-
-    def forward(self, batch_seqs, batch_seq_masks=None, batch_seq_segments=None):
-        x = self.embedding(batch_seqs) # batch x sen_len x emb_size
-        x = x.permute(1,0,2) # sen_len x batch x emb_size
-        self.hidden= self.init_hidden(batch_seqs.size()[0]) #1x64x128
-        x, _ = self.lstm(x, self.hidden)
-        ## reduce by mean
-        x = x.permute(1,0,2)
-        x = torch.mean(x, 1)
-        ## connect to fc
-        out = self.fc(x)
-        return out
 
 class AlbertModel(nn.Module):
     def __init__(self, requires_grad = True):

@@ -2,6 +2,9 @@
 
 See the paper "Inverted Residuals and Linear Bottlenecks:
 Mobile Networks for Classification, Detection and Segmentation" for more details.
+
+credict: https://github.com/kuangliu/pytorch-cifar
+
 '''
 import torch
 import torch.nn as nn

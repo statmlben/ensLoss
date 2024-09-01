@@ -1,4 +1,6 @@
-'''DenseNet in PyTorch.'''
+'''DenseNet in PyTorch. 
+credict: https://github.com/kuangliu/pytorch-cifar
+'''
 import math
 
 import torch

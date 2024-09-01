@@ -8,8 +8,11 @@ wandb/
 expt/
 artifacts/
 
+#other
+other/
+
 # dataset
-dataset/
+dataset/*
 *.csv
 *.out
 

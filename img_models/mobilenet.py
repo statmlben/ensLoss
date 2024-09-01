@@ -2,6 +2,9 @@
 
 See the paper "MobileNets: Efficient Convolutional Neural Networks for Mobile Vision Applications"
 for more details.
+
+credict: https://github.com/kuangliu/pytorch-cifar
+
 '''
 import torch
 import torch.nn as nn

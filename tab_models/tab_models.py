@@ -116,6 +116,11 @@ class ResNetBlock(nn.Module):
         return x + self.ff(x)
 
 class ResNet(nn.Module):
+    """
+    ResNet for Tabular data.
+
+    Credit: https://www.kaggle.com/code/syerramilli/ps3e24-pytorch-tabular-resnet
+    """
     def __init__(self, input_shape:int, params:dict={}, verbose=False):
         super(ResNet, self).__init__()
         self.params = params
@@ -123,7 +128,7 @@ class ResNet(nn.Module):
         self.verbose = []
                 
         n_hidden = params.get('n_hidden', 2)
-        layer_size = params.get('layer_size', 128)
+        layer_size = params.get('layer_size', 1024)
         normalization = params.get('normalization', 'layernorm')
         hidden_factor = params.get('hidden_factor', 2.)
         hidden_dropout = params.get('hidden_dropout', 0.1)
@@ -219,6 +224,11 @@ class re_block(nn.Module):
         return x_out          
 
 class UNET_1D(nn.Module):
+    """
+    UNET for Tabular data.
+
+    Credit: https://www.kaggle.com/code/syerramilli/ps3e24-pytorch-tabular-resnet
+    """
     def __init__(self ,input_dim,layer_n,kernel_size,depth):
         super(UNET_1D, self).__init__()
         self.input_dim = input_dim
