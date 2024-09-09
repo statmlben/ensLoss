@@ -1,11 +1,11 @@
 # 🔂 *EnsLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification
 
-Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for classification. Notably, the surrogate loss is not arbitrary, typically requiring *convexity* and *calibration* (CC) properties to ensure consistency in maximizing accuracy. 
+Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for classification. Notably, the surrogate loss is not arbitrary, typically requiring *convexity* and *calibration* (CC) properties to ensure consistency in maximizing accuracy.
+
+In this project, we propose a novel loss ensemble method, namely **EnsLoss**, which extends the ensemble learning concept to combine losses within the ERM framework. Unlike existing ensemble methods, our method distinctively preserves the "*legitimacy*" of the combined losses, i.e., ensuring the CC properties.
 
 - GitHub repo: [https://github.com/statmlben/ensloss](https://github.com/statmlben/ensloss)
 - Paper: [arXiv:2409.00908](https://arxiv.org/abs/2409.00908)
-
-In this project, we propose a novel loss ensemble method, namely **EnsLoss**, which extends the ensemble learning concept to combine losses within the ERM framework. Unlike existing ensemble methods, our method distinctively preserves the "*legitimacy*" of the combined losses, i.e., ensuring the CC properties.
 
 This repo describes a set of experiments that demonstrate the performance of the proposed **EnsLoss** method compared with existing methods based on a *fixed loss function*, and also assess its *compatibility* with other regularization methods.
 
@@ -57,7 +57,7 @@ This repository supports:
 - **Regularization methods**
   - [x] `dropout` in [ResNet](./img_models/resnet.py)
   - [x] `weight_decay`
-  - [x] `data augumentation` in [CIFAR](./loader.py) 
+  - [x] `data augumentation` in [CIFAR](./loader.py)
 
 Our running results are publicly available in both our W&B projects and this GitHub repository.
 - **W&B projects**
@@ -106,10 +106,10 @@ The summary statistics of datasets exhibiting statistical significance when comp
 To replicate the benchmark results presented in our paper, please use the following command:
 ```bash
 bash ./sh_files/runs_tab.sh
-``` 
+```
 Our runing results are publicly avaliable in our W\&B project [ensLoss-tab](https://wandb.ai/bdai/ensLoss-tab?nw=nwuserbdai) and the markdown report [out_tab](./out/out_tab.md).
 
-### Customize the Run 
+### Customize the Run
 To execute the methods on a dataset, use the following command:
 ```bash
 python main_tab.py -ID=4134
@@ -123,8 +123,8 @@ config = {
         'batch_size': 128,
         'save_model': False,
         'ensLoss_per_epochs': -1,
-        'trainer': {'epochs': 300, 'val_per_epochs': 10}, 
-        'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-6, 
+        'trainer': {'epochs': 300, 'val_per_epochs': 10},
+        'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-6,
                         'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 300}},
         'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 ```
@@ -134,7 +134,7 @@ To customize your experiment, please adjust the parameters in `argument` and `co
 
 This benchmark contains two image datasets: [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html) and [PCam](https://github.com/basveeling/pcam).
 
-- **CIFAR.** The CIFAR10 dataset was originally designed for multiclass image classification. In our study, we construct (10 x 9) / 2 = 45 binary CIFAR datasets, denoted as CIFAR2, by selecting all possible pairs of two classes from the CIFAR10 dataset, which enables the evaluation of our method. 
+- **CIFAR.** The CIFAR10 dataset was originally designed for multiclass image classification. In our study, we construct (10 x 9) / 2 = 45 binary CIFAR datasets, denoted as CIFAR2, by selecting all possible pairs of two classes from the CIFAR10 dataset, which enables the evaluation of our method.
 - **PCam.** The PCam dataset is an image binary classification dataset consisting of 327,680 96x96 color images derived from histopathologic scans of lymph node sections, with each image annotated with a binary label indicating the presence or absence of metastatic tissue.
 
 ### Replicating Benchmark
@@ -158,10 +158,10 @@ bash ./sh_files/runs_cifar_mobilenet.sh
 bash ./sh_files/runs_cifar_resnet.sh
 bash ./sh_files/runs_cifar_vgg.sh
 bash ./sh_files/runs_pcam.sh
-``` 
+```
 Our runing results are publicly avaliable in our W\&B project [ensLoss-img](https://wandb.ai/bdai/ensLoss-img?nw=nwuserbdai) and the markdown report [out_cifar](./out/out_cifar.md) and [out_pcam](./out/out_pcam.md).
 
-### Customize the Run 
+### Customize the Run
 To execute the methods on a dataset, use the following command:
 ```bash
 ## run for CIFAR
