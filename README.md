@@ -1,4 +1,9 @@
-# 🔂 *EnsLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification
+# 🔂 *EnsLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification 
+
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](http://twitter.com/share?text=ensloss&url=https://github.com/statmlben/ensLoss&hashtags=Loss,ERM,EnsembleLearning,MachineLearning,AI)
+[![Linkedin](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/shareArticle?mini=true&url=https://github.com/statmlben/ensLoss&title=ensloss)
+[![Python](https://badges.aleen42.com/src/python.svg)](https://www.python.org/)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/statmlben/ensLoss/pulls)
 
 Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for classification. Notably, the surrogate loss is not arbitrary, typically requiring *convexity* and *calibration* (CC) properties to ensure consistency in maximizing accuracy.
 
