@@ -170,10 +170,13 @@ def main(config, data_id=43969, n_trials=5, wandb_log=True):
     print((res_auc.round(4)).to_markdown())
 
     print('\n-- Testing --\n')
+    print('\n## Acc ##\n')
     print(p_less.round(4).to_markdown())
     print('\n')
     print(p_greater.round(4).to_markdown())
 
+    print('\n')
+    print('\n## AUC ##\n')
     print(p_less_auc.round(4).to_markdown())
     print('\n')
     print(p_greater_auc.round(4).to_markdown())
@@ -232,6 +235,7 @@ if __name__=='__main__':
     main(config=config, data_id=data_id, n_trials=n_trials, wandb_log=wandb_log)
 
 # python main_tab.py -B=128 -e=300 -ID=1142 -N='TabMLP1' -R=5 --no-log
+# python main_tab.py -B=128 -e=300 -ID=4134 -N='ResNet5' -R=5 --no-log
 
 ## experiment on Aug 14
 # Bioresponse: 4134

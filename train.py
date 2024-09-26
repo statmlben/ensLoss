@@ -47,7 +47,7 @@ class Trainer(object):
 
             ## set loss function parameter
             if ((self.period > 0) and (e%(self.period) == 0) and (self.loss=='ensLoss')):
-                loss_.lam = np.random.rand()
+                loss_.lam = 2*np.random.rand() - 1
                 # if np.random.randn() > 0.:
                 #     loss_.lam = np.random.rand()
                 # else:
@@ -169,7 +169,6 @@ class Trainer(object):
             torch.save(self.model.state_dict(), filename)
 
         return path_, epoch_acc_val, epoch_auc_val
-
 
 
 class Trainer_txt(object):
@@ -338,19 +337,26 @@ class Trainer_seq(object):
         config = self.config
 
         loss_ = getattr(losses, self.loss)()
-        optimizer = getattr(torch.optim, config['optimizer']['type'])(self.model.parameters(), lr=config['optimizer']['lr'], momentum=0.9, weight_decay=config['optimizer']['weight_decay'])
-        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, **config['optimizer']['args'])
+        optimizer = getattr(torch.optim, config['optimizer']['type'])([{'params': self.model.parameters(), 'initial_lr': config['optimizer']['lr']}], 
+                                                                      lr=config['optimizer']['lr'], 
+                                                                      momentum=0.9,
+                                                                      weight_decay=config['optimizer']['weight_decay'])
         
-        for e in range(1, config['trainer']['epochs']+1):
+        scheduler = getattr(torch.optim.lr_scheduler, config['optimizer']['lr_scheduler'])(optimizer, 
+                                                                                           **config['optimizer']['args'],
+                                                                                           last_epoch=config['trainer']['epochs'])        
+
+
+        for e in range(config['trainer']['epochs']+1, config['trainer']['epochs']+config['trainer']['seq_epochs']+1):
             
-            ## change loss to ensLoss in the final 50 epochs
-            if e == int(2*config['trainer']['epochs']/3):
-                self.loss = 'ensLoss'
-                loss_ = getattr(losses, self.loss)()
+            # ## change loss to ensLoss in the final 50 epochs
+            # if e == config['trainer']['epochs']:
+            #     self.loss = self.loss+'+ensLoss'
+            #     loss_ = getattr(losses, 'ensLoss')()
 
             ## set loss function parameter
             if ((self.period > 0) and (e%(self.period) == 0) and (self.loss=='ensLoss')):
-                loss_.lam = np.random.rand()
+                loss_.lam = 2 * np.random.rand() - 1
 
             epoch_loss_train = 0
             epoch_acc_train = 0
