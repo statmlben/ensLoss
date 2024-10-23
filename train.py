@@ -170,7 +170,6 @@ class Trainer(object):
 
         return path_, epoch_acc_val, epoch_auc_val
 
-
 class Trainer_txt(object):
 
     def __init__(self, model, loss, config, device, train_loader, period=-1, val_loader=None, seq_epoch=-1):
@@ -319,7 +318,6 @@ class Trainer_txt(object):
             torch.save(self.model.state_dict(), filename)
 
         return path_, epoch_acc_val, epoch_auc_val
-
 
 class Trainer_seq(object):
 

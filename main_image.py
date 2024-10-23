@@ -33,7 +33,7 @@ def main(config, filename='PCam', n_trials=5, wandb_log=False):
 
     ## wandb log
     if wandb_log:
-        wandb.init(project="ensLoss", name=filename+'-'+config['model']['net'])
+        wandb.init(project="ensLoss-img", name=filename+'-'+config['model']['net'])
 
     ## Reproducibility
     torch.manual_seed(0)
@@ -239,14 +239,16 @@ if __name__=='__main__':
     args = parser.parse_args()
 
     config = {
-            'loss_list': ['ensLoss', 'Focal', 'BCE', 'Hinge', 'EXP'],
+            # 'loss_list': ['ensLoss', 'Focal', 'BCE', 'Hinge', 'EXP'],
+            'loss_list': ['ensLoss', 'BCE', 'Hinge', 'EXP'],
             'dataset' : args.filename,
             'model': {'net': args.net},
             'save_model': False,
             'batch_size': args.batch,
             'ensLoss_per_epochs': -1,
             'trainer': {'epochs': args.epoch, 'val_per_epochs': 5},
-            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 5e-4, 'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
+            'optimizer': {'lr': 1e-3, 'type': 'SGD', 'weight_decay': 5e-4, 
+                          'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': args.epoch}},
             'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 
     filename = args.filename
