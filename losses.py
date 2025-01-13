@@ -1,6 +1,6 @@
 """ Loss functions for Binary Classification"""
 
-# Authors: Ben Dai <bendai@cuhk.edu.hk>
+# Authors: Ben Dai
 # License: MIT License
 
 import numpy as np

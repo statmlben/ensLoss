@@ -1,6 +1,6 @@
 """ensLoss in text datasets"""
 
-# Authors: Ben Dai <bendai@cuhk.edu.hk>
+# Authors: Ben Dai 
 # License: MIT License
 
 ## basics

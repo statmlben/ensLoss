@@ -1,6 +1,6 @@
 """ ensLoss: train.py"""
 
-# Authors: Ben Dai <bendai@cuhk.edu.hk>
+# Authors: Ben Dai 
 # License: MIT License
 
 import torch
