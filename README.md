@@ -40,8 +40,8 @@ Different **loss functions** can be integrated with **various neural networks** 
 This repository supports:
 
 - **Data Modes**
-  - [x] Tabular data ([main_tab.py](./main_tab.py))
   - [x] Image data ([main_img.py](./main_image.py))
+  - [x] Tabular data ([main_tab.py](./main_tab.py))
   - [ ] Text data ([main_text.py](./main_text.py))
 
 - **Loss** ([losses.py](./losses.py))
@@ -52,11 +52,11 @@ This repository supports:
   - [x] `BinFocal`: binary focal loss
 
 - **Model** ([img_models](./img_models/) + [tab_models](./tab_models/) + [text_models](./text_models/))
-  - [x] TabMLP\{D\} with different depths `D=1,3,5`
   - [x] VGG: `VGG16`, `VGG19`
   - [x] ResNet: `ResNet18`, `ResNet34`, `ResNet50`, `ResNet101`, `ResNet152`
   - [x] MobileNet: `MobileNet`, `MobileNetV2`
   - [x] DenseNet: `DenseNet121`, `DenseNet161`, `DenseNet169`, `DenseNet201`
+  - [x] TabMLP\{D\} with different depths `D=1,3,5`
   - [x] LSTM: `LSTM`, `BiLSTM`
 
 - **Regularization methods**
@@ -75,65 +75,6 @@ Our running results are publicly available in both our W&B projects and this Git
   - [x] [out_pcam](./out/out_pcam.md)
   - [x] [out_text](./out/out_text.md)
   - [x] [out_reg](./out/out_reg.md)
-
-## Benchmarks for Tabular Data
-
-This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/). These datasets were selected based on the following filtering criteria: `verified`, `>1000 instances`, `>1000 features`, `binary class`, `dense`, and with at least one official run. The resulting datasets can be found [here](https://www.openml.org/search?type=data&sort=runs&status=active&qualities.NumberOfInstances=between_1000_10000&qualities.NumberOfFeatures=between_1000_10000&qualities.NumberOfClasses=%3D_2&format=ARFF):
-
-| **Dataset**       | **Data ID** | **(n,d) (× 10³)** |
-|-------------------|-------------|-------------------|
-| Bioresponse       | 4134        | (3.75, 1.78)      |
-| guillermo         | 41159       | (20.0, 4.30)      |
-| riccardo          | 41161       | (20.0, 4.30)      |
-| hiva-agnostic     | 1039        | (4.23, 1.62)      |
-| christine         | 41142       | (5.42, 1.64)      |
-| OVA-Breast        | 1128        | (1.54, 10.9)      |
-| OVA-Uterus        | 1138        | (1.54, 10.9)      |
-| OVA-Ovary         | 1166        | (1.54, 10.9)      |
-| OVA-Kidney        | 1134        | (1.54, 10.9)      |
-| OVA-Lung          | 1130        | (1.54, 10.9)      |
-| OVA-Omentum       | 1139        | (1.54, 10.9)      |
-| OVA-Colon         | 1161        | (1.54, 10.9)      |
-| OVA-Endometrium   | 1142        | (1.54, 10.9)      |
-| OVA-Prostate      | 1146        | (1.54, 10.9)      |
-
-### Replicating Benchmark
-The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in **14 OpenML** binary classification datasets are presented.
-
-| **Models** | **EnsLoss** | **(vs BCE)**         | **(vs Exp)**         | **(vs Hinge)**       |
-|------------|-------------|----------------------|----------------------|----------------------|
-| **MLP(1)** |             | (9 better, 4 no diff, 1 worse) | (7 better, 5 no diff, 2 worse) | (5 better, 4 no diff, 5 worse) |
-| **MLP(3)** |             | (7 better, 7 no diff, 0 worse) | (8 better, 5 no diff, 1 worse) | (9 better, 3 no diff, 2 worse) |
-| **MLP(5)** |             | (11 better, 3 no diff, 0 worse) | (11 better, 2 no diff, 1 worse) | (13 better, 0 no diff, 1 worse) |
-
-<!-- ![tab_benchmark](./fig/tab_benchmark.png) -->
-
-To replicate the benchmark results presented in our paper, please use the following command:
-```bash
-bash ./sh_files/runs_tab.sh
-```
-Our runing results are publicly avaliable in our W\&B project [ensLoss-tab](https://wandb.ai/bdai/ensLoss-tab?nw=nwuserbdai) and the markdown report [out_tab](./out/out_tab.md).
-
-### Customize the Run
-To execute the methods on a dataset, use the following command:
-```bash
-python main_tab.py -ID=4134
-```
-Note that the `ID` refers to the dataset ID in OpenML. The runing configuration is included in `main_tab.py`, with the default settings as follows:
-
-```python
-config = {
-        'dataset' : 4134,
-        'model': {'net': 'TabMLP3', 'args': {}},
-        'batch_size': 128,
-        'save_model': False,
-        'ensLoss_per_epochs': -1,
-        'trainer': {'epochs': 300, 'val_per_epochs': 10},
-        'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-6,
-                        'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 300}},
-        'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
-```
-To customize your experiment, please adjust the parameters in `argument` and `config`.
 
 ## Benchmarks for Image Data
 
@@ -194,6 +135,66 @@ To customize your experiment, please adjust the parameters in `argument` and `co
 > Note that the results regarding the compatibility of existing overfitting prevention methods in our paper can also be replicated with customized runs, see [main_reg.py](./main_reg.py).
 
 
+## Benchmarks for Tabular Data
+
+This benchmark contain 14 tabular datasets in [openml](https://www.openml.org/). These datasets were selected based on the following filtering criteria: `verified`, `>1000 instances`, `>1000 features`, `binary class`, `dense`, and with at least one official run. The resulting datasets can be found [here](https://www.openml.org/search?type=data&sort=runs&status=active&qualities.NumberOfInstances=between_1000_10000&qualities.NumberOfFeatures=between_1000_10000&qualities.NumberOfClasses=%3D_2&format=ARFF):
+
+| **Dataset**       | **Data ID** | **(n,d) (× 10³)** |
+|-------------------|-------------|-------------------|
+| Bioresponse       | 4134        | (3.75, 1.78)      |
+| guillermo         | 41159       | (20.0, 4.30)      |
+| riccardo          | 41161       | (20.0, 4.30)      |
+| hiva-agnostic     | 1039        | (4.23, 1.62)      |
+| christine         | 41142       | (5.42, 1.64)      |
+| OVA-Breast        | 1128        | (1.54, 10.9)      |
+| OVA-Uterus        | 1138        | (1.54, 10.9)      |
+| OVA-Ovary         | 1166        | (1.54, 10.9)      |
+| OVA-Kidney        | 1134        | (1.54, 10.9)      |
+| OVA-Lung          | 1130        | (1.54, 10.9)      |
+| OVA-Omentum       | 1139        | (1.54, 10.9)      |
+| OVA-Colon         | 1161        | (1.54, 10.9)      |
+| OVA-Endometrium   | 1142        | (1.54, 10.9)      |
+| OVA-Prostate      | 1146        | (1.54, 10.9)      |
+
+### Replicating Benchmark
+The summary statistics of datasets exhibiting statistical significance when comparing the proposed **ensLoss** against all other fixed loss methods in **14 OpenML** binary classification datasets are presented.
+
+| **Models** | **EnsLoss** | **(vs BCE)**         | **(vs Exp)**         | **(vs Hinge)**       |
+|------------|-------------|----------------------|----------------------|----------------------|
+| **MLP(1)** |             | (9 better, 4 no diff, 1 worse) | (7 better, 5 no diff, 2 worse) | (5 better, 4 no diff, 5 worse) |
+| **MLP(3)** |             | (7 better, 7 no diff, 0 worse) | (8 better, 5 no diff, 1 worse) | (9 better, 3 no diff, 2 worse) |
+| **MLP(5)** |             | (11 better, 3 no diff, 0 worse) | (11 better, 2 no diff, 1 worse) | (13 better, 0 no diff, 1 worse) |
+
+<!-- ![tab_benchmark](./fig/tab_benchmark.png) -->
+
+To replicate the benchmark results presented in our paper, please use the following command:
+```bash
+bash ./sh_files/runs_tab.sh
+```
+Our runing results are publicly avaliable in our W\&B project [ensLoss-tab](https://wandb.ai/bdai/ensLoss-tab?nw=nwuserbdai) and the markdown report [out_tab](./out/out_tab.md).
+
+### Customize the Run
+To execute the methods on a dataset, use the following command:
+```bash
+python main_tab.py -ID=4134
+```
+Note that the `ID` refers to the dataset ID in OpenML. The runing configuration is included in `main_tab.py`, with the default settings as follows:
+
+```python
+config = {
+        'dataset' : 4134,
+        'model': {'net': 'TabMLP3', 'args': {}},
+        'batch_size': 128,
+        'save_model': False,
+        'ensLoss_per_epochs': -1,
+        'trainer': {'epochs': 300, 'val_per_epochs': 10},
+        'optimizer': {'lr': 1e-4, 'type': 'SGD', 'weight_decay': 5e-6,
+                        'lr_scheduler': 'CosineAnnealingLR', 'args': {'T_max': 300}},
+        'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
+```
+To customize your experiment, please adjust the parameters in `argument` and `config`.
+
+
 ## Benchmarks for Text Data
 This benchmark contains one text datasets: [GLUE-SST2](https://huggingface.co/datasets/nyu-mll/glue).
 
@@ -218,7 +219,6 @@ config = {
         'device': torch.device("cuda:0" if torch.cuda.is_available() else "cpu")}
 ```
 To customize your experiment, please adjust the parameters in `argument` and `config`.
-
 
 ## References
 - [OpenML](https://www.openml.org/)
