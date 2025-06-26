@@ -13,8 +13,6 @@ $$
 \min\_{f \in \mathcal{F}} \frac{1}{n} \sum_{i=1}^n \phi ( y_i f(\mathbf{x}\_i) ),
 $$
 
-<img src="https://latex.codecogs.com/svg.image?1+sin^2(x)" />
-
 where $\phi$ is a computing loss function to facilitate the empirical computation. Notably, most successful classification methods fall within this ERM framework, utilizing various loss functions and functional spaces. 
 
 For example, typical losses including the hinge loss $\phi(z) = (1 - z)_+$ for SVMs, the exponential loss $\phi(z) = \exp(-z)$ for AdaBoost, and the logistic loss $\phi(z) = \log(1 + \exp(-z))$ for logistic regression, see the various loss function in the right figure.
@@ -23,20 +21,30 @@ Notably, the surrogate loss is not arbitrary, typically requiring *convexity* an
 
 > **Theorem 1** (Classification-calibration; Bartlett et al., 2006). A convex loss function $\phi$ is classification-calibrated if and only if it is differentiable at 0 and $\phi'(0) < 0$.
 
-**Motivative Question.** The best loss function in practice is usually unknown and can vary across datasets.
+**Motivative Question.** However, in practical applications, determining which loss function performs better is a very challenging problem, as it is typically unknown and can vary across datasets.
 
-## Main Contributions
+We examine two of the most popular losses: BCE and Hinge loss. We provide experimental results on 45 CIFAR2 datasets (see codes in [main_img.py](./main_image.py)), which also confirms that the superiority of the loss function is not consistent across different models / datasets.
+
+| Model | ResNet34 | ResNet50 | VGG16 | VGG19 |
+|-------|----------|----------|-------|-------|
+| BCE > Hinge | 3 | 26 | 9 | 13 |
+| Hinge > BCE | 42 | 19 | 36 | 22 |
+
+
+## Our Method: EnsLoss
 
 In this project, we propose a novel loss ensemble method, namely **EnsLoss**, which extends the ensemble learning concept to combine losses within the ERM framework. Unlike existing ensemble methods, our method distinctively preserves the "*legitimacy*" of the combined losses, i.e., ensuring the CC properties.
 
 - GitHub repo: [https://github.com/statmlben/ensloss](https://github.com/statmlben/ensloss)
-- Paper: [arXiv:2409.00908](https://arxiv.org/abs/2409.00908)
+- ICML 2025: [arXiv:2409.00908](https://arxiv.org/abs/2409.00908)
 
 This repo describes a set of experiments that demonstrate the performance of the proposed **EnsLoss** method compared with existing methods based on a *fixed loss function*, and also assess its *compatibility* with other regularization methods.
 
 > **Quick overview.** Comparison of epoch-vs-test\_accuracy curves for various models on CIFAR2 (cat-dog) dataset using **EnsLoss** (ours) and other fixed losses (logistic (BCE), hinge, and exponential losses).
 >
 > ![overview](./fig/overview.png)
+
+The proposed **EnsLoss** is optimal (over other loss functions; even over epoch-wise) on almost all 45 CIFAR2 datasets (with all other experimental setups kept identical), see the detailed results in [Benchmarks for Image Data](#benchmarks-for-image-data).
 
 ## Motivation
 
