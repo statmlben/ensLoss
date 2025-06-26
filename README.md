@@ -10,8 +10,9 @@ Empirical risk minimization (ERM) with a computationally feasible surrogate loss
 <a href="https://github.com/statmlben/ensloss"><img src="./fig/loss.png" align="right" height="256" /></a>
 
 $$
-    \widehat{f}_{n} = \arg\min_{f \in \mathcal{F}} \ \widehat{R}_{\phi} (f), \quad \ \widehat{R}_{\phi} (f) :=  \frac{1}{n} \sum_{i=1}^n \phi \big( y_i f(\mathbf{x}_i) \big),
+    \widehat{f}_{n} = \arg \min_{f \in \mathcal{F}} \ \widehat{R}_{\phi} (f), \quad \ \widehat{R}_{\phi} (f) :=  \frac{1}{n} \sum_{i=1}^n \phi \big( y_i f(\mathbf{x}_i) \big),
 $$
+
 where $\phi$ is a computing loss function to facilitate the empirical computation. Notably, most successful classification methods fall within this ERM framework, utilizing various loss functions and functional spaces. 
 
 For example, typical losses including the hinge loss $\phi(z) = (1 - z)_+$ for SVMs, the exponential loss $\phi(z) = \exp(-z)$ for AdaBoost, and the logistic loss $\phi(z) = \log(1 + \exp(-z))$ for logistic regression, see the various loss function in the right figure.
