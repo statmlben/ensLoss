@@ -10,7 +10,7 @@ Empirical risk minimization (ERM) with a computationally feasible surrogate loss
 <a href="https://github.com/statmlben/ensloss"><img src="./fig/loss.png" align="right" height="256" /></a>
 
 $$
-\widehat{f}_{n} = \text{argmin}\_{f \in \mathcal{F}} \ \widehat{R}\_{\phi} (f), \quad \ \widehat{R}\_{\phi} (f) :=  \frac{1}{n} \sum_{i=1}^n \phi ( y_i f(\mathbf{x}\_i) ),
+\widehat{f}_{n} =  \ \widehat{R}\_{\phi} (f), \quad \ \widehat{R}\_{\phi} (f) :=  \frac{1}{n} \sum_{i=1}^n \phi ( y_i f(\mathbf{x}\_i) ),
 $$
 
 where $\phi$ is a computing loss function to facilitate the empirical computation. Notably, most successful classification methods fall within this ERM framework, utilizing various loss functions and functional spaces. 
