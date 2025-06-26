@@ -13,6 +13,8 @@ $$
 \min\_{f \in \mathcal{F}} \frac{1}{n} \sum_{i=1}^n \phi ( y_i f(\mathbf{x}\_i) ),
 $$
 
+<img src="https://latex.codecogs.com/svg.image?1+sin^2(x)" />
+
 where $\phi$ is a computing loss function to facilitate the empirical computation. Notably, most successful classification methods fall within this ERM framework, utilizing various loss functions and functional spaces. 
 
 For example, typical losses including the hinge loss $\phi(z) = (1 - z)_+$ for SVMs, the exponential loss $\phi(z) = \exp(-z)$ for AdaBoost, and the logistic loss $\phi(z) = \log(1 + \exp(-z))$ for logistic regression, see the various loss function in the right figure.
