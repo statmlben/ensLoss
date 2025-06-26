@@ -1,11 +1,28 @@
 # 🔂 *EnsLoss*: Stochastic Calibrated Loss Ensembles for Preventing Overfitting in Classification 
 
-[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](http://twitter.com/share?text=ensloss&url=https://github.com/statmlben/ensLoss&hashtags=Loss,ERM,EnsembleLearning,MachineLearning,AI)
-[![Linkedin](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&logoColor=white)](https://www.linkedin.com/shareArticle?mini=true&url=https://github.com/statmlben/ensLoss&title=ensloss)
 [![Python](https://badges.aleen42.com/src/python.svg)](https://www.python.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/statmlben/ensLoss/pulls)
 
-Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for classification. Notably, the surrogate loss is not arbitrary, typically requiring *convexity* and *calibration* (CC) properties to ensure consistency in maximizing accuracy.
+## Introduction
+
+Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for binary classification. Specifically, given a training dataset $(\mathbf{x}_i, y_i)_{i=1}^n$, the $\phi$-classification framework is formulated as:
+
+<a href="https://github.com/statmlben/ensloss"><img src="./fig/loss.png" align="right" height="256" /></a>
+
+$$
+    \widehat{f}_{n} = \arg\min_{f \in \mathcal{F}} \ \widehat{R}_{\phi} (f), \quad \ \widehat{R}_{\phi} (f) :=  \frac{1}{n} \sum_{i=1}^n \phi \big( y_i f(\mathbf{x}_i) \big),
+$$
+where $\phi$ is a computing loss function to facilitate the empirical computation. Notably, most successful classification methods fall within this ERM framework, utilizing various loss functions and functional spaces. 
+
+For example, typical losses including the hinge loss $\phi(z) = (1 - z)_+$ for SVMs, the exponential loss $\phi(z) = \exp(-z)$ for AdaBoost, and the logistic loss $\phi(z) = \log(1 + \exp(-z))$ for logistic regression, see the various loss function in the right figure.
+
+Notably, the surrogate loss is not arbitrary, typically requiring *convexity* and *calibration* (CC) properties to ensure consistency in maximizing accuracy, which is summarized in the following theorem.
+
+> **Theorem 1** (Classification-calibration; Bartlett et al., 2006). A convex loss function $\phi$ is classification-calibrated if and only if it is differentiable at 0 and $\phi'(0) < 0$.
+
+**Motivative Question.** The best loss function in practice is usually unknown and can vary across datasets.
+
+## Main Contributions
 
 In this project, we propose a novel loss ensemble method, namely **EnsLoss**, which extends the ensemble learning concept to combine losses within the ERM framework. Unlike existing ensemble methods, our method distinctively preserves the "*legitimacy*" of the combined losses, i.e., ensuring the CC properties.
 
