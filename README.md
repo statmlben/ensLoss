@@ -36,7 +36,7 @@ We examine two of the most popular losses: BCE and Hinge loss. We provide experi
 In this project, we propose a novel loss ensemble method, namely **EnsLoss**, which extends the ensemble learning concept to combine losses within the ERM framework. Unlike existing ensemble methods, our method distinctively preserves the "*legitimacy*" of the combined losses, i.e., ensuring the CC properties.
 
 - GitHub repo: [https://github.com/statmlben/ensloss](https://github.com/statmlben/ensloss)
-- ICML 2025: [arXiv:2409.00908](https://arxiv.org/abs/2409.00908)
+- ICML 2025: [pdf](https://openreview.net/pdf?id=wP8meX6uJC)
 
 This repo describes a set of experiments that demonstrate the performance of the proposed **EnsLoss** method compared with existing methods based on a *fixed loss function*, and also assess its *compatibility* with other regularization methods.
 
