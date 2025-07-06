@@ -255,3 +255,11 @@ To customize your experiment, please adjust the parameters in `argument` and `co
 - [huggingface.transformers](https://huggingface.co/transformers/v3.3.1/index.html)
 - [GLUE benchmark](https://gluebenchmark.com/leaderboard)
 - [PS3E24: PyTorch Tabular Resnet](https://www.kaggle.com/code/syerramilli/ps3e24-pytorch-tabular-resnet)
+
+## Thank you
+
+If you find this repository helpful, please star our repo 🌟.
+
+Thank you so much for the support from our stargazers.
+
+[![Stargazers repo roster for @statmlben/ensLoss](https://reporoster.com/stars/statmlben/ensLoss)](https://github.com/statmlben/ensLoss/stargazers)
