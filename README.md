@@ -7,7 +7,7 @@
 
 Empirical risk minimization (ERM) with a computationally feasible surrogate loss is a widely accepted approach for binary classification. Specifically, given a training dataset $(\mathbf{x}\_i, y_i)_{i=1}^n$, the $\phi$-classification framework is formulated as:
 
-<a href="https://github.com/statmlben/ensloss"><img src="./fig/loss.png" align="right" height="256" /></a>
+<a href="https://github.com/statmlben/ensloss"><img src="./fig/loss.png" align="right" height="128" /></a>
 
 $$
 \min\_{f \in \mathcal{F}} \frac{1}{n} \sum_{i=1}^n \phi ( y_i f(\mathbf{x}\_i) ),
